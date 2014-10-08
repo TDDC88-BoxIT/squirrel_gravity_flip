@@ -9,7 +9,7 @@ return {
   properties = {},
   tilesets = {
     {
-      name = "GravityFlip",
+      name = "Floor",
       firstgid = 1,
       tilewidth = 32,
       tileheight = 32,
@@ -26,7 +26,7 @@ return {
       tiles = {}
     },
     {
-      name = "GravityFlip",
+      name = "PlayerCharacter",
       firstgid = 2,
       tilewidth = 32,
       tileheight = 32,
