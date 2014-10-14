@@ -2,14 +2,21 @@
 -- loader to Zenterio's API once we get control of it. This should allow us to basically
 -- port the game from Love2D to ZenterioOS.
 
--- small demo for TiledMap loader
 love.filesystem.load("tiledmap.lua")()
+
 
 gKeyPressed = {}
 gCamX,gCamY = 100,100
 
 function love.load()
 	TiledMap_Load("map/prototypeLevel.tmx")
+  
+  player = {}
+  player.image = love.graphics.newImage("images/hero.png")
+  player.x = 100
+  player.y = 100
+  
+  
 end
 
 function love.keyreleased( key )
@@ -19,24 +26,21 @@ end
 function love.keypressed( key, unicode ) 
 	gKeyPressed[key] = true 
 	if (key == "escape") then os.exit(0) end
-	if (key == " ") then -- space = next mal
-		gMapNum = (gMapNum or 1) + 1
-		if (gMapNum > 10) then gMapNum = 1 end
-		TiledMap_Load(string.format("map/map%02d.tmx",gMapNum))
-		gCamX,gCamY = 100,100
-	end
 end
 
 function love.update( dt )
-	local s = 500*dt
-	if (gKeyPressed.up) then gCamY = gCamY - s end
-	if (gKeyPressed.down) then gCamY = gCamY + s end
-	if (gKeyPressed.left) then gCamX = gCamX - s end
-	if (gKeyPressed.right) then gCamX = gCamX + s end
+	local s = 480*dt
+	if (gKeyPressed.up) then player.y = player.y - s  end
+	if (gKeyPressed.down) then player.y = player.y + s end
+	if (gKeyPressed.left) then player.x = player.x - s end
+	if (gKeyPressed.right) then player.x = player.x + s end
+  gCamX = player.x
+  gCamY = player.y
 end
 
 function love.draw()
-    love.graphics.print('arrow-keys=scroll, space=next map', 50, 50)
+  love.graphics.print('dat squirrel thang (arrow keys to move, esc to close)', 50, 50)
 	love.graphics.setBackgroundColor(0x80,0x80,0x80)
 	TiledMap_DrawNearCam(gCamX,gCamY)
+  love.graphics.draw(player.image, player.x, player.y)
 end
