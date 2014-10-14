@@ -1,18 +1,12 @@
 -- version 1.0
 
-<<<<<<< HEAD
-
 require("squirrel_game.menu")
-
-
 enter_menu()
-=======
-dir = 'squirrel_game/'
 
+dir = 'squirrel_game/'
 
 function onStart()
   --timer = sys.new_timer(20, "update_cb")
-
    draw_screen()
 end
 
@@ -38,4 +32,3 @@ function update_cb(timer)
 --  end
 end
 
->>>>>>> 766ef704e50dc695554d4faf980c1b75ada7c32c
