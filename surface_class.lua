@@ -126,6 +126,7 @@ function surface_class:clear(color, rectangle)
   
   love.graphics.setCanvas(self.canvas)
   love.graphics.setColor(color)
+  love.graphics.setBlendMode("alpha")
   love.graphics.rectangle("fill", rectangle.x, rectangle.y, rectangle.width, rectangle.height)
   love.graphics.setCanvas()
 end
@@ -136,6 +137,7 @@ function surface_class:fill(color, rectangle)
   
   love.graphics.setCanvas(self.canvas)
   love.graphics.setColor(check_color(color))
+  love.graphics.setBlendMode("alpha")
   love.graphics.rectangle("fill", rectangle.x, rectangle.y, rectangle.width, rectangle.height)
   love.graphics.setCanvas()
 end
@@ -148,23 +150,24 @@ function surface_class:copyfrom(src_surface, src_rectangle, dest_rectangle, blen
   end
   
   if dest_rectangle == nil then
-    dest_rectangle = {x=0, y=0, width=src_surface:get_width(), height=src_surface:get_height()}
+    dest_rectangle = {x=0, y=0, width=src_rectangle.width, height=src_rectangle.height}
   else
-    if dest_rectangle.width == nil then
-      dest_rectangle.width=src_surface:get_width()
+    if dest_rectangle.width == nil and dest_rectangle.w == nil then
+      dest_rectangle.width=src_rectangle.width
     end
     
-    if dest_rectangle.height == nil then
-      dest_rectangle.height=src_surface:get_height()
+    if dest_rectangle.height == nil and dest_rectangle.h == nil then
+      dest_rectangle.height=src_rectangle.height
     end
   end
   
   dest_rectangle = check_rectangle(dest_rectangle)
-  
+  love.graphics.setColor({255,255,255,255})
   if blend_option ~= nil and blend_option then
     love.graphics.setBlendMode("alpha")
   else
     love.graphics.setBlendMode("replace")
+    --love.graphics.setBlendMode('premultiplied')
   end
   
   love.graphics.setCanvas(self.canvas)
@@ -197,11 +200,11 @@ end
 
 function surface_class:premultiply()
   -- Unsure exactly what this method does.
-  love.graphics.setCanvas(self.canvas)
+  --love.graphics.setCanvas(self.canvas)
   love.graphics.setBlendMode('premultiplied')
-  love.graphics.draw(self.canvas)
-  love.graphics.setBlendMode('alpha')
-  love.graphics.setCanvas()
+  --love.graphics.draw(self.canvas)
+  --love.graphics.setBlendMode('alpha')
+  --love.graphics.setCanvas()
 end
 
 function surface_class:destroy()

@@ -79,17 +79,19 @@ end
 
 
 function gfx.loadpng(path)
-  image = love.graphics.newImage(path)
-  surface = surface_class(image:getDimensions())
-  love.graphics.setCanvas(surface.canvas)
-  love.graphics.draw(image)
-  love.graphics.setCanvas()
-  return surface
+  return gfx.loadjpeg(path)
 end
 
 
 function gfx.loadjpeg(path)
-  return gfx.loadpng(path)
+  image = love.graphics.newImage(path)
+  surface = surface_class(image:getDimensions())
+  love.graphics.setCanvas(surface.canvas)
+  love.graphics.setColor(check_color({255,255,255,255}))
+  --love.graphics.setBlendMode('premultiplied')
+  love.graphics.draw(image)
+  love.graphics.setCanvas()
+  return surface
 end
 
 
