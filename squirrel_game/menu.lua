@@ -15,7 +15,7 @@ menu.items={
   [4]={id="exit",img="squirrel_game/images/menuImg/exit.png"}
 }
 menu.images={
-  [1]={x=screen:get_width()/8,y=screen:get_height()/4,width=202,height=277,img="squirrel_game/images/menuImg/thunderAcorn.png"},
+  [1]={x=screen:get_width()/8,y=screen:get_height()/4,width=152,height=208,img="squirrel_game/images/menuImg/thunderAcorn.png"},
 }
 menu.number_of_items = table.getn(menu.items) 
 menu.background_color={r=136,g=138,b=116}
@@ -66,7 +66,7 @@ function create_backdrop()
   sf:fill({r=0,g=0,b=0,a=200})
   
   --Loads the background image
-  local sf_png = gfx.loadpng("images/menu.png")
+  local sf_png = gfx.loadjpeg("squirrel_game/images/menuImg/gravityFlip.jpg")
   
   --Load thunder acorns
   local t_a = gfx.loadpng(menu.images[1].img)
@@ -158,8 +158,10 @@ function draw_menu()
   --Put semi-transparent backdrop over backgroun image
   screen:copyfrom(backdrop,nil,nil,true)
   
-  screen:copyfrom(thunder_acorn,nil,{x=menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,heigth=menu.images[1].height},true)
-  screen:copyfrom(thunder_acorn,nil,{x=5.7*menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,heigth=menu.images[1].height},true)
+  --Put thunder acorns on backdrop
+  screen:copyfrom(thunder_acorn,nil,{x=menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,height=menu.images[1].height},true)
+  screen:copyfrom(thunder_acorn,nil,{x=5.9*menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,height=menu.images[1].height},true)
+  
   --Put tiles on menu background
   for k,v in pairs(tile_surface_set) do
     if indexed_menu_item==k then
