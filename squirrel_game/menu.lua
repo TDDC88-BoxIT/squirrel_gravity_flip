@@ -27,11 +27,6 @@ if timer then
 end
 
 function onStart()
-  
-  --Sets the selection value to 1. 
-  --This is meant to represent what option on the menu that the user is choosing
-  --With the value 1, it will represent the first option on the menu, i.g "Start Game"
-  selection = 1
   --Loads the background image 
   load_background()
   --Loads menu tiles
@@ -44,12 +39,7 @@ function onStart()
  end 
 
 function load_background()
-   
-   --Saves the path of the background image in a local variable
-   local menu_pic = "images/menu.png"
-   --Loads the chosen image file and loads via the API
-   gfx.loadpng(menu_pic)
-   
+ 
   menuSurface=create_menu_background()
    
 end
@@ -131,7 +121,7 @@ function create_menu_item_indicator()
   return indicator
 end
 
---UNCEARTAIN IF THIS FUNCTION IS NEEDED
+
 function draw_menu()
    
   --Put tiles on menu background
@@ -146,7 +136,6 @@ function draw_menu()
   screen:copyfrom(menuSurface,nil,{x=menu.x,y=menu.y,width=menu.width,height=menu.height})
   
   gfx.update()
-  --TODO: DRAW EVERYTHING ON THE MENU
 
 end
 
@@ -156,13 +145,8 @@ function update_menu()
   draw_menu()
 end
 
-function navigate_menu()
-    
-  -- TODO: CREATE NAVIGATION AND FEEDBACK FOR NAVIGATING THE MENU
-  -- FOR EACH NAVIGATION ON THE MENU, SELECTION SHOULD DECREMENT OR INCREMENT
-  -- LIKE +1 for going down to "Exit Game"
-end
 
+--HANDLES NAVIGATION AND COMMANDS 
 function onKey(key, state)
   if key=="down" and state=='up' and indexed_menu_item<table.getn(menu.items) then
     indexed_menu_item=indexed_menu_item+1
@@ -187,20 +171,4 @@ function onKey(key, state)
   end 
 end
 
-function menu_button_pressed(button_pressed)
-  
-  --Check if the buttons pressed on the remote is "Ok"
-  --If it's pressed, it will check the value of selection
-  --and then call the approrite function for that value
-  if(button_pressed == " ") then
-    if(selection == 1) then
-      --START GAME?
-    elseif(selection == 2) then
-      --EXIT GAME?
-  --TODO: Add more options for more menu buttons, if added
-  end
-  
-end
-
-end
 
