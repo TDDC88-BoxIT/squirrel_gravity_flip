@@ -6,26 +6,10 @@
 -- dir = 'squirrel_game/'
 
 
-package.path = package.path .. arg[1] .. "\\api_squirrel_game\\?.lua"
+--package.path = package.path .. arg[1] .. "\\api_squirrel_game\\?.lua"
+package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
 require "level"
 
-my_table = {
-  floors = {
-    {
-      x = 10,
-      y = 10,
-      width = 32,
-      height = 32,
-    },
-    
-    {
-      x = 50,
-      y = 50,
-      width = 32,
-      height = 32,
-    }
-  }
-}
 
 player = {}
 --player.image = love.graphics.newImage("images/hero.png")
@@ -36,16 +20,14 @@ function onStart()
   lives = 10
   timer = sys.new_timer(20, "update_cb")
   
-  Level.load_level(1)
+  Level.load_level(2)
 
   floors = Level.get_floor()
-  print(floors)
-  --draw_screen(floors)
 end
 
 function draw_screen(floors)
   --- Get a green screen but can't change the color
-  screen:clear({g=160})
+  screen:clear({r=72,g=72,b=72})
   
   for k,v in pairs(floors) do 
     draw_tile(v)
@@ -70,7 +52,7 @@ end
 function draw_tile(tile)
   
   
-  screen:fill({r=0,g=255,b=0}, {x=tile.x, y=tile.y, width=tile.width, height=tile.height})
+  screen:fill({r=255,g=0,b=0}, {x=tile.x, y=tile.y, width=tile.width, height=tile.height})
   
 end
 

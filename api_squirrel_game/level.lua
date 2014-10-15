@@ -26,23 +26,22 @@ function Level.get_floor()
     end
   end
   
-  for k,v in pairs(floor_layer_data) do     
-    --print(k .. " " .. v)
-    --print(floor_tileset)
-    if v == floor_tileset.firstgid then      
+  for k,v in pairs(floor_layer_data) do  
+    if v == floor_tileset.firstgid then     
+      
       floor_tile = {
         width = floor_tileset.tilewidth,
         height = floor_tileset.tileheight,
-        x = (k % Level.raw_level.width) * floor_tileset.tilewidth,
-        y = (math.floor(k / Level.raw_level.width)) * floor_tileset.tileheight,
-        k = k
+        --Since k starts on 1 we need to sub 1 to be able to start at 0
+        x = ((k-1) % Level.raw_level.width) * floor_tileset.tilewidth,
+        y = (math.floor((k-1) / Level.raw_level.width)) * floor_tileset.tileheight
       }
+      
+      print(k)
       table.insert(floors, floor_tile)
-    end
-    --print(floor_tileset.firstgid)
-    --table.foreach(floors, print) 
-    
+      
+      
+    end 
   end
-  print(table.getn(floors))
   return floors
 end
