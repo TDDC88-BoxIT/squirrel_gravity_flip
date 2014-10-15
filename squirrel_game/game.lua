@@ -42,7 +42,7 @@ function draw_screen()
   
   --screen:fill({0,0,200}, {59,60,200,500})
   
-  gfx.update()
+  --gfx.update()
 end
 
 --Taken directly from Zenterio's game since I think we will need this or is this for a later user story?
@@ -61,7 +61,7 @@ function update_cb(timer)
 end
 
 function draw_tile(floors)
-  print(floors.x)
+  
   screen:fill({10, 10, 32, 32})
   
 end
