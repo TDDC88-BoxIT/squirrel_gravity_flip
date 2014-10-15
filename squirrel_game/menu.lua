@@ -1,7 +1,7 @@
 --Menu object
 local menu = {}
-menu.x = (screen:get_width()-(screen:get_width()*0.2))/2
-menu.y = screen:get_height()/4
+menu.x = (screen:get_width()-(screen:get_width()*0.2))/2 -- Center on screen in x-axis
+menu.y = screen:get_height()/4 
 menu.width= nil       --Is being set when initiating the menu
 menu.height= nil      --Is being set when initiating the menu
 menu.tile_x= nil      --Is being set when initiating the menu
@@ -13,10 +13,15 @@ menu.items={
   [2]={id="highScore",img="squirrel_game/images/menuImg/highScore.png"},
   [3]={id="settings",img="squirrel_game/images/menuImg/settings.png"},
   [4]={id="exit",img="squirrel_game/images/menuImg/exit.png"}
-  }
+}
+menu.images={
+  [1]={x=screen:get_width()/8,y=screen:get_height()/4,width=202,height=277,img="squirrel_game/images/menuImg/thunderAcorn.png"},
+}
 menu.number_of_items = table.getn(menu.items) 
 menu.background_color={r=136,g=138,b=116}
 menu.indicator_color={r=255,g=0,b=0}
+
+
 local backdrop = nil
 local menuSurface = nil
 local tile_surface_set = {}
@@ -31,20 +36,26 @@ if timer then
 end
 
 function onStart()
-  load_backdrop()
-  --Loads the background image 
-  load_background()
-  --Loads menu tiles
-  load_menu_buttons() -- IF THIS IS COMMENTED OUT THE BACKGROUND IS SHOWN, IF NOT THE TILE IS SHOWN
-  --UNCEARTAIN IF THIS FUNCTION IS NEEDED
-  --Loads menu item indicator
-  load_menu_indicator()
+  -- Creates all components for menu screen
+  create_menu_components()
+  
+  -- Starts a timer which calls the update function every 100 milliseconds
   timer = sys.new_timer(100, "update_menu")
   draw_menu()
  end 
 
-function load_backdrop()
-  backdrop = create_backdrop()
+function create_menu_components()
+  -- Create semi-transparent background
+  backdrop, backgroundImageSurface, thunder_acorn= create_backdrop()
+  
+  -- Create menu background
+  menuSurface = create_menu_background()
+  
+  -- Create menu buttons
+  tile_surface_set=create_menu_tiles()
+  
+  -- Create menu indicator
+  indicator_object=create_menu_item_indicator()
 end
 
 --Creates semi-transparent backdrop to cover game screen  
@@ -54,11 +65,14 @@ function create_backdrop()
   --Set color and location of menu surface
   sf:fill({r=0,g=0,b=0,a=200})
   
-  return sf
-end
-
-function load_background()
-  menuSurface, menuBackgroundSurface=create_menu_background()
+  --Loads the background image
+  local sf_png = gfx.loadpng("images/menu.png")
+  
+  --Load thunder acorns
+  local t_a = gfx.loadpng(menu.images[1].img)
+  
+    --returns both surfaces
+  return sf, sf_png, t_a
 end
 
 --Creates a new menu background surface
@@ -66,28 +80,17 @@ function create_menu_background()
   
   -- Set menu size
   menu.width = screen:get_width()*0.2 --10% of screen width
-  menu.height= 310-- Screen height
+  menu.height= 30 + ((menu.tile_height+10)*menu.number_of_items)
  
   -- Create menu background surface
   local sf = gfx.new_surface(menu.width, menu.height)
-  --Set color and location of menu surface
-  --sf:fill(menu.background_color)
-  
+
   -- Set menu background image
   local img_surface=nil
   img_surface = gfx.loadpng("squirrel_game/images/menuImg/menuBackground.png")
   sf:copyfrom(img_surface,nil,{x=0,y=0,width=menu.width,height=menu.height})
-  
-  
-  --Loads the background image
-  local sf_png = gfx.loadpng("images/menu.png")
-  
-  --returns both surfaces
-  return sf, sf_png
-end
-
-function load_menu_buttons()
-  tile_surface_set=create_menu_tiles()
+ 
+  return sf
 end
 
 -- Create a set of tile surfaces for the menu (All the buttons)
@@ -124,10 +127,6 @@ function create_menu_tiles()
   return tile_set
 end
 
-function load_menu_indicator()
-  indicator_object=create_menu_item_indicator()
-end
-
 function create_menu_item_indicator()
    -- Create indicator object
   local indicator={}
@@ -154,11 +153,13 @@ end
 function draw_menu()
   
   --Put the menu-png in the background
-  screen:copyfrom(menuBackgroundSurface,nil)
+  screen:copyfrom(backgroundImageSurface,nil)
   
   --Put semi-transparent backdrop over backgroun image
   screen:copyfrom(backdrop,nil,nil,true)
   
+  screen:copyfrom(thunder_acorn,nil,{x=menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,heigth=menu.images[1].height},true)
+  screen:copyfrom(thunder_acorn,nil,{x=5.7*menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,heigth=menu.images[1].height},true)
   --Put tiles on menu background
   for k,v in pairs(tile_surface_set) do
     if indexed_menu_item==k then
@@ -176,7 +177,7 @@ end
 
 --SUPPOSED TO UPDATE THE MENU TO SHOW WHAT MENU TILE IS CURRENTLY SELECTED
 function update_menu()
-  menuSurface, menuBackgroundSurface=create_menu_background()
+  menuSurface = create_menu_background()
   tile_surface_set=create_menu_tiles()
   draw_menu()
 end
