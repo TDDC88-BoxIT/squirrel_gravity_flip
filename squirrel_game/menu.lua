@@ -2,10 +2,10 @@
 local menu = {}
 menu.x = 0
 menu.y = 0
-menu.width= nil   --Is being set when initiating the menu
-menu.height= nil  --Is being set when initiating the menu
-menu.tile_x= nil  --Is being set when initiating the menu
-menu.tile_y= nil  --Is being set when initiating the menu
+menu.width= nil       --Is being set when initiating the menu
+menu.height= nil      --Is being set when initiating the menu
+menu.tile_x= nil      --Is being set when initiating the menu
+menu.tile_y= nil      --Is being set when initiating the menu
 menu.tile_width = nil --Is being set when initiating the menu (depends on menu width)
 menu.tile_height = 40
 menu.items={"Start","High Score","Settings","Exit"}
@@ -148,7 +148,7 @@ end
 
 --HANDLES NAVIGATION AND COMMANDS 
 function onKey(key, state)
-  if key=="down" and state=='up' and indexed_menu_item<table.getn(menu.items) then
+  if key=="down" and state=='up' and indexed_menu_item<menu.number_of_items then
     indexed_menu_item=indexed_menu_item+1
   elseif key=="up" and state=='up' and indexed_menu_item>1 then
     indexed_menu_item=indexed_menu_item-1
