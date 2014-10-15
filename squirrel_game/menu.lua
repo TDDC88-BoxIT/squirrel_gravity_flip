@@ -8,7 +8,7 @@ menu.tile_x= nil      --Is being set when initiating the menu
 menu.tile_y= nil      --Is being set when initiating the menu
 menu.tile_width = nil --Is being set when initiating the menu (depends on menu width)
 menu.tile_height = 40
-menu.items={
+menu.items={  
   [1]={id="start",img="squirrel_game/images/menuImg/start.png"},
   [2]={id="highScore",img="squirrel_game/images/menuImg/highScore.png"},
   [3]={id="settings",img="squirrel_game/images/menuImg/settings.png"},
@@ -42,11 +42,7 @@ function onStart()
  end 
 
 function load_background()
- 
   menuSurface, menuBackgroundSurface=create_menu_background()
-  
-
-   
 end
 
 --Creates a new menu background surface
