@@ -18,7 +18,6 @@ menu.images={
   [1]={x=screen:get_width()/8,y=screen:get_height()/4,width=152,height=208,img="squirrel_game/images/menuImg/thunderAcorn.png"},
 }
 menu.number_of_items = table.getn(menu.items) 
-menu.background_color={r=136,g=138,b=116}
 menu.indicator_color={r=255,g=0,b=0}
 
 
