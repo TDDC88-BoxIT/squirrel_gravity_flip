@@ -8,19 +8,18 @@ menu.tile_x= nil      --Is being set when initiating the menu
 menu.tile_y= nil      --Is being set when initiating the menu
 menu.tile_width = nil --Is being set when initiating the menu (depends on menu width)
 menu.tile_height = 40
-menu.items={"Start","High Score","Settings","Exit"}
+menu.items={
+  [1]={id="start",img="squirrel_game/images/menuImg/start.png"},
+  [2]={id="highScore",img="squirrel_game/images/menuImg/highScore.png"},
+  [3]={id="settings",img="squirrel_game/images/menuImg/settings.png"},
+  [4]={id="exit",img="squirrel_game/images/menuImg/exit.png"}
+  }
 menu.number_of_items = table.getn(menu.items) 
-menu.background_color={r=0,g=255,b=255}
+menu.background_color={r=0,g=255,b=0}
 menu.indicator_color={r=255,g=0,b=0}
 local menuSurface = nil
 local tile_surface_set = {}
 local indicator_object=nil
-
-local imageFiles={}
-imageFiles.start= "squirrel_game/images/menuImg/start.png"
-imageFiles.highScore= "squirrel_game/images/menuImg/highScore.png"
-imageFiles.settings= "squirrel_game/images/menuImg/settings.png"
-imageFiles.exit= "squirrel_game/images/menuImg/exit.png"
 
 --Item currently indexed in menu
 local indexed_menu_item=1  
@@ -93,16 +92,8 @@ function create_menu_tiles()
     
     -- Set button image
     local img_surface=nil
-    if menu.items[i]=="Start" then
-      img_surface = gfx.loadpng(imageFiles.start)
-    elseif menu.items[i]=="High Score" then
-      img_surface = gfx.loadpng(imageFiles.highScore)
-    elseif menu.items[i]=="Settings" then
-      img_surface = gfx.loadpng(imageFiles.settings)
-    elseif menu.items[i]=="Exit" then
-      img_surface = gfx.loadpng(imageFiles.exit)
-    end
-    
+    img_surface = gfx.loadpng(menu.items[i].img)
+
     sf:copyfrom(img_surface,nil,{x=0,y=0,width=tile.width,height=tile.height})
     
     -- Add attributes to tile object
@@ -180,16 +171,16 @@ function onKey(key, state)
   elseif key=="ok" and state=='up' then
       
       -- ACTIONS WHEN MENU BUTTONS ARE PRESSED
-      if menu.items[indexed_menu_item]=="Start" then
+      if menu.items[indexed_menu_item].id=="start" then
         -- COMMAND TO START GAME
       end
-      if menu.items[indexed_menu_item]=="High Score" then
+      if menu.items[indexed_menu_item].id=="high_score" then
         -- COMMAND TO VIEW HIGH SCORE
       end
-      if menu.items[indexed_menu_item]=="Settings" then
+      if menu.items[indexed_menu_item].id=="settings" then
         -- COMMAND TO VIEW SETTINGS
       end
-      if menu.items[indexed_menu_item]=="Exit" then
+      if menu.items[indexed_menu_item].id=="exit" then
         -- COMMAND TO EXIT
         sys.stop()
       end
