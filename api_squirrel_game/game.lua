@@ -5,18 +5,22 @@
 
 -- dir = 'squirrel_game/'
 
+
+package.path = package.path .. arg[1] .. "\\api_squirrel_game\\?.lua"
+require "level"
+
 my_table = {
   floors = {
     {
-      x = 1234,
-      y = 5432,
+      x = 10,
+      y = 10,
       width = 32,
       height = 32,
     },
     
     {
-      x = 1234,
-      y = 5432,
+      x = 50,
+      y = 50,
       width = 32,
       height = 32,
     }
@@ -24,25 +28,28 @@ my_table = {
 }
 
 player = {}
-player.image = love.graphics.newImage("images/hero.png")
+--player.image = love.graphics.newImage("images/hero.png")
 player.x = 100
 player.y = 100
 
 function onStart()
   lives = 10
   timer = sys.new_timer(20, "update_cb")
-  draw_screen()
+  
+  Level.load_level(1)
+
+  floors = Level.get_floor()
+  print(floors)
+  --draw_screen(floors)
 end
 
-function draw_screen()
+function draw_screen(floors)
   --- Get a green screen but can't change the color
   screen:clear({g=160})
   
-  table.foreach(my_table["floors"], draw_tile)
-  
-  --screen:fill({0,0,200}, {59,60,200,500})
-  
-  --gfx.update()
+  for k,v in pairs(floors) do 
+    draw_tile(v)
+  end
 end
 
 --Taken directly from Zenterio's game since I think we will need this or is this for a later user story?
@@ -53,16 +60,17 @@ function update_cb(timer)
   --last_time = now
  -- print(now)
   if lives > 0 then
-    draw_screen()
+    draw_screen(floors)
   else
    -- game_over()
     print ("YOU LOST!!")
   end
 end
 
-function draw_tile(floors)
+function draw_tile(tile)
   
-  screen:fill({10, 10, 32, 32})
+  
+  screen:fill({r=0,g=255,b=0}, {x=tile.x, y=tile.y, width=tile.width, height=tile.height})
   
 end
 
