@@ -171,8 +171,8 @@ function hitTest (camx,camy, herox, heroy, herosize)
         if (gfx) then
           local sx = x*kTileSize - camx + screen_w/2
           local sy = y*kTileSize - camy + screen_h/2
-          local temp = checkCollesion(herox, heroy, herosize, herosize, sx, sy, kTileSize, kTileSize)
-          if temp > 0 then
+          local temp = CheckCollision2(herox, heroy, herosize, herosize, sx, sy, kTileSize, kTileSize)
+          if temp ~= nil then
               return temp
           end
     --			love.graphics.draw(gfx,sx,sy) -- x, y, r, sx, sy, ox, oy
@@ -180,7 +180,7 @@ function hitTest (camx,camy, herox, heroy, herosize)
       end
     end
 	end
-  return 0
+  return nil
 end
 
 -- basic check collesion
