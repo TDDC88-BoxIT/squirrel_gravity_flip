@@ -31,7 +31,16 @@ end
 
 function love.update( dt )
   local s = 480*dt
+  
+  -- gravity
   gsetGravity(10)
+  local gy = CurveY(dt)
+  player.y = player.y + gy
+  if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+    player.y = player.y - gy
+  end
+  
+  -- go ahead
   player.x = player.x + 100*dt
   if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
     player.x = player.x - 100*dt
