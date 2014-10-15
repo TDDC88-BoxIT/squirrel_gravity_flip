@@ -29,11 +29,37 @@ function love.keypressed( key, unicode )
 end
 
 function love.update( dt )
-	local s = 480*dt
-	if (gKeyPressed.up) then player.y = player.y - s  end
-	if (gKeyPressed.down) then player.y = player.y + s end
-	if (gKeyPressed.left) then player.x = player.x - s end
-	if (gKeyPressed.right) then player.x = player.x + s end
+  local s = 480*dt
+  player.x = player.x + 100*dt
+  if 1 == hitTest(gCamX,gCamY, player.x, player.y, 32) then
+    player.x = player.x - 100*dt
+  end
+	if (gKeyPressed.up) then
+    player.y = player.y - s
+    if 1 == hitTest(gCamX,gCamY, player.x, player.y, 32) then
+      player.y = player.y + s
+    end
+  end
+	if (gKeyPressed.down) then
+    player.y = player.y + s
+    if 1 == hitTest(gCamX,gCamY, player.x, player.y, 32) then
+      print("hitTest before", hitTest(gCamX,gCamY, player.x, player.y, 32))
+      player.y = player.y - s
+      print("hitTest after", hitTest(gCamX,gCamY, player.x, player.y, 32))
+    end
+  end
+	if (gKeyPressed.left) then
+    player.x = player.x - s
+    if 1 == hitTest(gCamX,gCamY, player.x, player.y, 32) then
+      player.x = player.x + s
+    end
+  end
+	if (gKeyPressed.right) then
+    player.x = player.x + s
+    if 1 == hitTest(gCamX,gCamY, player.x, player.y, 32) then
+      player.x = player.x - s
+    end
+  end
   gCamX = player.x
   gCamY = player.y
 end
