@@ -164,7 +164,7 @@ function navigate_menu()
 end
 
 function onKey(key, state)
-  if key=="down" and state=='up' and indexed_menu_item<table.getn(menu.items) then
+  if key=="down" and state=='up' and indexed_menu_item<menu.number_of_items then
     indexed_menu_item=indexed_menu_item+1
   elseif key=="up" and state=='up' and indexed_menu_item>1 then
     indexed_menu_item=indexed_menu_item-1
