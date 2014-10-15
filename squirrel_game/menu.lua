@@ -16,6 +16,7 @@ menu.items={
 }
 menu.images={
   [1]={x=screen:get_width()/8,y=screen:get_height()/4,width=152,height=208,img="squirrel_game/images/menuImg/thunderAcorn.png"},
+  [2]={x=0,y=0,width=screen:get_width(),height=screen:get_height(),img="squirrel_game/images/menuImg/gravityFlip.jpg"},
 }
 menu.number_of_items = table.getn(menu.items) 
 menu.indicator_color={r=255,g=0,b=0}
@@ -65,7 +66,7 @@ function create_backdrop()
   sf:fill({r=0,g=0,b=0,a=200})
   
   --Loads the background image
-  local sf_png = gfx.loadjpeg("squirrel_game/images/menuImg/gravityFlip.jpg")
+  local sf_png = gfx.loadjpeg(menu.images[2].img)
   
   --Load thunder acorns
   local t_a = gfx.loadpng(menu.images[1].img)
@@ -152,7 +153,7 @@ end
 function draw_menu()
   
   --Put the menu-png in the background
-  screen:copyfrom(backgroundImageSurface,nil)
+  screen:copyfrom(backgroundImageSurface,nil,{x=menu.images[2].x,y=menu.images[2].y,width=menu.images[2].width,height=menu.images[2].height})
   
   --Put semi-transparent backdrop over backgroun image
   screen:copyfrom(backdrop,nil,nil,true)
