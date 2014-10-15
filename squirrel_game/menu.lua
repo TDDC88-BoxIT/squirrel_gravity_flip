@@ -19,7 +19,7 @@ local tile_surface_set = {}
 local indicator_object=nil
 
 --Item currently indexed in menu
-local indexed_menu_item=2
+local indexed_menu_item=1
 
 if timer then
    timer:stop()
@@ -164,7 +164,7 @@ function navigate_menu()
 end
 
 function onKey(key, state)
-  if key=="down" and state=='up' and indexed_menu_item<4 then
+  if key=="down" and state=='up' and indexed_menu_item<table.getn(menu.items) then
     indexed_menu_item=indexed_menu_item+1
   elseif key=="up" and state=='up' and indexed_menu_item>1 then
     indexed_menu_item=indexed_menu_item-1
