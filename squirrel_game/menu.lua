@@ -9,10 +9,11 @@ menu.tile_y= nil      --Is being set when initiating the menu
 menu.tile_width = nil --Is being set when initiating the menu (depends on menu width)
 menu.tile_height = 60
 menu.items={  
-  [1]={id="start",img="squirrel_game/images/menuImg/start.png"},
-  [2]={id="highScore",img="squirrel_game/images/menuImg/highScore.png"},
-  [3]={id="settings",img="squirrel_game/images/menuImg/settings.png"},
-  [4]={id="exit",img="squirrel_game/images/menuImg/exit.png"}
+  [1]={id="resume",img="squirrel_game/images/menuImg/resume.png"},
+  [2]={id="start",img="squirrel_game/images/menuImg/start.png"},
+  [3]={id="highScore",img="squirrel_game/images/menuImg/highScore.png"},
+  [4]={id="settings",img="squirrel_game/images/menuImg/settings.png"},
+  [5]={id="exit",img="squirrel_game/images/menuImg/exit.png"}
 }
 menu.images={
   [1]={x=screen:get_width()/8,y=screen:get_height()/4,width=152,height=208,img="squirrel_game/images/menuImg/thunderAcorn.png"},
@@ -21,6 +22,8 @@ menu.images={
 menu.number_of_items = table.getn(menu.items) 
 menu.indicator_color={r=255,g=0,b=0}
 
+
+local gameState = 1 -- '1' = Start menu , '2' = Pause menu  TEMPORARY GAME STATE INDICATOR
 
 local backdrop = nil
 local menuSurface = nil
@@ -152,7 +155,7 @@ end
 
 function draw_menu()
   
-  --Put the menu-png in the background
+  --Put the background image in the background (THIS WILL NOT BE NECESSARY WHEN THERE IS A GAME)
   screen:copyfrom(backgroundImageSurface,nil,{x=menu.images[2].x,y=menu.images[2].y,width=menu.images[2].width,height=menu.images[2].height})
   
   --Put semi-transparent backdrop over backgroun image
@@ -177,7 +180,7 @@ function draw_menu()
 
 end
 
---SUPPOSED TO UPDATE THE MENU TO SHOW WHAT MENU TILE IS CURRENTLY SELECTED
+-- UPDATES THE MENU TO SHOW WHAT MENU TILE IS CURRENTLY SELECTED
 function update_menu()
   menuSurface = create_menu_background()
   tile_surface_set=create_menu_tiles()
@@ -204,8 +207,7 @@ function onKey(key, state)
         -- COMMAND TO VIEW SETTINGS
       end
       if menu.items[indexed_menu_item].id=="exit" then
-        -- COMMAND TO EXIT
-        sys.stop()
+        sys.stop() -- COMMAND TO EXIT
       end
   end 
 end
