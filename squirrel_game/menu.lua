@@ -44,7 +44,9 @@ function onStart()
 
 function load_background()
  
-  menuSurface=create_menu_background()
+  menuSurface, menuBackgroundSurface=create_menu_background()
+  
+
    
 end
 
@@ -54,13 +56,17 @@ function create_menu_background()
   -- Set menu size
   menu.width = screen:get_width()*0.1 --10% of screen width
   menu.height=screen:get_height() -- Screen height
-  
+ 
   -- Create menu background surface
   local sf = gfx.new_surface(menu.width, menu.height)
   --Set color and location of menu surface
   sf:fill(menu.background_color)
   
-  return sf
+  --Loads the background image
+  local sf_png = gfx.loadpng("images/menu.png")
+  
+  --returns both surfaces
+  return sf, sf_png
 end
 
 function load_menu_buttons()
@@ -138,7 +144,11 @@ end
 
 
 function draw_menu()
-   
+  
+  --Put the meun-png in the background
+  screen:copyfrom(menuBackgroundSurface,nil)
+  
+  
   --Put tiles on menu background
   for k,v in pairs(tile_surface_set) do
     if indexed_menu_item==k then
