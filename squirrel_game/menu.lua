@@ -2,10 +2,10 @@
 local menu = {}
 menu.x = 0
 menu.y = 0
-menu.width= nil   --Is being set when initiating the menu
-menu.height= nil  --Is being set when initiating the menu
-menu.tile_x= nil  --Is being set when initiating the menu
-menu.tile_y= nil  --Is being set when initiating the menu
+menu.width= nil       --Is being set when initiating the menu
+menu.height= nil      --Is being set when initiating the menu
+menu.tile_x= nil      --Is being set when initiating the menu
+menu.tile_y= nil      --Is being set when initiating the menu
 menu.tile_width = nil --Is being set when initiating the menu (depends on menu width)
 menu.tile_height = 40
 menu.items={"Start","High Score","Settings","Exit"}
@@ -27,7 +27,6 @@ if timer then
 end
 
 function onStart()
-  
   --Sets the selection value to 1. 
   --This is meant to represent what option on the menu that the user is choosing
   --With the value 1, it will represent the first option on the menu, i.g "Start Game"
