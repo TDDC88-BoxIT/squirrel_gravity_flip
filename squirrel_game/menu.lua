@@ -11,15 +11,19 @@ menu.tile_height = 40
 menu.items={"Start","High Score","Settings","Exit"}
 menu.number_of_items = table.getn(menu.items) 
 menu.background_color={r=0,g=255,b=255}
-menu.tiles_color={r=0,g=0,b=255}
 menu.indicator_color={r=255,g=0,b=0}
-
 local menuSurface = nil
 local tile_surface_set = {}
 local indicator_object=nil
 
+local imageFiles={}
+imageFiles.start= "squirrel_game/images/menuImg/start.png"
+imageFiles.highScore= "squirrel_game/images/menuImg/highScore.png"
+imageFiles.settings= "squirrel_game/images/menuImg/settings.png"
+imageFiles.exit= "squirrel_game/images/menuImg/exit.png"
+
 --Item currently indexed in menu
-local indexed_menu_item=1
+local indexed_menu_item=1  
 
 if timer then
    timer:stop()
@@ -81,8 +85,19 @@ function create_menu_tiles()
     -- Create tile surface
     local sf= gfx.new_surface(tile.width, tile.height)
     
-    -- Set tile surface color
-    sf:fill(menu.tiles_color,nil)
+    -- Set button image
+    local img_surface=nil
+    if menu.items[i]=="Start" then
+      img_surface = gfx.loadpng(imageFiles.start)
+    elseif menu.items[i]=="High Score" then
+      img_surface = gfx.loadpng(imageFiles.highScore)
+    elseif menu.items[i]=="Settings" then
+      img_surface = gfx.loadpng(imageFiles.settings)
+    elseif menu.items[i]=="Exit" then
+      img_surface = gfx.loadpng(imageFiles.exit)
+    end
+    
+    sf:copyfrom(img_surface,nil,{x=0,y=0,width=tile.width,height=tile.height})
     
     -- Add attributes to tile object
     tile.surface=sf
