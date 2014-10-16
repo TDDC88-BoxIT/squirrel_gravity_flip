@@ -36,8 +36,6 @@ function Level.get_floor()
         x = ((k-1) % Level.raw_level.width) * floor_tileset.tilewidth,
         y = (math.floor((k-1) / Level.raw_level.width)) * floor_tileset.tileheight
       }
-      
-      print(k)
       table.insert(floors, floor_tile)
       
       

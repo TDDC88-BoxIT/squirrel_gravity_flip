@@ -35,14 +35,21 @@ if timer then
    timer = nil
 end
 
-function showMenu()
+function startMenu()
+  
   -- Creates all components for menu screen
   create_menu_components()
   
   -- Starts a timer which calls the update function every 100 milliseconds
   timer = sys.new_timer(100, "update_menu")
   draw_menu()
- end 
+end 
+
+function stopMenu()
+  screen:clear()
+  timer:stop()
+  timer = nil  
+end
 
 function create_menu_components()
   -- Create semi-transparent background
@@ -187,6 +194,7 @@ end
 
 --HANDLES NAVIGATION AND COMMANDS 
 function onKey(key, state)
+  
   if key=="down" and state=='up' and indexed_menu_item<menu.number_of_items then
     indexed_menu_item=indexed_menu_item+1
   elseif key=="up" and state=='up' and indexed_menu_item>1 then

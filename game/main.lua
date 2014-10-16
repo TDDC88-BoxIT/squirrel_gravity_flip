@@ -4,20 +4,24 @@ require "menu"
 
 game_state = 0
 function onStart()
-  --showGame()
-  showMenu()
+  --startGame()
+  startMenu()
   
 end
 
 
 
 function onKey(key, state)
+  
+  
   if key=="ok" and state=='up' then
-    if game_state == 1 then      
-      showGame()
+    if game_state == 1 then    
+      stopMenu()
+      startGame()      
       game_state = 0
     elseif game_state == 0 then
-      showMenu()
+      stopGame()
+      startMenu()      
       game_state = 1
     end   
   end
