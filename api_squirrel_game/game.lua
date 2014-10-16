@@ -6,8 +6,8 @@
 -- dir = 'squirrel_game/'
 
 
---package.path = package.path .. arg[1] .. "\\api_squirrel_game\\?.lua"
-package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
+package.path = package.path .. arg[1] .. "\\api_squirrel_game\\?.lua"
+--package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
 require "level"
 
 
