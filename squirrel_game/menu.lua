@@ -27,7 +27,7 @@ menu.images={
 --menu.number_of_items = table.getn(menu.items) 
 menu.indicator_color={r=255,g=0,b=0}
 
-local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu"
+local menuState = "pause_menu" -- CAN BE "start_menu" OR "pause_menu"
 local backdrop = nil
 local menuSurface = nil
 local tile_surface_set = {}
@@ -203,6 +203,7 @@ function update_menu()
   draw_menu()
 end
 
+-- SETS A MENU STATE WHICH DETERMINES WHICH MENU WILL BE SHOWN. POSSIBLE STATES ARE: "pause_menu" AND "start_menu"
 function set_menu_state(state)
   if state=="start_menu" or state=="pause_menu" then
     menuState=state
@@ -211,9 +212,6 @@ function set_menu_state(state)
   end
 end
 
---[[
-Returns the current menu state as a string. Can either be "start_menu" or "pause_menu"
---]]
 function get_menu_state()
   return menuState
 end
