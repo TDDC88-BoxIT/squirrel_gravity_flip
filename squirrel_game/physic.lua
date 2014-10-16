@@ -13,6 +13,21 @@ function greset(cury, speed)
   mtotal = 0
 end
 
+function ToTop()
+  mstarty = 0
+  mtotal = 0
+  mgravity = -10
+  mspeed = -200
+end
+
+function ToBottom()
+  mstarty = 0
+  mtotal = 0
+  mgravity = 10
+  mspeed = 200
+end
+
+
 function CurveY(dt)
   mtotal = mtotal + dt
   mcury = mspeed*mtotal + mgravity * mtotal * mtotal / 2

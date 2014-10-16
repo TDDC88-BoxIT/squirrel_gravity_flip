@@ -30,14 +30,14 @@ function love.keypressed( key, unicode )
 end
 
 function love.update( dt )
-  local s = 480*dt
+  local s = 700*dt
   
   -- gravity
   gsetGravity(10)
   local gy = CurveY(dt)
   player.y = player.y + gy
   if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-    player.y = player.y - gy
+    player.y = player.y - 2*gy
   end
   
   -- go ahead
@@ -46,17 +46,17 @@ function love.update( dt )
     player.x = player.x - 100*dt
   end
 	if (gKeyPressed.up) then
+    ToTop()
     player.y = player.y - s
     if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
       player.y = player.y + s
     end
   end
 	if (gKeyPressed.down) then
+    ToBottom()
     player.y = player.y + s
     if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-      print("hitTest before", hitTest(gCamX,gCamY, player.x, player.y, 32))
-      player.y = player.y - s
-      print("hitTest after", hitTest(gCamX,gCamY, player.x, player.y, 32))
+      player.y = player.y - 2*s
     end
   end
 	if (gKeyPressed.left) then
