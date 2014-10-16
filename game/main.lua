@@ -1,4 +1,8 @@
-package.path = package.path .. arg[1] .. "\\game\\?.lua;"
+--path for windows:
+-- package.path = package.path .. arg[1] .. "\\game\\?.lua;"
+
+--path for mac / linux:
+package.path = package.path .. arg[1] .. "/game/?.lua;"
 
 require "game"
 require "menu"
