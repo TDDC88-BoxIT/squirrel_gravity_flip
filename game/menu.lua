@@ -1,4 +1,4 @@
---Menu object
+--Start Menu object
 local menu = {}
 menu.x = (screen:get_width()-(screen:get_width()*0.2))/2 -- Center on screen in x-axis
 menu.y = screen:get_height()/4 
@@ -8,20 +8,26 @@ menu.tile_x= nil      --Is being set when initiating the menu
 menu.tile_y= nil      --Is being set when initiating the menu
 menu.tile_width = nil --Is being set when initiating the menu (depends on menu width)
 menu.tile_height = 60
-menu.items={  
-  [1]={id="start",img="game/images/menuImg/start.png"},
-  [2]={id="highScore",img="game/images/menuImg/highScore.png"},
-  [3]={id="settings",img="game/images/menuImg/settings.png"},
-  [4]={id="exit",img="game/images/menuImg/exit.png"}
+menu.start_menu_items={  
+  [1]={id="start_new",img="squirrel_game/images/menuImg/start.png"},
+  [2]={id="highScore",img="squirrel_game/images/menuImg/highScore.png"},
+  [3]={id="settings",img="squirrel_game/images/menuImg/settings.png"},
+  [4]={id="exit",img="squirrel_game/images/menuImg/exit.png"}
+}
+menu.pause_menu_items={  
+  [1]={id="start_new",img="squirrel_game/images/menuImg/start.png"},
+  [2]={id="resume",img="squirrel_game/images/menuImg/resume.png"},
+  [3]={id="settings",img="squirrel_game/images/menuImg/settings.png"},
+  [4]={id="exit",img="squirrel_game/images/menuImg/exit.png"}
 }
 menu.images={
-  [1]={x=screen:get_width()/8,y=screen:get_height()/4,width=152,height=208,img="game/images/menuImg/thunderAcorn.png"},
-  [2]={x=0,y=0,width=screen:get_width(),height=screen:get_height(),img="game/images/menuImg/gravityFlip.jpg"},
+  [1]={x=screen:get_width()/8,y=screen:get_height()/4,width=152,height=208,img="squirrel_game/images/menuImg/thunderAcorn.png"},
+  [2]={x=0,y=0,width=screen:get_width(),height=screen:get_height(),img="squirrel_game/images/menuImg/gravityFlip.jpg"},
 }
-menu.number_of_items = table.getn(menu.items) 
+--menu.number_of_items = table.getn(menu.items) 
 menu.indicator_color={r=255,g=0,b=0}
 
-
+local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu"
 local backdrop = nil
 local menuSurface = nil
 local tile_surface_set = {}
@@ -35,21 +41,20 @@ if timer then
    timer = nil
 end
 
-function startMenu()
-  
+function start_menu()
   -- Creates all components for menu screen
   create_menu_components()
   
   -- Starts a timer which calls the update function every 100 milliseconds
   timer = sys.new_timer(100, "update_menu")
   draw_menu()
-end 
-
-function stopMenu()
+ end 
+ 
+ function stop_menu()
   screen:clear()
   timer:stop()
-  timer = nil  
-end
+  timer = nil 
+ end
 
 function create_menu_components()
   -- Create semi-transparent background
@@ -82,21 +87,26 @@ function create_backdrop()
   return sf, sf_png, t_a
 end
 
---Creates a new menu background surface
+--Creates a new menu background surface based on menuState "gs"
 function create_menu_background()
+  local sf=nil
+  local img_surface=nil
   
   -- Set menu size
   menu.width = screen:get_width()*0.2 --10% of screen width
-  menu.height= 30 + ((menu.tile_height+10)*menu.number_of_items)
+  if menuState=="start_menu" then -- MENU HEIGHT VARIES DEPENDING ON MENY TYPE
+    menu.height= 30 + ((menu.tile_height+10)*table.getn(menu.start_menu_items))
+  elseif menuState=="pause_menu" then
+    menu.height= 30 + ((menu.tile_height+10)*table.getn(menu.pause_menu_items))
+  end
  
   -- Create menu background surface
-  local sf = gfx.new_surface(menu.width, menu.height)
-
+  sf= gfx.new_surface(menu.width, menu.height)
+   
   -- Set menu background image
-  local img_surface=nil
-  img_surface = gfx.loadpng("game/images/menuImg/menuBackground.png")
+  img_surface = gfx.loadpng("squirrel_game/images/menuImg/menuBackground.png")
   sf:copyfrom(img_surface,nil,{x=0,y=0,width=menu.width,height=menu.height})
- 
+  
   return sf
 end
 
@@ -104,15 +114,19 @@ end
 function create_menu_tiles()
   
   local tile_set={}
-   
+  local nbr_of_tiles=nil
+  if menuState=="start_menu" then
+    nbr_of_tiles=table.getn(menu.start_menu_items)
+  elseif menuState=="pause_menu" then
+    nbr_of_tiles=table.getn(menu.pause_menu_items)
+  end
+  
   -- Create menu tile rectangles    CREATE AN ARRAY WITH ALL TILES AND LOOP THROUGH IT WHEN DRAWING TO AVOID BLACK AREAS
-  for i = 1, menu.number_of_items, 1 do
-   
+  for i = 1, nbr_of_tiles, 1 do
     -- Create tile object
     local tile={}
-    
     -- Set tile size 
-    tile.width= menu.width*0.9-- 90% of menu width
+    tile.width= menu.width*0.9 -- 90% of menu width
     tile.height= menu.tile_height
     
     -- Create tile surface
@@ -120,7 +134,11 @@ function create_menu_tiles()
     
     -- Set button image
     local img_surface=nil
-    img_surface = gfx.loadpng(menu.items[i].img)
+    if menuState=="start_menu" then 
+      img_surface = gfx.loadpng(menu.start_menu_items[i].img) -- GET IMAGES FOR START MENU
+    elseif menuState=="pause_menu" then 
+      img_surface = gfx.loadpng(menu.pause_menu_items[i].img) -- GET IMAGES FROM PAUSE MENU
+    end
     sf:copyfrom(img_surface,nil,{x=0,y=0,width=tile.width,height=tile.height})
     
     -- Add attributes to tile object
@@ -159,7 +177,7 @@ end
 
 function draw_menu()
   
-  --Put the menu-png in the background
+  --Put the background image in the background (THIS WILL NOT BE NECESSARY WHEN THERE IS A GAME)
   screen:copyfrom(backgroundImageSurface,nil,{x=menu.images[2].x,y=menu.images[2].y,width=menu.images[2].width,height=menu.images[2].height})
   
   --Put semi-transparent backdrop over backgroun image
@@ -184,39 +202,73 @@ function draw_menu()
 
 end
 
---SUPPOSED TO UPDATE THE MENU TO SHOW WHAT MENU TILE IS CURRENTLY SELECTED
+-- UPDATES THE menu TO SHOW WHAT MENU TILE IS CURRENTLY SELECTED
 function update_menu()
   menuSurface = create_menu_background()
   tile_surface_set=create_menu_tiles()
   draw_menu()
 end
 
+-- SETS A MENU STATE WHICH DETERMINES WHICH MENU WILL BE SHOWN. POSSIBLE STATES ARE: "pause_menu" AND "start_menu"
+function set_menu_state(state)
+  if state=="start_menu" or state=="pause_menu" then
+    menuState=state
+  else 
+    menuState="start_menu"
+  end
+end
+
+function get_menu_state()
+  return menuState
+end
 
 --HANDLES NAVIGATION AND COMMANDS 
 function menu_key_down(key, state)
-  
-  if key=="down" and state=='up' and indexed_menu_item<menu.number_of_items then
-    indexed_menu_item=indexed_menu_item+1
+ 
+  if key=="down" and state=='up' then
+    if menuState=="start_menu" and indexed_menu_item<table.getn(menu.start_menu_items) then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
+      indexed_menu_item=indexed_menu_item+1
+    elseif menuState=="pause_menu" and indexed_menu_item<table.getn(menu.pause_menu_items) then-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU
+      indexed_menu_item=indexed_menu_item+1
+    end
+    
   elseif key=="up" and state=='up' and indexed_menu_item>1 then
-    indexed_menu_item=indexed_menu_item-1
-  elseif key=="ok" and state=='up' then
+      indexed_menu_item=indexed_menu_item-1
       
-      -- ACTIONS WHEN MENU BUTTONS ARE PRESSED
-      if menu.items[indexed_menu_item].id=="start" then
-        -- COMMAND TO START GAME        
-        stopMenu()
-        startGame()
-        game_state = 0
-      end
-      if menu.items[indexed_menu_item].id=="high_score" then
-        -- COMMAND TO VIEW HIGH SCORE
-      end
-      if menu.items[indexed_menu_item].id=="settings" then
-        -- COMMAND TO VIEW SETTINGS
-      end
-      if menu.items[indexed_menu_item].id=="exit" then
-        -- COMMAND TO EXIT
-        sys.stop()
+  elseif key=="ok" and state=='up' then
+      if menuState=="start_menu" then
+        
+        -- ACTIONS WHEN menu BUTTONS ARE PRESSED
+        if menu.start_menu_items[indexed_menu_item].id=="start_new" then
+          -- COMMAND TO START GAME
+          stop_menu()
+          start_game()
+          global_game_state = 1
+        end
+        
+        if menu.start_menu_items[indexed_menu_item].id=="high_score" then
+          -- COMMAND TO VIEW HIGH SCORE
+        end
+        if menu.start_menu_items[indexed_menu_item].id=="settings" then
+          -- COMMAND TO VIEW SETTINGS
+        end
+        if menu.start_menu_items[indexed_menu_item].id=="exit" then
+          sys.stop() -- COMMAND TO EXIT
+        end
+      elseif menuState=="pause_menu" then
+         -- ACTIONS WHEN menu BUTTONS ARE PRESSED
+        if menu.pause_menu_items[indexed_menu_item].id=="start_new" then
+          -- COMMAND TO START GAME
+        end
+        if menu.pause_menu_items[indexed_menu_item].id=="resume" then
+          -- COMMAND TO VIEW HIGH SCORE
+        end
+        if menu.pause_menu_items[indexed_menu_item].id=="settings" then
+          -- COMMAND TO VIEW SETTINGS
+        end
+        if menu.pause_menu_items[indexed_menu_item].id=="exit" then
+          sys.stop() -- COMMAND TO EXIT
+        end
       end
   end 
 end

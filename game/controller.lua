@@ -1,6 +1,6 @@
 function onKey(key, state)
   
-  if game_state == 0 then
+  if global_game_state == 0 then
     menu_key(key, state)
   end 
   

@@ -16,7 +16,7 @@ player = {}
 player.x = 100
 player.y = 100
 
-function startGame()   
+function start_game()   
   
   lives = 10
   timer = sys.new_timer(20, "update_cb")
@@ -26,7 +26,7 @@ function startGame()
   floors = Level.get_floor()
 end
 
-function stopGame()
+function stop_game()
   screen:clear()
   timer:stop()
   timer = nil  
