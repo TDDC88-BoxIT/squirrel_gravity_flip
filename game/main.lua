@@ -1,7 +1,9 @@
 package.path = package.path .. arg[1] .. "\\game\\?.lua;"
+
 require "game"
 require "menu"
 
+require "controller"
 game_state = 0
 function onStart()
   --startGame()
@@ -9,10 +11,7 @@ function onStart()
   
 end
 
-
-
-function onKey(key, state)
-  
+function onfKey(key, state) 
   
   if key=="ok" and state=='up' then
     if game_state == 1 then    
@@ -27,3 +26,6 @@ function onKey(key, state)
   end
   
 end
+
+
+

@@ -16,8 +16,7 @@ player = {}
 player.x = 100
 player.y = 100
 
-function startGame()  
-  
+function startGame()   
   
   lives = 10
   timer = sys.new_timer(20, "update_cb")
@@ -57,10 +56,9 @@ function update_cb(timer)
   end
 end
 
-function draw_tile(tile)
+function draw_tile(tile) 
   
-  
-  screen:fill({r=255,g=0,b=0}, {x=tile.x, y=tile.y, width=tile.width, height=tile.height})
-  
+  screen:fill({r=255,g=0,b=0}, {x=tile.x, y=tile.y, width=tile.width, height=tile.height})  
 end
+
 

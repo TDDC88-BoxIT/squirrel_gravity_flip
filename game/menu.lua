@@ -193,7 +193,7 @@ end
 
 
 --HANDLES NAVIGATION AND COMMANDS 
-function onKey(key, state)
+function menu_key_down(key, state)
   
   if key=="down" and state=='up' and indexed_menu_item<menu.number_of_items then
     indexed_menu_item=indexed_menu_item+1
@@ -203,7 +203,10 @@ function onKey(key, state)
       
       -- ACTIONS WHEN MENU BUTTONS ARE PRESSED
       if menu.items[indexed_menu_item].id=="start" then
-        -- COMMAND TO START GAME
+        -- COMMAND TO START GAME        
+        stopMenu()
+        startGame()
+        game_state = 0
       end
       if menu.items[indexed_menu_item].id=="high_score" then
         -- COMMAND TO VIEW HIGH SCORE
