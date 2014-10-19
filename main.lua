@@ -66,7 +66,7 @@ function love.load()
   
   --require('game.game')
   buffer_screen = screen
-  require('game.game')
+  require('squirrel_game.menu')
 end
 
 

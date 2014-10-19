@@ -106,7 +106,7 @@ function create_menu_background()
   -- Set menu background image
   img_surface = gfx.loadpng("squirrel_game/images/menuImg/menuBackground.png")
   sf:copyfrom(img_surface,nil,{x=0,y=0,width=menu.width,height=menu.height})
-  
+  img_surface:destroy() -- ELIMINATE UNECESSARY RAM-USAGE
   return sf
 end
 
@@ -140,7 +140,8 @@ function create_menu_tiles()
       img_surface = gfx.loadpng(menu.pause_menu_items[i].img) -- GET IMAGES FROM PAUSE MENU
     end
     sf:copyfrom(img_surface,nil,{x=0,y=0,width=tile.width,height=tile.height})
-    
+    img_surface:destroy() -- ELIMINATE UNECESSARY RAM-USAGE
+
     -- Add attributes to tile object
     tile.surface=sf
     tile.x= (menu.width-tile.width)/2 -- Centering menu tiles in menu background on the x-axis
@@ -179,24 +180,27 @@ function draw_menu()
   
   --Put the background image in the background (THIS WILL NOT BE NECESSARY WHEN THERE IS A GAME)
   screen:copyfrom(backgroundImageSurface,nil,{x=menu.images[2].x,y=menu.images[2].y,width=menu.images[2].width,height=menu.images[2].height})
-  
+  backgroundImageSurface:destroy()
   --Put semi-transparent backdrop over backgroun image
   screen:copyfrom(backdrop,nil,nil,true)
-  
+  backdrop:destroy()
   --Put thunder acorns on backdrop
   screen:copyfrom(thunder_acorn,nil,{x=menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,height=menu.images[1].height},true)
   screen:copyfrom(thunder_acorn,nil,{x=5.9*menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,height=menu.images[1].height},true)
-  
+  thunder_acorn:destroy()
   --Put tiles on menu background
   for k,v in pairs(tile_surface_set) do
     if indexed_menu_item==k then
       v.surface:copyfrom(indicator_object.surface,nil,{x=indicator_object.x,y=indicator_object.y,width=indicator_object.width,height=indicator_object.height})
+      indicator_object:destroy()
     end
     menuSurface:copyfrom(v.surface,nil,{x=v.x,y=v.y,width=v.width,height=v.height},true)
+    v.surface:destroy()
   end
   
   -- Put menu background on screen
   screen:copyfrom(menuSurface,nil,{x=menu.x,y=menu.y,width=menu.width,height=menu.height},true)
+  menuSurface:destroy()
   
   gfx.update()
 
