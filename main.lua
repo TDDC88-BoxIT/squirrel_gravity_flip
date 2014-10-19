@@ -63,10 +63,10 @@ function love.load()
   key_translation["f"] = "play_list"
   key_translation["u"] = "mute"
   
+  
   --require('game.game')
   buffer_screen = screen
-  require('game.main')
-
+  require('game.game')
   --require('test')
 end
 
@@ -103,6 +103,8 @@ function love.keypressed(key, isrepeat)
   if key_translation[key] ~= nil and type(onKey) == "function" then
     print("Keybord key: " .. key .. ", STB key: " .. key_translation[key] .. ", state: " .. state )
     onKey(key_translation[key], state)
+  elseif key == "escape" then
+    print("Memory usage: " .. string.format("%.0f",gfx.get_memory_use()) .. " of " .. string.format("%.0f",gfx.get_memory_limit()) .. " bytes or " .. string.format("%.2f", gfx.get_memory_use() * 100 / gfx.get_memory_limit()) .. " %")
   end
 end
 
