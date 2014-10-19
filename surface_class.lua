@@ -208,5 +208,6 @@ function surface_class:premultiply()
 end
 
 function surface_class:destroy()
+  gfx.memory_use = gfx.memory_use - (self.canvas:getWidth()*self.canvas:getHeight()*4)
   self.canvas = nil
 end

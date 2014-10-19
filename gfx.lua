@@ -53,12 +53,13 @@ end
 
 
 function gfx.new_surface(width, height)
+  gfx.memory_use = gfx.memory_use + (width*height*4)
   return surface_class(width, height)
 end
 
 
 function gfx.get_memory_use()
-  return 1000000 -- TODO
+  return gfx.memory_use
 end
 
 
@@ -67,7 +68,8 @@ screen = surface_class(love.graphics.getDimensions())
 --buffer_screen = gfx.screen
 
 function gfx.get_memory_limit()
-  return 1000000 -- TODO
+  -- Taken from the box
+  return 10485760
 end
 
 
@@ -86,6 +88,7 @@ end
 function gfx.loadjpeg(path)
   image = love.graphics.newImage(path)
   surface = surface_class(image:getDimensions())
+  gfx.memory_use = gfx.memory_use + (image:getWidth()*image:getHeight()*4)
   love.graphics.setCanvas(surface.canvas)
   love.graphics.setColor(check_color({255,255,255,255}))
   --love.graphics.setBlendMode('premultiplied')
@@ -100,5 +103,6 @@ end
 ----------------------
 
 gfx.auto_update = false
+gfx.memory_use = 0
 
 return gfx
