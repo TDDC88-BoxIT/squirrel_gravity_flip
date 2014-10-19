@@ -12,11 +12,12 @@ require "level"
 
 
 player = {}
---player.image = love.graphics.newImage("images/hero.png")
-player.x = 100
-player.y = 100
+--player.image = "game/images/hero.png"
+player.x = 400
+player.y = 480
+pos_change = 0
 
-function startGame()   
+function start_game()   
   
   lives = 10
   timer = sys.new_timer(20, "update_cb")
@@ -26,7 +27,7 @@ function startGame()
   floors = Level.get_floor()
 end
 
-function stopGame()
+function stop_game()
   screen:clear()
   timer:stop()
   timer = nil  
@@ -37,7 +38,8 @@ function draw_screen(floors)
   screen:clear({r=72,g=72,b=72})
   
   for k,v in pairs(floors) do 
-    draw_tile(v)
+    draw_tile(v, pos_change)
+    pos_change = pos_change + 0.1
   end
 end
 
@@ -56,9 +58,9 @@ function update_cb(timer)
   end
 end
 
-function draw_tile(tile) 
+function draw_tile(tile, pos_change) 
   
-  screen:fill({r=255,g=0,b=0}, {x=tile.x, y=tile.y, width=tile.width, height=tile.height})  
+  screen:fill({r=255,g=0,b=0}, {x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})  
 end
 
 
