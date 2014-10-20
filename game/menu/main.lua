@@ -10,6 +10,9 @@ local backgroundImage = nil
 local backdrop = nil
 
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
+local current_character = 1
+local squirrel1 = {}
+local squirrel2 = {}
 
 function start_menu()
   local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
@@ -22,6 +25,7 @@ function start_menu()
   menu:set_menu_background("game/images/menuImg/menuBackground.png")
   menu:assemble()
   timer = sys.new_timer(100, "update_menu")
+  add_running_squirrel()
   draw_menu()
 end 
 
@@ -43,6 +47,33 @@ function add_menu_items()
 
   menu:add_menu_item("settings","game/images/menuImg/settings.png")
   menu:add_menu_item("exit","game/images/menuImg/exit.png")    
+end
+
+
+function add_running_squirrel()
+  squirrel1.path= "game/images/menuImg/squirrel1.png"
+  squirrel1.width=117
+  squirrel1.height=140
+
+  squirrel2.path= "game/images/menuImg/squirrel2.png"
+  squirrel2.width=117
+  squirrel2.height=140
+
+  -- SETS A BACKGROUND IMAGE ON SCREEN
+  squirrel1.img = gfx.loadpng(squirrel1.path)
+  squirrel2.img = gfx.loadpng(squirrel2.path) 
+end
+
+function change_character()
+  if current_character==1 then
+    screen:copyfrom(squirrel2.img, nil,{x=200,y=250,width=squirrel2.width,height=squirrel2.height},true)
+    screen:copyfrom(squirrel2.img, nil,{x=950,y=250,width=squirrel2.width,height=squirrel2.height},true)
+    current_character=2
+  else
+    screen:copyfrom(squirrel1.img, nil,{x=200,y=250,width=squirrel1.width,height=squirrel1.height},true)
+    screen:copyfrom(squirrel1.img, nil,{x=950,y=250,width=squirrel1.width,height=squirrel1.height},true)
+    current_character=1
+  end
 end
 
 function add_menu_bling()
@@ -88,8 +119,10 @@ function get_menu_state()
 end
 
 function draw_menu()
+  screen:clear()
   if addBling==true then
     add_menu_bling()
+    change_character()
   end
   screen:copyfrom(menu:get_menu_surface(), nil,{x=menu:get_location().x,y=menu:get_location().y,width=menu:get_size().width,height=menu:get_size().height},true)
   menu:get_menu_surface():destroy()

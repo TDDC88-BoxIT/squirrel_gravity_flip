@@ -1,4 +1,35 @@
 
+local squirrel1 = {}
+squirrel1.path= "game/images/menuImg/squirrel1.png"
+squirrel1.width=117
+squirrel1.height=140
+
+local squirrel2 = {}
+squirrel2.path= "game/images/menuImg/squirrel2.png"
+squirrel2.width=117
+squirrel2.height=140
+
+-- SETS A BACKGROUND IMAGE ON SCREEN
+squirrel1.img = gfx.loadpng(squirrel1.path)
+squirrel2.img = gfx.loadpng(squirrel2.path)
+
+timer = sys.new_timer(100, "change_character")
+current_character = 1
+function change_character()
+	screen:clear()
+	if current_character==1 then
+		screen:copyfrom(squirrel2.img, nil,{x=0,y=0,width=squirrel2.width,height=squirrel2.height},true)
+		current_character=2
+	else
+		screen:copyfrom(squirrel1.img, nil,{x=0,y=0,width=squirrel1.width,height=squirrel1.height},true)
+		current_character=1
+	end
+end
+
+  
+
+  -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
+ 
 --Create surface a
 --local a = gfx.new_surface(30, 30)
 
