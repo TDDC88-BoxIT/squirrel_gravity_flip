@@ -6,9 +6,6 @@ function onKey(key, state)
   
 end
 
-
-
-
 function menu_key(key, state)
   menu_key_down(key, state)
 end

@@ -41,6 +41,8 @@ if timer then
    timer = nil
 end
 
+local st_menu
+
 function onStart()
   -- Creates all components for menu screen
   create_menu_components()
@@ -67,7 +69,7 @@ end
 --Creates semi-transparent backdrop to cover game screen  
 function create_backdrop()
   -- Create menu background surface
-  local sf = gfx.new_surface(screen:get_width(),screen:get_height())  --HOW TO DESTROY THIS????
+  local sf = gfx.new_surface(screen:get_width(),screen:get_height())
   --Set color and location of menu surface
   sf:fill({r=0,g=0,b=0,a=200})
   
@@ -174,22 +176,18 @@ function draw_menu()
   
   --Put the background image in the background (THIS WILL NOT BE NECESSARY WHEN THERE IS A GAME)
   screen:copyfrom(backgroundImageSurface,nil,{x=menu.images[2].x,y=menu.images[2].y,width=menu.images[2].width,height=menu.images[2].height})
-  backgroundImageSurface:destroy()
 
   --Put semi-transparent backdrop over backgroun image
   screen:copyfrom(backdrop,nil,nil,true)
-  backdrop:destroy()
-
+ 
   --Put thunder acorns on backdrop
   screen:copyfrom(thunder_acorn,nil,{x=menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,height=menu.images[1].height},true)
   screen:copyfrom(thunder_acorn,nil,{x=5.9*menu.images[1].x,y=menu.images[1].y,width=menu.images[1].width,height=menu.images[1].height},true)
-  thunder_acorn:destroy()
 
   --Put tiles on menu background
   for k,v in pairs(tile_surface_set) do
     if indexed_menu_item==k then
       v.surface:copyfrom(indicator_object.surface,nil,{x=indicator_object.x,y=indicator_object.y,width=indicator_object.width,height=indicator_object.height})  
-      indicator_object.surface:destroy()
     end
     menuSurface:copyfrom(v.surface,nil,{x=v.x,y=v.y,width=v.width,height=v.height},true)
     v.surface:destroy()
@@ -197,9 +195,18 @@ function draw_menu()
   
   -- Put menu background on screen
   screen:copyfrom(menuSurface,nil,{x=menu.x,y=menu.y,width=menu.width,height=menu.height},true)
-  menuSurface:destroy()
+  destroy_unnecessary_surfaces()
   gfx.update()
 
+end
+
+function destroy_unnecessary_surfaces()
+  -- THE CONTENT OF THE FOLLOWING SURFACES HAVE BEEN COPIED TO SCREEN AND CAN THEREFOR BE REMOVED IN ORDER TO SAVE RAM
+  backgroundImageSurface:destroy()
+  backdrop:destroy()
+  thunder_acorn:destroy()
+  indicator_object.surface:destroy()
+  menuSurface:destroy()
 end
 
 -- UPDATES THE menu TO SHOW WHAT MENU TILE IS CURRENTLY SELECTED
