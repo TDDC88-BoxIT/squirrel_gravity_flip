@@ -1,7 +1,15 @@
-require("menu.menu_object")
+require("menu/menu_object")
 
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu"
 local menu = nil
+local thunder_acorn_path = "game/images/menuImg/thunderAcorn.png"
+local background_image_path = "game/images/menuImg/gravityFlip.jpg"
+
+local thunderAcorn = {}
+local backgroundImage = nil
+local backdrop = nil
+
+local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 
 function start_menu()
   local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
@@ -37,6 +45,31 @@ function add_menu_items()
   menu:add_menu_item("exit","game/images/menuImg/exit.png")    
 end
 
+function add_menu_bling()
+  thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
+  thunderAcorn.height=139
+  thunderAcorn.width=101
+
+  -- SETS A BACKGROUND IMAGE ON SCREEN
+  backgroundImage = gfx.loadpng(background_image_path)
+  screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
+
+  -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN
+  backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
+  backdrop:fill({r=0,g=0,b=0,a=200})
+  screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
+
+  -- SETS FOUR THUNDER ACORNS ON SCREEN
+  screen:copyfrom(thunderAcorn.img, nil,{x=0,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  
+  -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
+  backgroundImage:destroy()
+  thunderAcorn.img:destroy()
+  backdrop:destroy()
+end
 
 -- SETS A MENU STATE WHICH DETERMINES WHICH MENU WILL BE SHOWN. POSSIBLE STATES ARE: "pause_menu" AND "start_menu"
 function set_menu_state(state)
@@ -56,7 +89,10 @@ function get_menu_state()
 end
 
 function draw_menu()
-  screen:copyfrom(menu:get_menu_surface(), nil,{x=menu:get_location().x,y=menu:get_location().y,width=menu:get_size().width,height=menu:get_size().height})
+  if addBling==true then
+    add_menu_bling()
+  end
+  screen:copyfrom(menu:get_menu_surface(), nil,{x=menu:get_location().x,y=menu:get_location().y,width=menu:get_size().width,height=menu:get_size().height},true)
   menu:get_menu_surface():destroy()
 end
 

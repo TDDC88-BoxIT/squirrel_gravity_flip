@@ -64,7 +64,7 @@ function love.load()
   key_translation["u"] = "mute"
   
   
-  require('game.main')
+  require('game/main')
   buffer_screen = screen
   --require('test')
   --require('squirrel_game.menu')
