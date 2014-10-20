@@ -46,10 +46,6 @@ function add_menu_items()
 end
 
 function add_menu_bling()
-  thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
-  thunderAcorn.height=139
-  thunderAcorn.width=101
-
   -- SETS A BACKGROUND IMAGE ON SCREEN
   backgroundImage = gfx.loadpng(background_image_path)
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
@@ -60,6 +56,9 @@ function add_menu_bling()
   screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
 
   -- SETS FOUR THUNDER ACORNS ON SCREEN
+  thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
+  thunderAcorn.height=139
+  thunderAcorn.width=101
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
