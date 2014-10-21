@@ -5,7 +5,7 @@ local menu_height= 300
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu"
-local menu = nil
+local menu = nil  -- THE MENU SURFACE VARIABLE
 
 local thunder_acorn_path = "game/images/menuImg/thunderAcorn.png"
 local thunderAcorn = {}
@@ -36,7 +36,7 @@ function add_items()
   menu:add_item("start_new","game/images/menuImg/start.png")
 
   if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
-    menu:add_item("highScore","game/images/menuImg/highScore.png")
+    menu:add_item("high_score","game/images/menuImg/highScore.png")
   elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
     menu:add_item("resume","game/images/menuImg/resume.png")
   end
@@ -45,12 +45,7 @@ function add_items()
   menu:add_item("exit","game/images/menuImg/exit.png")    
 end
 
-
-function add_running_squirrel()
-  squirrel=character_object(117,140,"game/images/menuImg/squirrel1.png")
-  squirrel:add_image("game/images/menuImg/squirrel2.png") 
-end
-
+-- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
   backgroundImage = gfx.loadpng(background_image_path)
@@ -72,11 +67,13 @@ function add_menu_bling()
   
   -- ADD A RUNNING SQUIRREL
   if squirrel==nil then
-    add_running_squirrel()  
+    squirrel=character_object(117,140,"game/images/menuImg/squirrel1.png")
+    squirrel:add_image("game/images/menuImg/squirrel2.png") 
   end
   squirrel:update()
   screen:copyfrom(squirrel:get_surface(), nil,{x=200,y=250,width=squirrel:get_size().width,height=squirrel:get_size().height},true)
-  
+  screen:copyfrom(squirrel:get_surface(), nil,{x=(screen:get_width()-(squirrel:get_size().width+200)),y=250,width=squirrel:get_size().width,height=squirrel:get_size().height},true)
+
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
   backgroundImage:destroy()
   thunderAcorn.img:destroy()
@@ -105,7 +102,7 @@ end
 function draw_menu()
   screen:clear()
   if addBling==true then
-    add_menu_bling()
+    add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRREL)
   end
   menu:update()
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
@@ -130,9 +127,15 @@ function menu_key_down(key, state)
       stop_menu()
       start_game()
       global_game_state = 1
-    elseif menu:get_indexed_item().id=="resume" then
-      -- COMMAND TO VIEW HIGH SCORE    
-    elseif menu:get_indexed_item().id=="high_score" then
+    elseif menu:get_indexed_item().id=="resume" then  -- RIGHT NOW THIS SWAPS TO PAUSE MENU
+      set_menu_state("start_menu")
+      menu:clear_items()
+      add_items()
+      -- COMMAND TO VIEW RESUME
+    elseif menu:get_indexed_item().id=="high_score" then -- RIGHT NOW THIS SWAPS TO START MENU
+      set_menu_state("pause_menu")
+      menu:clear_items()
+      add_items()
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then
       -- COMMAND TO VIEW SETTINGS

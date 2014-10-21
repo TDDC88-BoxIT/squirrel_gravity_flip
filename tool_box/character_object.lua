@@ -16,13 +16,13 @@ end)
 
 -- SETS MENU SIZE
 function character_object:set_size(character_width, character_height)
-	self.widht=character_width or self.width
+	self.width=character_width or self.width
 	self.height=character_height or self.height
 end
 
 -- RETURNS MENU SIZE
 function character_object:get_size()
-	local size={widht=self.width, height=self.height}
+	local size={width=self.width, height=self.height}
 	return size
 end
 
