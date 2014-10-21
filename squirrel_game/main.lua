@@ -3,6 +3,7 @@
 -- port the game from Love2D to ZenterioOS.
 
 love.filesystem.load("tiledmap.lua")()
+require "physic"
 
 
 gKeyPressed = {}
@@ -29,11 +30,47 @@ function love.keypressed( key, unicode )
 end
 
 function love.update( dt )
-	local s = 480*dt
-	if (gKeyPressed.up) then player.y = player.y - s  end
-	if (gKeyPressed.down) then player.y = player.y + s end
-	if (gKeyPressed.left) then player.x = player.x - s end
-	if (gKeyPressed.right) then player.x = player.x + s end
+  local s = 700*dt
+  
+  -- gravity
+  gsetGravity(10)
+  local gy = CurveY(dt)
+  player.y = player.y + gy
+  if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+    player.y = player.y - 2*gy
+  end
+  
+  -- go ahead
+  player.x = player.x + 100*dt
+  if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+    player.x = player.x - 100*dt
+  end
+	if (gKeyPressed.up) then
+    ToTop()
+    player.y = player.y - s
+    if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+      player.y = player.y + s
+    end
+  end
+	if (gKeyPressed.down) then
+    ToBottom()
+    player.y = player.y + s
+    if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+      player.y = player.y - 2*s
+    end
+  end
+	if (gKeyPressed.left) then
+    player.x = player.x - s
+    if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+      player.x = player.x + s
+    end
+  end
+	if (gKeyPressed.right) then
+    player.x = player.x + s
+    if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+      player.x = player.x - s
+    end
+  end
   gCamX = player.x
   gCamY = player.y
 end

@@ -157,3 +157,37 @@ function TiledMap_Parse(filename)
 	return tiles, layers
 end
 
+-- basic check collision - logic
+function hitTest (camx,camy, herox, heroy, herosize)
+	camx,camy = floor(camx),floor(camy)
+	local screen_w = love.graphics.getWidth()
+	local screen_h = love.graphics.getHeight()
+	local minx,maxx = floor((camx-screen_w/2)/kTileSize),ceil((camx+screen_w/2)/kTileSize)
+	local miny,maxy = floor((camy-screen_h/2)/kTileSize),ceil((camy+screen_h/2)/kTileSize)
+	for z = 1,#gMapLayers do
+    for x = minx,maxx do
+      for y = miny,maxy do
+        local gfx = gTileGfx[TiledMap_GetMapTile(x,y,z)]
+        if (gfx) then
+          local sx = x*kTileSize - camx + screen_w/2
+          local sy = y*kTileSize - camy + screen_h/2
+          local temp = CheckCollision2(herox, heroy, herosize, herosize, sx, sy, kTileSize, kTileSize)
+          if temp ~= nil then
+              return temp
+          end
+    --			love.graphics.draw(gfx,sx,sy) -- x, y, r, sx, sy, ox, oy
+        end
+      end
+    end
+	end
+  return nil
+end
+
+-- basic check collesion
+function checkCollesion(ax1,ay1,aw,ah, bx1,by1,bw,bh)
+  local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
+  if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
+    return 1-- left & right
+  end
+  return 0
+end
