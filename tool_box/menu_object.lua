@@ -2,9 +2,7 @@
 -- menu_object class --
 -----------------------
 -- THE MENU CONSTRUCTOR SETS START VALUES FOR THE MENU
-menu_object = class(function (self, menu_x, menu_y, menu_width, menu_height)
-	self.x = menu_x or 0
-  self.y = menu_y or 0
+menu_object = class(function (self, menu_width, menu_height)
 	self.width = menu_width or screen:get_width()*0.2
 	self.height = menu_height or 300
   self.tile_height = 60
@@ -15,19 +13,8 @@ menu_object = class(function (self, menu_x, menu_y, menu_width, menu_height)
 	self.indicator_width=self.tile_width*0.05
   self.indexed_item=1
   self.menu_items={}
+  self.menu_surface=nil
 end)
-
--- SETS MENU LOCATION
-function menu_object:set_location(menu_x, menu_y)
-	self.x = menu_x or self.x
-	self.y = menu_y or self.y
-end
-
--- RETURNS MENU LOCATION
-function menu_object:get_location()
-	local location={x=self.x, y=self.y}
-	return location
-end
 
 -- SETS MENU SIZE
 function menu_object:set_size(menu_width,menu_height)
@@ -66,62 +53,52 @@ function menu_object:get_tile_location()
 end
 
 -- ADDS NEW MENU ITEMS
-function menu_object:add_menu_item(item_id, img_Path)
+function menu_object:add_item(item_id, img_Path)
 	table.insert(self.menu_items, table.getn(self.menu_items)+1, {id=item_id,img=img_Path})
 end
 
 -- CLEARS ALL ADDED MENU ITEMS
-function menu_object:clear_menu_items()
+function menu_object:clear_items()
   self.menu_items={}
 end
 
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
-function menu_object:get_indexed_menu_item()
+function menu_object:get_indexed_item()
   return self.menu_items[self.indexed_item]
 end 
 
 -- RETURNS ALL MENU ITEMS
-function menu_object:get_menu_items()
+function menu_object:get_items()
 	return self.menu_items
 end
 
--- RETURNS THE MENU SURFACE
-function menu_object:get_menu_surface()
-	return self.menu_surface
-end	
-
 -- SETS THE MENU INDICATOR COLOR
-function menu_object:set_menu_indicator_color(color)
+function menu_object:set_indicator_color(color)
   self.indicator_color=color;
 end
 
 -- SETS THE INDICATOR WIDTH
-function menu_object:set_menu_indicator_width(width)
+function menu_object:set_indicator_width(width)
   self.indicator_width=width
 end
 
 -- INCREASES THE INDEX FOR CURRENTLY SELECTED MENU ITEM
-function menu_object:increase_menu_index()
+function menu_object:increase_index()
   if self.indexed_item<table.getn(self.menu_items) then
     self.indexed_item=self.indexed_item+1
   end
 end
 
 -- DE CREASES THE INDEX FOR CURRENTLY SELECTED MENU ITEM
-function menu_object:decrease_menu_index()
+function menu_object:decrease_index()
   if self.indexed_item>1 then
     self.indexed_item=self.indexed_item-1
   end
 end
 
 -- RETURNS THE INDEX OF THE CURRENTLY SELECTED MENU ITEM
-function menu_object:get_menu_index()
+function menu_object:get_current_index()
   return self.indexed_item
-end
-
-
-function menu_object:assemble()
-  self:update()
 end
 
 -- ASSEMBLES ALL MENU PARTS INTO A MENU
@@ -130,18 +107,18 @@ function menu_object:update()
     self:set_tile_size(nil,(self.height-(table.getn(self.menu_items))*20)/table.getn(self.menu_items))
   end
   self.menu_surface=gfx.new_surface(self.width, self.height)
-  self:make_menu_bakground()
-  self:make_menu_tiles()
+  self:make_bakground()
+  self:make_tiles()
 end
 
 
 -- SETS THE PATH TO THE MENU BACKGROUND IMAGE
-function menu_object:set_menu_background(path)
+function menu_object:set_background(path)
   self.menu_background=path
 end
 
 -- CREATES THE MENU BACKGROUND AND ADDS IT TO THE MENU
-function menu_object:make_menu_bakground()
+function menu_object:make_bakground()
    local img_surface=nil
     img_surface = gfx.loadpng(self.menu_background)
     self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height},true)
@@ -149,7 +126,7 @@ function menu_object:make_menu_bakground()
 end
 
 -- CREATES ALL MENU BUTTONS AND ADDS THEM TO THE MENU
-function menu_object:make_menu_tiles()
+function menu_object:make_tiles()
   -- Create menu tile rectangles    CREATE AN ARRAY WITH ALL TILES AND LOOP THROUGH IT WHEN DRAWING TO AVOID BLACK AREAS
   for i = 1, table.getn(self.menu_items), 1 do
     -- Set button image
@@ -158,14 +135,14 @@ function menu_object:make_menu_tiles()
     self.menu_surface:copyfrom(img_surface,nil,{x=self.tile_x,y=(self.tile_y+(self.tile_height*(i-1)+i*10)
 ),width=self.tile_width,height=self.tile_height},true)
     if i == self.indexed_item then
-		self:make_menu_item_indicator((self.tile_y+(self.tile_height*(i-1)+i*10)))
+		self:make_item_indicator((self.tile_y+(self.tile_height*(i-1)+i*10)))
   	end
     img_surface:destroy()
   end
 end
 
 -- CREATES THE MENU INDICATOR AND ADDS IT TO THE MENU. THE Y-VALUE MARKS WHERE THE INDICATOR IS TO BE PUT
-function menu_object:make_menu_item_indicator(y_value)
+function menu_object:make_item_indicator(y_value)
 	-- Set indicator size
   self.indicator_height = self.tile_height -- Indicator is as high as the tile which it incicates
 	-- Create indicator surface
@@ -176,3 +153,8 @@ function menu_object:make_menu_item_indicator(y_value)
   self.menu_surface:copyfrom(sf,nil,{x=self.tile_x, y=y_value, width=self.indicator_width, height=self.indicator_height})
   sf:destroy()
 end
+
+-- RETURNS THE MENU SURFACE
+function menu_object:get_surface()
+  return self.menu_surface
+end 
