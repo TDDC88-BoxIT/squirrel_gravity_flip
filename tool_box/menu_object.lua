@@ -3,14 +3,13 @@
 -----------------------
 -- THE MENU CONSTRUCTOR SETS START VALUES FOR THE MENU
 menu_object = class(function (self, menu_width, menu_height)
-	self.width = menu_width or screen:get_width()*0.2
+	self.width = menu_width or math.floor(screen:get_width()*0.2)
 	self.height = menu_height or 300
   self.tile_height = 60
-	self.tile_width = self.width*0.9
+	self.tile_width = math.floor(self.width*0.9)
 	self.tile_x = (self.width-self.tile_width)/2
-	self.tile_y = self.height*0.05
+	self.tile_y = math.floor(self.height*0.05)
 	self.indicator_color = {r=255,g=0,b=0}
-	self.indicator_width=self.tile_width*0.05
   self.indexed_item=1
   self.menu_items={}
   self.menu_surface=nil
@@ -144,10 +143,10 @@ end
 -- CREATES THE MENU INDICATOR AND ADDS IT TO THE MENU. THE Y-VALUE MARKS WHERE THE INDICATOR IS TO BE PUT
 function menu_object:make_item_indicator(y_value)
 	-- Set indicator size
-  self.indicator_height = self.tile_height -- Indicator is as high as the tile which it incicates
+  self.indicator_height = self.tile_height -- INDICATOR HEIGHT IS SET TO TILE HEIGHT
+  self.indicator_width = math.floor(self.tile_width*0.05) -- INDICATOR WIDTH IS SET TO 5% OF TILE WIDTH
 	-- Create indicator surface
   local sf = gfx.new_surface(self.indicator_width, self.indicator_height)
- 
 	--Set color for indicator surface
   sf:fill(self.indicator_color)
   self.menu_surface:copyfrom(sf,nil,{x=self.tile_x, y=y_value, width=self.indicator_width, height=self.indicator_height})
