@@ -4,19 +4,20 @@
 
 love.filesystem.load("tiledmap.lua")()
 require "physic"
+require "tiledmap"
 
 
 gKeyPressed = {}
 gCamX,gCamY = 100,100
-local imageDir = "../images/"
+local imageDir = "images/"
 local player = {}
 
 function gravity_module_start()
 	TiledMap_Load("map/prototypeLevel.tmx") 
-  player.image = love.graphics.newImage("images/hero.png")
+  player.image = love.graphics.newImage(imageDir.."hero.png")
   player.x = 100
   player.y = 100 
-  timer = sys.new_timer(100, "gravity_module_load_update") 
+  timer =  love.timer.new_timer(100, "gravity_module_load_update") 
 end
 
 function gravity_module_stop()
@@ -91,3 +92,5 @@ function love.draw()
 	TiledMap_DrawNearCam(gCamX,gCamY)
   love.graphics.draw(player.image, player.x, player.y)
 end
+
+gravity_module_start() -- STARTS THE WHOLE THING

@@ -17,7 +17,7 @@ function TiledMap_Load (filepath,tilesize,spritepath_removeold,spritepath_prefix
 	
 	local tiletype,layers = TiledMap_Parse(filepath)
 	gMapLayers = layers
-	for first_gid,path in pairs(tiletype) do 
+	for first_gid,path in pairs(tiletype) do
 		path = spritepath_prefix .. string.gsub(path,"^"..string.gsub(spritepath_removeold,"%.","%%."),"")
 		local raw = love.image.newImageData(path)
 		local w,h = raw:getWidth(),raw:getHeight()
