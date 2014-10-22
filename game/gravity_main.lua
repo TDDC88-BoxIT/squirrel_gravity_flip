@@ -2,21 +2,23 @@
 -- loader to Zenterio's API once we get control of it. This should allow us to basically
 -- port the game from Love2D to ZenterioOS.
 
-love.filesystem.load("tiledmap.lua")()
-require "physic"
-
+--love.filesystem.load("tiledmap.lua")()
+require ("game/physic")
+require ("game/tiledmap")
 
 gKeyPressed = {}
 gCamX,gCamY = 100,100
-local imageDir = "../images/"
+local imageDir = "images/"
+local mapDir = "map/"
 local player = {}
 
 function gravity_module_start()
-	TiledMap_Load("map/prototypeLevel.tmx") 
-  player.image = love.graphics.newImage("images/hero.png")
+	TiledMap_Load(mapDir.."prototypeLevel.tmx") 
+  player.image = imageDir.."hero.png"
   player.x = 100
   player.y = 100 
-  timer = sys.new_timer(100, "gravity_module_load_update") 
+  timer = sys.new_timer(100, gravity_module_load_update(0.01)) 
+
 end
 
 function gravity_module_stop()
@@ -25,18 +27,9 @@ function gravity_module_stop()
   timer = nil 
  end
 
-function love.keyreleased( key )
-	gKeyPressed[key] = nil
-end
-
-function love.keypressed( key, unicode ) 
-	gKeyPressed[key] = true 
-	if (key == "escape") then os.exit(0) end
-end
-
 function gravity_module_load_update( dt )
   local s = 700*dt
-  
+  hitTest(gCamX, gCamY, player.x, player.y, 32)
   -- gravity
   gsetGravity(10)
   local gy = CurveY(dt)
@@ -53,6 +46,8 @@ function gravity_module_load_update( dt )
   
   gCamX = player.x
   gCamY = player.y
+
+  gravity_draw()
 end
 
 function gravity_module_key_down(key, state)
@@ -83,11 +78,18 @@ function gravity_module_key_down(key, state)
       player.x = player.x - s
     end
   end
+  if key=="escape" and state=='down' then 
+    sys.stop() -- COMMAND TO EXIT
+  end
 end
 
-function love.draw()
-  love.graphics.print('dat squirrel thang (arrow keys to move, esc to close)', 50, 50)
-	love.graphics.setBackgroundColor(0x80,0x80,0x80)
-	TiledMap_DrawNearCam(gCamX,gCamY)
-  love.graphics.draw(player.image, player.x, player.y)
+function gravity_draw()
+  --love.graphics.print('dat squirrel thang (arrow keys to move, esc to close)', 50, 50)
+	--love.graphics.setBackgroundColor(0x80,0x80,0x80)
+	--TiledMap_DrawNearCam(gCamX,gCamY)
+  --love.graphics.draw(player.image, player.x, player.y)
+  sf = gfx.loadpng(player.image)
+  screen:copyfrom(sf, nil,{x=player.x,y=player.y,width=32,height=32},true)
+  sf:destroy()
+  gfx.update()
 end

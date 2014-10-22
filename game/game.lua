@@ -13,17 +13,20 @@ require "level"
 
 player = {}
 --player.image = "game/images/hero.png"
-player.x = 400
-player.y = 480
-pos_change = 0
-
 function start_game()   
-  
+  player.x = 400
+  player.y = 480
+  pos_change = 0
   lives = 10
   timer = sys.new_timer(20, "update_cb")
-  
   Level.load_level(2)
+  floors = Level.get_floor()
+end
 
+function resume_game()   
+  lives = 10
+  timer = sys.new_timer(20, "update_cb")
+  Level.load_level(2)
   floors = Level.get_floor()
 end
 
@@ -62,5 +65,15 @@ function draw_tile(tile, pos_change)
   
   screen:fill({r=255,g=0,b=0}, {x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})  
 end
+
+function game_key_down(key, state)
+  print(key)
+  if key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
+    stop_game()
+    change_global_game_state(0)
+    set_menu_state("pause_menu")
+    start_menu()
+  end
+end 
 
 
