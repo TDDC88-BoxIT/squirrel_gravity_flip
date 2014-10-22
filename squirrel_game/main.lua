@@ -12,12 +12,12 @@ gCamX,gCamY = 100,100
 local imageDir = "images/"
 local player = {}
 
-function gravity_module_start()
+function love.load()
 	TiledMap_Load("map/prototypeLevel.tmx") 
   player.image = love.graphics.newImage(imageDir.."hero.png")
   player.x = 100
   player.y = 100 
-  timer =  love.timer.new_timer(100, "gravity_module_load_update") 
+  --timer =  love.timer.new_timer(100, "gravity_module_load_update") 
 end
 
 function gravity_module_stop()
@@ -51,14 +51,8 @@ function gravity_module_load_update( dt )
   if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
     player.x = player.x - 100*dt
   end
-  
-  gCamX = player.x
-  gCamY = player.y
-end
 
-function gravity_module_key_down(key, state)
- 
-  if key=="up" and state=='down' then 
+   if key=="up" and state=='down' then 
     ToTop()
     player.y = player.y - s
     if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
@@ -84,6 +78,9 @@ function gravity_module_key_down(key, state)
       player.x = player.x - s
     end
   end
+  
+  gCamX = player.x
+  gCamY = player.y
 end
 
 function love.draw()
@@ -92,5 +89,3 @@ function love.draw()
 	TiledMap_DrawNearCam(gCamX,gCamY)
   love.graphics.draw(player.image, player.x, player.y)
 end
-
-gravity_module_start() -- STARTS THE WHOLE THING
