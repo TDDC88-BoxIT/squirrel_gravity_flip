@@ -52,8 +52,8 @@ function TiledMap_DrawNearCam (camx,camy)
 		if (gfx) then 
 			local sx = x*kTileSize - camx + screen_w/2
 			local sy = y*kTileSize - camy + screen_h/2
-			--love.graphics.draw(gfx,sx,sy) -- x, y, r, sx, sy, ox, oy
-			screen:copyfrom(gfx,nil,sx,sy)
+			love.graphics.draw(gfx,sx,sy) -- x, y, r, sx, sy, ox, oy
+			--screen:copyfrom(gfx,nil,sx,sy)
 		end
 	end
 	end

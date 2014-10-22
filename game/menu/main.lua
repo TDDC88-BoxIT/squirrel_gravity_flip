@@ -128,7 +128,8 @@ function menu_key_down(key, state)
       -- COMMAND TO START GAME
       stop_menu()
       change_global_game_state(1)
-      start_game()
+      --start_game()
+      gravity_module_start()
     elseif menu:get_indexed_item().id=="resume" then  -- RIGHT NOW THIS SWAPS TO PAUSE MENU
       stop_menu()
       change_global_game_state(1)

@@ -6,7 +6,6 @@ love.filesystem.load("tiledmap.lua")()
 require "physic"
 require "tiledmap"
 
-
 gKeyPressed = {}
 gCamX,gCamY = 100,100
 local imageDir = "images/"
@@ -14,10 +13,15 @@ local player = {}
 
 function love.load()
 	TiledMap_Load("map/prototypeLevel.tmx") 
-  player.image = love.graphics.newImage(imageDir.."hero.png")
+  player.image = love.graphics.newImage(imageDir.."squirrel1.png")
   player.x = 100
   player.y = 100 
   --timer =  love.timer.new_timer(100, "gravity_module_load_update") 
+end
+function love.start()
+  --squirrel=character_object(32,32,imageDir.."squirrel1.png")
+  --squirrel:add_image(imageDir.."squirrel2.png") 
+  player.image=squirrel:get_surface()
 end
 
 function gravity_module_stop()
@@ -37,7 +41,8 @@ end
 
 function love.update( dt )
   local s = 700*dt
-  
+  --squirrel:update()
+  --player.image=squirrel:get_surface()
   -- gravity
   gsetGravity(10)
   local gy = CurveY(dt)
