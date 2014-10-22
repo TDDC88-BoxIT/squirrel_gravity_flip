@@ -35,7 +35,7 @@ function love.keypressed( key, unicode )
 	if (key == "escape") then os.exit(0) end
 end
 
-function gravity_module_load_update( dt )
+function love.update( dt )
   local s = 700*dt
   
   -- gravity
@@ -51,34 +51,32 @@ function gravity_module_load_update( dt )
   if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
     player.x = player.x - 100*dt
   end
-
-   if key=="up" and state=='down' then 
+  if (gKeyPressed.up) then
     ToTop()
     player.y = player.y - s
     if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
       player.y = player.y + s
     end
   end
-  if key=="down" and state=='down' then 
+  if (gKeyPressed.down) then
     ToBottom()
     player.y = player.y + s
     if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
       player.y = player.y - 2*s
     end
   end
-  if key=="left" and state=='down' then 
+  if (gKeyPressed.left) then
     player.x = player.x - s
     if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
       player.x = player.x + s
     end
   end
-  if key=="right" and state=='down' then 
+  if (gKeyPressed.right) then
     player.x = player.x + s
     if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
       player.x = player.x - s
     end
   end
-  
   gCamX = player.x
   gCamY = player.y
 end
