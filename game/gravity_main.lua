@@ -13,11 +13,11 @@ local imageDir = "images/"
 local mapDir = "map/"
 local player = {}
 local character = nil
+local character_update_flag = 0
 function gravity_module_start()
 	TiledMap_Load(mapDir.."prototypeLevel.tmx") 
   character = character_object(32,32,imageDir.."menuImg/squirrel1.png")
   character:add_image(imageDir.."menuImg/squirrel2.png")
-  character:update()
 
   player.x = 100
   player.y = 100 
@@ -60,6 +60,8 @@ end
 function update_character()
   character:update()
 end
+
+
 
 function gravity_module_key_down(key, state)
  

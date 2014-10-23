@@ -16,11 +16,12 @@ local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 local current_character = 1
 
-local squirrel = nil
+local squirrel1 = nil
+local squirrel2 = nil
 
 function start_menu()
   menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
-  add_items()
+  add_menu_items()
   menu:set_background(imageDir.."menuBackground.png")
   timer = sys.new_timer(100, "update_menu")
   draw_menu()
@@ -33,17 +34,17 @@ function stop_menu()
  end
 
 -- ADDS THE MENU ITEMS
-function add_items()
-  menu:add_item("start_new",imageDir.."start.png")
+function add_menu_items()
+  menu:add_button("start_new",imageDir.."start.png")
 
   if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
-    menu:add_item("high_score",imageDir.."highScore.png")
+    menu:add_button("high_score",imageDir.."highScore.png")
   elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
-    menu:add_item("resume",imageDir.."resume.png")
+    menu:add_button("resume",imageDir.."resume.png")
   end
 
-  menu:add_item("settings",imageDir.."settings.png")
-  menu:add_item("exit",imageDir.."exit.png")    
+  menu:add_button("settings",imageDir.."settings.png")
+  menu:add_button("exit",imageDir.."exit.png")    
 end
 
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
@@ -66,21 +67,24 @@ function add_menu_bling()
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   
-  -- ADD A RUNNING SQUIRREL
-  if squirrel==nil then
-    squirrel=character_object(117,140,imageDir.."squirrel1.png")
-    squirrel:add_image(imageDir.."squirrel2.png") 
+  -- ADD TWO A RUNNING SQUIRRELS
+  if squirrel1 == nil and squirrel2 == nil then
+    squirrel1=character_object(117,140,imageDir.."squirrel1.png")
+    squirrel1:add_image(imageDir.."squirrel2.png")
+    squirrel2=character_object(117,140,imageDir.."squirrel1.png")
+    squirrel2:add_image(imageDir.."squirrel2.png") 
   end
-  squirrel:update()
-  screen:copyfrom(squirrel:get_surface(), nil,{x=200,y=250,width=squirrel:get_size().width,height=squirrel:get_size().height},true)
-  screen:copyfrom(squirrel:get_surface(), nil,{x=(screen:get_width()-(squirrel:get_size().width+200)),y=250,width=squirrel:get_size().width,height=squirrel:get_size().height},true)
-
+  squirrel1:update()
+  squirrel2:update()
+  screen:copyfrom(squirrel1:get_surface(), nil,{x=200,y=250,width=squirrel1:get_size().width,height=squirrel1:get_size().height},true)
+  screen:copyfrom(squirrel2:get_surface(), nil,{x=(screen:get_width()-(squirrel2:get_size().width+200)),y=250,width=squirrel2:get_size().width,height=squirrel2:get_size().height},true)
+  
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
   backgroundImage:destroy()
   thunderAcorn.img:destroy()
   backdrop:destroy()
-  squirrel:get_surface():destroy()
-
+  squirrel1:destroy()
+  squirrel2:destroy()
 end
 
 -- SETS A MENU STATE WHICH DETERMINES WHICH MENU WILL BE SHOWN. POSSIBLE STATES ARE: "pause_menu" AND "start_menu"
@@ -92,7 +96,7 @@ function set_menu_state(state)
       menuState="start_menu"
     end
     menu:clear_items() -- CLEARS OUT ALL THE MENU ITEMS FORM THE MENU
-    add_items() -- CREATES NEW MENU ITEMS 
+    add_buttons() -- CREATES NEW MENU ITEMS 
   end
 end
 
@@ -103,11 +107,10 @@ end
 function draw_menu()
   screen:clear()
   if addBling==true then
-    add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRREL)
+    add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
-  menu:update()
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-  menu:get_surface():destroy()
+  menu:destroy()
   gfx.update()
 end
 
@@ -130,12 +133,11 @@ function menu_key_down(key, state)
       change_global_game_state(1)
       --start_game()
       gravity_module_start()
-    elseif menu:get_indexed_item().id=="resume" then  -- RIGHT NOW THIS SWAPS TO PAUSE MENU
+    elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
       resume_game()
-      -- COMMAND TO VIEW RESUME
-    elseif menu:get_indexed_item().id=="high_score" then -- RIGHT NOW THIS SWAPS TO START MENU
+    elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then
       -- COMMAND TO VIEW SETTINGS
