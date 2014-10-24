@@ -95,8 +95,8 @@ function set_menu_state(state)
     else 
       menuState="start_menu"
     end
-    menu:clear_items() -- CLEARS OUT ALL THE MENU ITEMS FORM THE MENU
-    add_buttons() -- CREATES NEW MENU ITEMS 
+    menu:clear_buttons() -- CLEARS OUT ALL THE MENU ITEMS FORM THE MENU
+    add_menu_items() -- CREATES NEW MENU ITEMS 
   end
 end
 
@@ -131,8 +131,8 @@ function menu_navigation(key, state)
       -- COMMAND TO START GAME
       stop_menu()
       change_global_game_state(1)
-      --start_game()
-      gravity_module_start()
+      start_game()
+      --gravity_module_start()
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)

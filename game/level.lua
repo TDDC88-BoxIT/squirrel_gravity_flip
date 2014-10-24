@@ -7,7 +7,7 @@ Level = {
   
 }
 function Level.load_level (level_number)
-  loaded_level = require("levels/level" .. level_number)
+  loaded_level = require("game/levels/level" .. level_number)
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
@@ -20,6 +20,7 @@ function Level.get_floor()
   floor_tileset = nil
   floors = {}
  
+  -- GET FLOOR TILE FROM LEVEL
   for k,v in pairs(tilesets) do     
     if v.name == "Floor" then
       floor_tileset = tilesets[k]
@@ -27,11 +28,12 @@ function Level.get_floor()
   end
   
   for k,v in pairs(floor_layer_data) do  
-    if v == floor_tileset.firstgid then     
+    if v == floor_tileset.firstgid then  -- DISTINGUISHING FLOOR TILES IN THE DATA     
       
       floor_tile = {
         width = floor_tileset.tilewidth,
         height = floor_tileset.tileheight,
+        -- SETS X AND Y COORDINATED FOR FLOOR TILE?
         --Since k starts on 1 we need to sub 1 to be able to start at 0
         x = ((k-1) % Level.raw_level.width) * floor_tileset.tilewidth,
         y = (math.floor((k-1) / Level.raw_level.width)) * floor_tileset.tileheight

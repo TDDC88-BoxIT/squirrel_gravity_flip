@@ -2,7 +2,8 @@ function onKey(key, state)
 	  if global_game_state == 0 then
 	    menu_key(key, state)
 	  elseif global_game_state == 1 then
-	  	gravity_key(key, state)
+	  	game_key(key, state)
+	  	--gravity_key(key, state)
 	  end  
 end
 
