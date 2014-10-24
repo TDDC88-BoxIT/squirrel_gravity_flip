@@ -10,7 +10,8 @@
 --package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
 require "level"
 
-
+local background
+local imageDir = "images/"
 player = {}
 --player.image = "game/images/hero.png"
 function start_game()   
@@ -38,7 +39,10 @@ end
 
 function draw_screen(floors)
   --- Get a green screen but can't change the color
-  screen:clear({r=72,g=72,b=72})
+  screen:clear()
+  background = gfx.loadpng("images/level_sky.png")
+  screen:copyfrom(background,nil,nil)
+  background:destroy()
   
   for k,v in pairs(floors) do 
     draw_tile(v, pos_change)
@@ -62,8 +66,10 @@ function update_cb(timer)
 end
 
 function draw_tile(tile, pos_change) 
-  
-  screen:fill({r=255,g=0,b=0}, {x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})  
+  if tile_surface==nil then
+    tile_surface = gfx.loadpng(imageDir.."floor.png") -- SET FLOOR TILE IMAGE
+  end
+  screen:copyfrom(tile_surface,nil,{x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})
 end
 
 function game_navigation(key, state)
