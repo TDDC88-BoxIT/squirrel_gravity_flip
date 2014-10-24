@@ -10,9 +10,12 @@
 --package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
 require "game/level"
 
+local background
+local imageDir = "images/"
+
 -- CERATES A TILE SURFACE
 function create_tile(tile_index) 
-  return gfx.loadpng("images/floor" .. tile_index .. ".png") 
+  return gfx.loadpng(imageDir .. "floor" .. tile_index .. ".png") 
 end
 
 local tile_surface = create_tile(1)
@@ -44,7 +47,10 @@ end
 
 function draw_screen(floors)
   --- Get a green screen but can't change the color
-  screen:clear({r=72,g=72,b=72})
+  screen:clear()
+  background = gfx.loadpng("images/level_sky.png")
+  screen:copyfrom(background,nil,nil)
+  background:destroy()
   
   for k,v in pairs(floors) do 
     draw_tile(v, pos_change)
