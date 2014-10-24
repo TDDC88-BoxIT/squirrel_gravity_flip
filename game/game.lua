@@ -23,6 +23,8 @@ local direction_flag=0 -- 0 MEANS DOWN AND 1 MEANS UP
 local character_size = 32
 local tile_surface=nil
 local floor_speed = 10
+local background
+
 player = {}
 --player.image = "game/images/hero.png"
 function start_game() 
@@ -103,13 +105,9 @@ end
 function draw_screen(floors)
 
   screen:clear()
-  
-  -- CREATES A NEW SURFACE FOR THE GAME BACKGOUND AND GIVES IT A GRAY COLOR
-  sf = gfx.new_surface(screen:get_width(), screen:get_height())
-  sf:fill({r=80,g=80,b=80})
-  -- THE BACKGROUND IS COPIED TO THE SCREEN AND THE SURFACE IS DESTROYED
-  screen:copyfrom(sf)
-  sf:destroy()
+  background = gfx.loadpng("images/level_sky.png")
+  screen:copyfrom(background,nil,nil)
+  background:destroy()
 
   -- LOOP THROUGH FLOOR TILES AND CALL DRAW FUNCTION 
  -- for k,v in pairs(floors) do 
@@ -126,18 +124,14 @@ function draw_screen(floors)
 
   --- Get a green screen but can't change the color
   --screen:clear({r=72,g=72,b=72})
-  
-  
+
 end
 
-
-function draw_tile(tile, pos_change)
+function draw_tile(tile, pos_change) 
   if tile_surface==nil then
     tile_surface = gfx.loadpng(imageDir.."floor.png") -- SET FLOOR TILE IMAGE
   end
   screen:copyfrom(tile_surface,nil,{x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})
-  --screen:fill({r=255,g=0,b=0},{x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})
-  --sf:destroy()  
 end
 
 function game_navigation(key, state)
