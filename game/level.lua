@@ -7,7 +7,7 @@ Level = {
   
 }
 function Level.load_level (level_number)
-  loaded_level = require("levels/level" .. level_number)
+  loaded_level = require("game/levels/level" .. level_number)
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width

@@ -131,8 +131,8 @@ function menu_navigation(key, state)
       -- COMMAND TO START GAME
       stop_menu()
       change_global_game_state(1)
-      --start_game()
-      gravity_module_start()
+      start_game()
+      --gravity_module_start()
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)

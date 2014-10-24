@@ -8,8 +8,14 @@
 
 --package.path = package.path .. arg[1] .. "\\game\\?.lua"
 --package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
-require "level"
+require "game/level"
 
+-- CERATES A TILE SURFACE
+function create_tile(tile_index) 
+  return gfx.loadpng("images/floor" .. tile_index .. ".png") 
+end
+
+local tile_surface = create_tile(1)
 
 player = {}
 --player.image = "game/images/hero.png"
@@ -62,8 +68,7 @@ function update_cb(timer)
 end
 
 function draw_tile(tile, pos_change) 
-  
-  screen:fill({r=255,g=0,b=0}, {x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})  
+  screen:copyfrom(tile_surface, nil, {x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})
 end
 
 function game_navigation(key, state)
@@ -75,5 +80,6 @@ function game_navigation(key, state)
     start_menu()
   end
 end 
+
 
 
