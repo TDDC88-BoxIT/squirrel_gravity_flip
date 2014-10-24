@@ -13,12 +13,13 @@ local imageDir = "images/"
 local mapDir = "map/"
 local player = {}
 local character = nil
-local character_update_flag = 0
+local direction_flag=0 -- 0 MEANS DOWN AND 1 MEANS UP
+local character_size = 32
+
 function gravity_module_start()
 	TiledMap_Load(mapDir.."prototypeLevel.tmx") 
-  character = character_object(32,32,imageDir.."menuImg/squirrel1.png")
+  character = character_object(character_size,character_size,imageDir.."menuImg/squirrel1.png")
   character:add_image(imageDir.."menuImg/squirrel2.png")
-
   player.x = 100
   player.y = 100 
   timer = sys.new_timer(20, "gravity_module_load_update")
@@ -35,20 +36,19 @@ function gravity_module_stop()
 
 function gravity_module_load_update()
   dt=0.01
-  local s = 700*dt
-  hitTest(gCamX, gCamY, player.x, player.y, 32)
+  hitTest(gCamX, gCamY, player.x, player.y, character_size)
   -- gravity
   gsetGravity(10)
   local gy = CurveY(dt)
   player.y = player.y + gy
-  if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-    player.y = player.y - 2*gy
+  if nil ~= hitTest(gCamX,gCamY, player.x, player.y, character_size) then
+    player.y = player.y - gy --THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
   end
 
    -- go ahead
   player.x = player.x + 100*dt
-  if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-    player.x = player.x - 100*dt
+  if nil ~= hitTest(gCamX,gCamY, player.x, player.y, character_size) then
+    player.x = player.x  - 100*dt --THIS MAKES THE SQUIRREL STOP MOVING FORWARD IF IT RUNS INTO SOMEHTING
   end
   
   gCamX = player.x
@@ -58,54 +58,51 @@ function gravity_module_load_update()
 end
 
 function update_character()
-  character:update()
+  character:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
+  character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
 end
 
 
 
-function gravity_module_key_down(key, state)
+function gravity_module_navigation(key, state)
  
-  if key=="up" and (state=='repeat' or state== 'down') then
-    ToTop()
-    player.y = player.y - 10
-    if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-      player.y = player.y + 10
+  if key=="ok" and state== 'up' then
+    if direction_flag == 0 then
+      ToTop()
+      --player.y = player.y - 10
+      --if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+       -- player.y = player.y + 10
+      --end
+      direction_flag=1
+    else
+      ToBottom()
+      --player.y = player.y + 10
+      --if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
+       -- player.y = player.y - 20
+      --end
+      direction_flag=0
     end
   end
-  if key=="down" and (state=='repeat' or state== 'down') then 
-    ToBottom()
-    player.y = player.y + 10
-    if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-      player.y = player.y - 20
-    end
-  end
-  if key=="left" and (state=='repeat' or state== 'down') then 
-    player.x = player.x - 10
-    if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-      player.x = player.x + 10
-    end
-  end
-  if key=="right" and (state=='repeat' or state== 'down') then 
-    player.x = player.x + 10
-    if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-      player.x = player.x - 10
-    end
-  end
-  if key=="escape" and state=='down' then 
+ 
+  if key=="red" and state=='down' then 
     sys.stop() -- COMMAND TO EXIT
   end
 end
 
 function gravity_draw()
   screen:clear()
-  --love.graphics.print('dat squirrel thang (arrow keys to move, esc to close)', 50, 50)
+  
+  -- CREATES A NEW SURFACE FOR THE GAME BACKGOUND AND GIVES IT A GRAY COLOR
   sf = gfx.new_surface(screen:get_width(), screen:get_height())
   sf:fill({r=80,g=80,b=80})
+  -- THE BACKGROUND IS COPIED TO THE SCREEN AND THE SURFACE IS DESTROYED
   screen:copyfrom(sf)
+  sf:destroy()
+
 	TiledMap_DrawNearCam(gCamX,gCamY)
-  --love.graphics.draw(player.image, player.x, player.y)
-  --sf = gfx.loadpng(player.image)
+
+  -- THE GAME CHARACTER IS COPIED TO THE SCREEN
   screen:copyfrom(character:get_surface(), nil,{x=player.x,y=player.y},true)
-  --sf:destroy()
+  
   gfx.update()
 end

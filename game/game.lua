@@ -66,7 +66,7 @@ function draw_tile(tile, pos_change)
   screen:fill({r=255,g=0,b=0}, {x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})  
 end
 
-function game_key_down(key, state)
+function game_navigation(key, state)
   print(key)
   if key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
     stop_game()

@@ -7,15 +7,15 @@ function onKey(key, state)
 end
 
 function menu_key(key, state)
- 	menu_key_down(key, state)
+ 	menu_navigation(key, state)
 end
 
 function game_key(key, state)
-	game_key_down(key, state)
+	game_navigation(key, state)
 end
 
 function gravity_key(key, state)
-	gravity_module_key_down(key, state)
+	gravity_module_navigation(key, state)
 end
 
 function change_global_game_state(state)

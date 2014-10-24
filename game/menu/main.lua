@@ -119,7 +119,7 @@ function update_menu()
 end
 
 --HANDLES MENU NAVIGATION AND COMMANDS 
-function menu_key_down(key, state)
+function menu_navigation(key, state)
  
   if key=="down" and state=='up' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU    
