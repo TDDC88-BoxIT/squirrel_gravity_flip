@@ -25,6 +25,14 @@ local tile_surface=nil
 local floor_speed = 10
 local background
 
+
+-- CERATES A TILE SURFACE
+function create_tile(tile_index) 
+  return gfx.loadpng(imageDir .. "floor" .. tile_index .. ".png") 
+end
+
+local tile_surface = create_tile(1)
+
 player = {}
 --player.image = "game/images/hero.png"
 function start_game() 
@@ -42,8 +50,8 @@ function start_game()
   pos_change = 0
   lives = 10
   --timer = sys.new_timer(20, "update_cb")
-  --Level.load_level(1)
-  --floors = Level.get_floor()
+  Level.load_level(1)
+  floors = Level.get_floor()
 end
 
 function resume_game()   
@@ -75,6 +83,7 @@ function update_cb(timer)
   --update_state(now - last_time)
   --last_time = now
  -- print(now)
+  --[[
   if lives > 0 then
     dt=0.01
     hitTest(gCamX, gCamY, player.x, player.y, character_size)
@@ -94,12 +103,12 @@ function update_cb(timer)
     
     gCamX = player.x
     gCamY = player.y
-
+    ]]
     draw_screen(floors)
-  else
+  --else
    -- game_over()
-    print ("YOU LOST!!")
-  end
+    --print ("YOU LOST!!")
+  --end
 end
 
 function draw_screen(floors)
@@ -110,12 +119,12 @@ function draw_screen(floors)
   background:destroy()
 
   -- LOOP THROUGH FLOOR TILES AND CALL DRAW FUNCTION 
- -- for k,v in pairs(floors) do 
-  -- draw_tile(v, pos_change)
-  --end
-  --pos_change = pos_change + floor_speed
+  for k,v in pairs(floors) do 
+    draw_tile(v, pos_change)
+  end
+  pos_change = pos_change + floor_speed
   
-  TiledMap_DrawNearCam(gCamX,gCamY)
+  --TiledMap_DrawNearCam(gCamX,gCamY)
 
   -- THE GAME CHARACTER IS COPIED TO THE SCREEN
   screen:copyfrom(character:get_surface(), nil,{x=player.x,y=player.y},true)
@@ -128,10 +137,7 @@ function draw_screen(floors)
 end
 
 function draw_tile(tile, pos_change) 
-  if tile_surface==nil then
-    tile_surface = gfx.loadpng(imageDir.."floor.png") -- SET FLOOR TILE IMAGE
-  end
-  screen:copyfrom(tile_surface,nil,{x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})
+  screen:copyfrom(tile_surface, nil, {x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})
 end
 
 function game_navigation(key, state)
@@ -158,5 +164,6 @@ function game_navigation(key, state)
     start_menu()
   end
 end 
+
 
 

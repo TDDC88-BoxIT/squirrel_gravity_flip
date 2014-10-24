@@ -3,7 +3,6 @@ function onKey(key, state)
 	    menu_key(key, state)
 	  elseif global_game_state == 1 then
 	  	game_key(key, state)
-	  	--gravity_key(key, state)
 	  end  
 end
 
