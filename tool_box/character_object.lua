@@ -51,8 +51,10 @@ character_object = class(function (self, character_width, character_height, char
 	self.width = character_width or 50
 	self.height = character_height or 50
 	self.character_images={}
+	self.character_flipped_images={}
 	self.current_character_image=1	-- DETERMINES WHICH CHARACTER IMAGE WILL BE DISPLAYED CURRENTLY
 	self.character_surface=nil
+	self.show_flipped_images = false -- DETERMINES WHICH SET OF CHARACTER IMAGES THAT WILL BE SHOWN
 	if character_img ~= nil then
 		self:add_image(character_img) 
 	end
@@ -76,22 +78,49 @@ function character_object:add_image(img_Path)
 	table.insert(self.character_images, table.getn(self.character_images)+1, img_Path)
 end
 
+-- ADDS NEW FLIPPED MENU ITEMS
+function character_object:add_flipped_image(img_Path)
+	table.insert(self.character_flipped_images, table.getn(self.character_flipped_images)+1, img_Path)
+end
+
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
 function character_object:get_current_image()
-  	return self.character_images[self.current_character_image]
+	if show_flipped_images==true then
+  		return self.character_flipped_images[self.current_character_image]
+  	else
+  		return self.character_images[self.current_character_image]
+  	end
 end 
 
 -- CLEARS ALL ADDED MENU ITEMS
 function character_object:clear_images()
   	self.character_images={}
+  	self.character_flipped_images={}
 end
+
+function character_object:flip()
+	if show_flipped_images==true then
+		show_flipped_images=false
+	else
+		show_flipped_images=true
+	end
+end
+
 
 -- CHANGES THE IMAGE INDEX IN ORDER TO CREATE AN ANIMATION OF THE CHARACTER IMAGES
 local function animate(self)
-	if self.current_character_image<table.getn(self.character_images) then
-		self.current_character_image=self.current_character_image+1
+	if show_flipped_images==true then
+		if self.current_character_image<table.getn(self.character_flipped_images) then
+			self.current_character_image=self.current_character_image+1
+		else
+			self.current_character_image=1
+		end
 	else
-		self.current_character_image=1
+		if self.current_character_image<table.getn(self.character_images) then
+			self.current_character_image=self.current_character_image+1
+		else
+			self.current_character_image=1
+		end
 	end
 end
 

@@ -3,9 +3,9 @@
 -- port the game from Love2D to ZenterioOS.
 
 --love.filesystem.load("tiledmap.lua")()
-require ("game/physic")
-require ("game/tiledmap")
-require("tool_box/character_object")
+--require ("game/physic")
+--require ("game/level_module")
+--require("tool_box/character_object")
 
 gKeyPressed = {}
 gCamX,gCamY = 100,100

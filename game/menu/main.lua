@@ -7,10 +7,12 @@ local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE T
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu"
 local menu = nil  -- THE MENU SURFACE VARIABLE
 
-local imageDir = "images/menuImg/"
+local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
-local background_image_path = imageDir.."gravityFlip.jpg"
+local background_image_path = imageDir.."/menuImg/gravityFlip.jpg"
+local squirrelImg1 = imageDir.."character/squirrel1.png" 
+local squirrelImg2 = imageDir.."character/squirrel2.png"
 local backgroundImage = nil
 local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
@@ -22,7 +24,7 @@ local squirrel2 = nil
 function start_menu()
   menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   add_menu_items()
-  menu:set_background(imageDir.."menuBackground.png")
+  menu:set_background(imageDir.."menuImg/menuBackground.png")
   timer = sys.new_timer(100, "update_menu")
   draw_menu()
 end 
@@ -35,16 +37,16 @@ function stop_menu()
 
 -- ADDS THE MENU ITEMS
 function add_menu_items()
-  menu:add_button("start_new",imageDir.."start.png")
+  menu:add_button("start_new",imageDir.."menuImg/start.png")
 
   if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
-    menu:add_button("high_score",imageDir.."highScore.png")
+    menu:add_button("high_score",imageDir.."menuImg/highScore.png")
   elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
-    menu:add_button("resume",imageDir.."resume.png")
+    menu:add_button("resume",imageDir.."menuImg/resume.png")
   end
 
-  menu:add_button("settings",imageDir.."settings.png")
-  menu:add_button("exit",imageDir.."exit.png")    
+  menu:add_button("settings",imageDir.."menuImg/settings.png")
+  menu:add_button("exit",imageDir.."menuImg/exit.png")    
 end
 
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
@@ -69,10 +71,10 @@ function add_menu_bling()
   
   -- ADD TWO A RUNNING SQUIRRELS
   if squirrel1 == nil and squirrel2 == nil then
-    squirrel1=character_object(117,140,imageDir.."squirrel1.png")
-    squirrel1:add_image(imageDir.."squirrel2.png")
-    squirrel2=character_object(117,140,imageDir.."squirrel1.png")
-    squirrel2:add_image(imageDir.."squirrel2.png") 
+    squirrel1=character_object(117,140,squirrelImg1)
+    squirrel1:add_image(squirrelImg2)
+    squirrel2=character_object(117,140,squirrelImg1)
+    squirrel2:add_image(squirrelImg2) 
   end
   squirrel1:update()
   squirrel2:update()
@@ -132,7 +134,6 @@ function menu_navigation(key, state)
       stop_menu()
       change_global_game_state(1)
       start_game()
-      --gravity_module_start()
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
