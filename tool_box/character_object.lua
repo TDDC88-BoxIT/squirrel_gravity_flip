@@ -85,7 +85,7 @@ end
 
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
 function character_object:get_current_image()
-	if show_flipped_images==true then
+	if self.show_flipped_images==true then
   		return self.character_flipped_images[self.current_character_image]
   	else
   		return self.character_images[self.current_character_image]
@@ -99,17 +99,17 @@ function character_object:clear_images()
 end
 
 function character_object:flip()
-	if show_flipped_images==true then
-		show_flipped_images=false
+	if self.show_flipped_images==true then
+		self.show_flipped_images=false
 	else
-		show_flipped_images=true
+		self.show_flipped_images=true
 	end
 end
 
 
 -- CHANGES THE IMAGE INDEX IN ORDER TO CREATE AN ANIMATION OF THE CHARACTER IMAGES
 local function animate(self)
-	if show_flipped_images==true then
+	if self.show_flipped_images==true then
 		if self.current_character_image<table.getn(self.character_flipped_images) then
 			self.current_character_image=self.current_character_image+1
 		else

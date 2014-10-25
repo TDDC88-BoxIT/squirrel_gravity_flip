@@ -27,16 +27,8 @@ local tile_surface=nil
 local floor_speed = 10
 local background
 
-
--- CERATES A TILE SURFACE
-function create_tile(tile_index) 
-  return gfx.loadpng(imageDir .. "floor" .. tile_index .. ".png") 
-end
-
-local tile_surface = create_tile(1)
-
 player = {}
---player.image = "game/images/hero.png"
+
 function start_game() 
 
   TiledMap_Load(mapDir.."prototypeLevel.tmx") 
@@ -76,10 +68,9 @@ end
 
 
 --Taken directly from Zenterio's game since I think we will need this or is this for a later user story?
-function update_cb(timer) 
+function update_cb() 
   if lives > 0 then
-    dt=0.01
-    hitTest(gCamX, gCamY, player.x, player.y, character_width, character_height)
+    dt=0.01    
     -- gravity
     gsetGravity(10)
     local gy = CurveY(dt)
@@ -89,9 +80,9 @@ function update_cb(timer)
     end
 
      -- go ahead
-    player.x = player.x + 100*dt
+    player.x = player.x + 2
     if nil ~= hitTest(gCamX,gCamY, player.x, player.y, character_width, character_height) then
-      player.x = player.x  - 100*dt --THIS MAKES THE SQUIRREL STOP MOVING FORWARD IF IT RUNS INTO SOMEHTING
+      player.x = player.x  --THIS MAKES THE SQUIRREL STOP MOVING FORWARD IF IT RUNS INTO SOMEHTING
     end
     
     gCamX = player.x
@@ -109,12 +100,6 @@ function draw_screen()
   background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
   background:destroy()
-
-  -- LOOP THROUGH FLOOR TILES AND CALL DRAW FUNCTION 
-  --for k,v in pairs(floors) do 
-    --draw_tile(v, pos_change)
-  --end
-  --pos_change = pos_change + floor_speed
   
   draw_tiles(gCamX,gCamY)
 
@@ -123,31 +108,19 @@ function draw_screen()
   
   gfx.update()
 
-  --- Get a green screen but can't change the color
-  --screen:clear({r=72,g=72,b=72})
-
 end
 
-function draw_tile(tile, pos_change) 
-  screen:copyfrom(tile_surface, nil, {x=tile.x - pos_change, y=tile.y, width=tile.width, height=tile.height})
-end
 
 function game_navigation(key, state)
   if key=="ok" and state== 'up' then
     character:flip()
     if direction_flag == "down" then
       ToTop()
-      --player.y = player.y - 10
-      --if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-       -- player.y = player.y + 10
-      --end
+
       direction_flag="up"
     else
       ToBottom()
-      --player.y = player.y + 10
-      --if nil ~= hitTest(gCamX,gCamY, player.x, player.y, 32) then
-       -- player.y = player.y - 20
-      --end
+
       direction_flag="down"
     end
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE

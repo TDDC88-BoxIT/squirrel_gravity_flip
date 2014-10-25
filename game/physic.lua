@@ -1,6 +1,6 @@
 
 mgravity = 10
-mspeed = 200
+mspeed = 800
 mcurx = 10
 mcury = 10
 startx = 10
@@ -17,14 +17,14 @@ function ToTop()
   mstarty = 0
   mtotal = 0
   mgravity = -10
-  mspeed = -200
+  mspeed = -800
 end
 
 function ToBottom()
   mstarty = 0
   mtotal = 0
   mgravity = 10
-  mspeed = 200
+  mspeed = 800
 end
 
 
@@ -61,7 +61,7 @@ function CheckCollision2(ax1,ay1,aw,ah, bx1,by1,bw,bh)
     end
     table.sort(X, comp)
     table.sort(Y,comp)
-    return X[2][1], X[3][1],Y[2][1],Y[3][1]
+    return X[2][1], X[3][1], Y[2][1], Y[3][1]
   end
   return nil
 end

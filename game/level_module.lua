@@ -45,12 +45,12 @@ function draw_tiles (camx,camy) -- camx AND camy SEEMS TO BE THE COORDINATES OF 
 	local minx,maxx = floor((camx-screen_w/2)/tile_width),ceil((camx+screen_w/2)/tile_width) -- GETS MIN AND MAXIMUM COORDINATES FOR SCREEN ON X-AXIS
 	local miny,maxy = floor((camy-screen_h/2)/tile_height),ceil((camy+screen_h/2)/tile_height) -- GETS MIN AND MAXIMUM COORDINATES FOR SCREEN ON Y-AXIS
 	for layer_id = 1,#tile_layers do 	-- LOOPS OVER ALL LAYER OF TILES IN THE LEVEL
-		for x = minx,maxx do 		-- LOOPS OVER THE WIDTH OF THE SCREEN
-			for y = miny,maxy do 	-- LOOPS OVER THE HEIGHT OF THE SCREEN
+		for x = minx,maxx do 			-- LOOPS OVER THE WIDTH OF THE SCREEN
+			for y = miny,maxy do 		-- LOOPS OVER THE HEIGHT OF THE SCREEN
 				local tile = game_tile_set[get_tile_data_value(x,y,layer_id)] -- RETREIVES THE TILE FOR THE CURRENT LOCATION
 				if (tile) then
 					local sx = x*tile_width - camx + screen_w/2 -- WHAT DOES THIS DO?
-					local sy = y*tile_height - camy + screen_h/2 -- WHAT DOES THIS DO?
+					local sy = y*tile_height - camy + screen_h/2-- WHAT DOES THIS DO?
 					screen:copyfrom(tile,nil,{x=sx,y=sy,nil,nil})
 				end
 			end
@@ -170,9 +170,9 @@ function hitTest (camx, camy, herox, heroy, hero_width, hero_height)
 				if (tile) then
 					local sx = x*tile_width - camx + screen_w/2
 					local sy = y*tile_height - camy + screen_h/2
-					local temp = CheckCollision2(herox, heroy, hero_width, hero_height, sx, sy, tile_width, tile_height)
-					if temp ~= nil then
-						return temp
+					local temp1,temp2,temp3,temp4 = CheckCollision2(herox, heroy, hero_width, hero_height, sx, sy, tile_width, tile_height)
+					if temp1 ~= nil then
+						return temp1,temp2,temp3,temp4
 					end
 				end
 			end
