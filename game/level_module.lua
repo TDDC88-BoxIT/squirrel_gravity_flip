@@ -38,19 +38,19 @@ function get_tile_data_value (tx,ty,layerid) -- coords in tiles
 	return row and row[tx] or kMapTileTypeEmpty
 end
 
-function draw_tiles (camx,camy) -- camx AND camy SEEMS TO BE THE COORDINATES OF THE CHARACTER OBJECTS TOP LEFT CORNER
-	camx,camy = floor(camx),floor(camy)
+function draw_tiles (player_x,player_y)
+	player_x,player_y = floor(player_x),floor(player_y)
 	local screen_w = screen:get_width()
 	local screen_h = screen:get_height()
-	local minx,maxx = floor((camx-screen_w/2)/tile_width),ceil((camx+screen_w/2)/tile_width) -- GETS MIN AND MAXIMUM COORDINATES FOR SCREEN ON X-AXIS
-	local miny,maxy = floor((camy-screen_h/2)/tile_height),ceil((camy+screen_h/2)/tile_height) -- GETS MIN AND MAXIMUM COORDINATES FOR SCREEN ON Y-AXIS
+	local minx,maxx = floor((player_x-screen_w/2)/tile_width),ceil((player_x+screen_w/2)/tile_width) -- DIVIDES THE SCREEN WIDTH INTO UNITS OF SIZE TILE_WIDTH
+	local miny,maxy = floor((player_y-screen_h/2)/tile_height),ceil((player_y+screen_h/2)/tile_height) -- DIVIDES THE SCREEN INTO UNITS OF SIZE TILE_HEIGHT
 	for layer_id = 1,#tile_layers do 	-- LOOPS OVER ALL LAYER OF TILES IN THE LEVEL
 		for x = minx,maxx do 			-- LOOPS OVER THE WIDTH OF THE SCREEN
 			for y = miny,maxy do 		-- LOOPS OVER THE HEIGHT OF THE SCREEN
 				local tile = game_tile_set[get_tile_data_value(x,y,layer_id)] -- RETREIVES THE TILE FOR THE CURRENT LOCATION
 				if (tile) then
-					local sx = x*tile_width - camx + screen_w/2 -- WHAT DOES THIS DO?
-					local sy = y*tile_height - camy + screen_h/2-- WHAT DOES THIS DO?
+					local sx = x*tile_width - player_x + screen_w/2 -- WHAT DOES THIS DO?
+					local sy = y*tile_height - player_y + screen_h/2 -- WHAT DOES THIS DO?
 					screen:copyfrom(tile,nil,{x=sx,y=sy,nil,nil})
 				end
 			end
@@ -157,19 +157,19 @@ function TiledMap_Parse(filename)
 end
 
 -- basic check collision - logic
-function hitTest (camx, camy, herox, heroy, hero_width, hero_height)
-	camx,camy = floor(camx),floor(camy)
+function hitTest (player_x, player_y, herox, heroy, hero_width, hero_height)
+	herox,heroy = floor(herox),floor(heroy)
 	local screen_w = screen:get_width()
 	local screen_h = screen:get_height()
-	local minx,maxx = floor((camx-screen_w/2)/tile_width),ceil((camx+screen_w/2)/tile_width)
-	local miny,maxy = floor((camy-screen_h/2)/tile_height),ceil((camy+screen_h/2)/tile_height)
+	local minx,maxx = floor((herox-screen_w/2)/tile_width),ceil((herox+screen_w/2)/tile_width)
+	local miny,maxy = floor((heroy-screen_h/2)/tile_height),ceil((heroy+screen_h/2)/tile_height)
 	for layer_id = 1,#tile_layers do 	-- LOOPS OVER ALL LAYER OF TILES IN THE LEVEL
 		for x = minx,maxx do 			-- LOOPS OVER THE WIDTH OF THE SCREEN
 			for y = miny,maxy do 		-- LOOPS OVER THE HEIGHT OF THE SCREEN
 				local tile = game_tile_set[get_tile_data_value(x,y,layer_id)]
 				if (tile) then
-					local sx = x*tile_width - camx + screen_w/2
-					local sy = y*tile_height - camy + screen_h/2
+					local sx = x*tile_width - herox + screen_w/2
+					local sy = y*tile_height - heroy + screen_h/2
 					local temp1,temp2,temp3,temp4 = CheckCollision2(herox, heroy, hero_width, hero_height, sx, sy, tile_width, tile_height)
 					if temp1 ~= nil then
 						return temp1,temp2,temp3,temp4

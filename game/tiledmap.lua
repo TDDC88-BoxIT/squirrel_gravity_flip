@@ -160,15 +160,15 @@ function hitTest (camx, camy, herox, heroy, herosize)
 	camx,camy = floor(camx),floor(camy)
 	local screen_w = love.graphics.getWidth()
 	local screen_h = love.graphics.getHeight()
-	local minx,maxx = floor((camx-screen_w/2)/kTileSize),ceil((camx+screen_w/2)/kTileSize)
-	local miny,maxy = floor((camy-screen_h/2)/kTileSize),ceil((camy+screen_h/2)/kTileSize)
+	local minx,maxx = floor((herox-screen_w/2)/kTileSize),ceil((herox+screen_w/2)/kTileSize)
+	local miny,maxy = floor((heroy-screen_h/2)/kTileSize),ceil((heroy+screen_h/2)/kTileSize)
 	for layerId = 1,#gMapLayers do
 	    for x = minx,maxx do
 		      for y = miny,maxy do
 		        local gfx = gTileGfx[TiledMap_GetMapTile(x,y,layerId)]
 		        if (gfx) then
-		          local sx = x*kTileSize - camx + screen_w/2
-		          local sy = y*kTileSize - camy + screen_h/2
+		          local sx = x*kTileSize - herox + screen_w/2
+		          local sy = y*kTileSize - heroy + screen_h/2
 		          local temp = CheckCollision2(herox, heroy, herosize, herosize, sx, sy, kTileSize, kTileSize)
 		          if temp ~= nil then
 		              return temp

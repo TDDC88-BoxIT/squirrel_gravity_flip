@@ -1,6 +1,6 @@
 
 mgravity = 10
-mspeed = 800
+mspeed = 100
 mcurx = 10
 mcury = 10
 startx = 10
@@ -17,16 +17,23 @@ function ToTop()
   mstarty = 0
   mtotal = 0
   mgravity = -10
-  mspeed = -800
 end
 
 function ToBottom()
   mstarty = 0
   mtotal = 0
   mgravity = 10
-  mspeed = 800
 end
 
+function getNewYStep(step_length)
+  local newStep = mgravity
+  return newStep
+end
+
+function getNewXStep(step_length)
+  local newStep = step_length*mspeed
+  return newStep
+end
 
 function CurveY(dt)
   mtotal = mtotal + dt

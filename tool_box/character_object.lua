@@ -98,12 +98,19 @@ function character_object:clear_images()
   	self.character_flipped_images={}
 end
 
+-- CHANGES THE BOOLEAN DETERMINING WHICH SET OM CHARACTER IMAGES THAT ARE TO BE DISPLAYED
 function character_object:flip()
 	if self.show_flipped_images==true then
 		self.show_flipped_images=false
 	else
 		self.show_flipped_images=true
 	end
+end
+
+-- RESETS THE CHARACTER TO START SETTINGS
+function character_object:reset()
+	self.show_flipped_images=false
+	self.current_character_image=1
 end
 
 
