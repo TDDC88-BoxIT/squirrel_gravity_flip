@@ -157,7 +157,7 @@ function TiledMap_Parse(filename)
 end
 
 -- basic check collision - logic
-function hitTest (player_x, player_y, herox, heroy, hero_width, hero_height)
+function hitTest (herox, heroy, hero_width, hero_height)
 	herox,heroy = floor(herox),floor(heroy)
 	local screen_w = screen:get_width()
 	local screen_h = screen:get_height()

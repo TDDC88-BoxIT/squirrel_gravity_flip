@@ -76,7 +76,7 @@ function update_cb()
     if direction_flag=="down" then
       for y=0, getNewYStep(dt), 1 do
         player.new_y = player.cur_y + y
-        if hitTest(player.cur_x, player.cur_y, player.cur_x, player.new_y, character_width, character_height) ~= nil then
+        if hitTest(player.cur_x, player.new_y, character_width, character_height) ~= nil then
           player.new_y = player.new_y - 1--THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
           break
         end
@@ -84,7 +84,7 @@ function update_cb()
     else
        for y=0, getNewYStep(dt),-1 do
         player.new_y = player.cur_y + y
-        if hitTest(player.cur_x, player.cur_y, player.cur_x, player.new_y, character_width, character_height) ~= nil then
+        if hitTest(player.cur_x, player.new_y, character_width, character_height) ~= nil then
           player.new_y = player.new_y + 1--THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
           break
         end
@@ -94,7 +94,7 @@ function update_cb()
      -- go ahead
     for x=1, 5 do
       player.new_x = player.cur_x + x
-      if hitTest(player.cur_x, player.cur_y, player.new_x, player.new_y, character_width, character_height) ~= nil then
+      if hitTest(player.new_x, player.new_y, character_width, character_height) ~= nil then
         player.new_x = player.new_x-1 --THIS MAKES THE SQUIRREL STOP MOVING FORWARD IF IT RUNS INTO SOMEHTING
         break
       end
