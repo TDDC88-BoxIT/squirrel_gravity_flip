@@ -49,8 +49,8 @@ function draw_tiles (player_x,player_y)
 			for y = miny,maxy do 		-- LOOPS OVER THE HEIGHT OF THE SCREEN
 				local tile = game_tile_set[get_tile_data_value(x,y,layer_id)] -- RETREIVES THE TILE FOR THE CURRENT LOCATION
 				if (tile) then
-					local sx = x*tile_width - player_x + screen_w/2 -- WHAT DOES THIS DO?
-					local sy = y*tile_height - player_y + screen_h/2 -- WHAT DOES THIS DO?
+					local sx = x*tile_width - player_x + screen_w/2 	-- WHAT DOES THIS DO?
+					local sy = y*tile_height - player_y + screen_h/2 	-- WHAT DOES THIS DO?
 					screen:copyfrom(tile,nil,{x=sx,y=sy,nil,nil})
 				end
 			end

@@ -74,7 +74,7 @@ function update_cb()
     
      --player.new_y = player.cur_y + getNewYStep(dt)
     if direction_flag=="down" then
-      for y=0, getNewYStep(dt), 1 do
+      for y=1, getNewYStep(dt), 1 do
         player.new_y = player.cur_y + y
         if hitTest(player.cur_x, player.new_y, character_width, character_height) ~= nil then
           player.new_y = player.new_y - 1--THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
@@ -128,13 +128,18 @@ end
 
 function game_navigation(key, state)
   if key=="ok" and state== 'up' then
-    character:flip()
     if direction_flag == "down" then
-      ToTop()
-      direction_flag="up"
+       if hitTest(player.cur_x, player.cur_y+1, character_width, character_height) ~= nil then
+        character:flip()
+        ToTop()
+        direction_flag="up"
+      end
     else
-      ToBottom()
-      direction_flag="down"
+      if hitTest(player.cur_x, player.cur_y-1, character_width, character_height) ~= nil then
+        character:flip()
+        ToBottom()
+        direction_flag="down"
+      end
     end
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
     stop_game()
