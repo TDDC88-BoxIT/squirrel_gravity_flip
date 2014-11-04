@@ -17,20 +17,18 @@ function TiledMap_Load (filepath,tilesize,spritepath_removeold,spritepath_prefix
 	
 	local tiletype,layers = TiledMap_Parse(filepath)
 	gMapLayers = layers
-	for first_gid,path in pairs(tiletype) do
-		path = spritepath_prefix .. string.gsub(path,"^"..string.gsub(spritepath_removeold,"%.","%%."),"")
-		local raw = love.image.newImageData(path)
-		local w,h = raw:getWidth(),raw:getHeight()
+	
+	for first_gid,path in pairs(tiletype) do  -- LOOPS OVER ALL TILES TYPES IN THE LEVEL
+		path = spritepath_prefix .. string.gsub(path,"^"..string.gsub(spritepath_removeold,"%.","%%."),"") -- RETREIVING THE PATH FOR THE TILES
+		local raw = gfx.loadpng(path) -- CREATES A NEW IMAGE OF HERO AND FLOOR IMAGE FILE
+		local w,h = raw:get_width(), raw:get_height() 
 		local gid = first_gid
-		local e = kTileSize
-		for y=0,floor(h/kTileSize)-1 do
-		for x=0,floor(w/kTileSize)-1 do
-			local sprite = love.image.newImageData(kTileSize,kTileSize)
-			sprite:paste(raw,0,0,x*e,y*e,e,e)
-			gTileGfx[gid] = love.graphics.newImage(sprite)
-			gid = gid + 1
-		end
-		end
+		--local e = kTileSize
+		local sprite = gfx.new_surface(kTileSize,kTileSize)
+		sprite:copyfrom(raw,nil,nil,true) -- PUTS THE CREATED IMAGE (RAW) ON THE SPRITE SURFACE AND SETS ITS SEIZE TO e
+		gTileGfx[gid] = sprite
+		gid = gid + 1
+		raw:destroy() -- DESTROYS THE RAW IMAGE TO SAVE RAM
 	end
 end
 
@@ -39,23 +37,23 @@ function TiledMap_GetMapTile (tx,ty,layerid) -- coords in tiles
 	return row and row[tx] or kMapTileTypeEmpty
 end
 
-function TiledMap_DrawNearCam (camx,camy)
+function TiledMap_DrawNearCam (camx,camy) -- camx AND camy SEEMS TO BE THE COORDINATES OF THE CHARACTER OBJECTS TOP LEFT CORNER
 	camx,camy = floor(camx),floor(camy)
-	local screen_w = love.graphics.getWidth()
-	local screen_h = love.graphics.getHeight()
-	local minx,maxx = floor((camx-screen_w/2)/kTileSize),ceil((camx+screen_w/2)/kTileSize)
-	local miny,maxy = floor((camy-screen_h/2)/kTileSize),ceil((camy+screen_h/2)/kTileSize)
-	for z = 1,#gMapLayers do
-	for x = minx,maxx do
-	for y = miny,maxy do
-		local gfx = gTileGfx[TiledMap_GetMapTile(x,y,z)]
-		if (gfx) then 
-			local sx = x*kTileSize - camx + screen_w/2
-			local sy = y*kTileSize - camy + screen_h/2
-			love.graphics.draw(gfx,sx,sy) -- x, y, r, sx, sy, ox, oy
+	local screen_w = screen:get_width()
+	local screen_h = screen:get_height()
+	local minx,maxx = floor((camx-screen_w/2)/kTileSize),ceil((camx+screen_w/2)/kTileSize) -- GETS MIN AND MAXIMUM COORDINATES FOR SCREEN ON X-AXIS
+	local miny,maxy = floor((camy-screen_h/2)/kTileSize),ceil((camy+screen_h/2)/kTileSize) -- GETS MIN AND MAXIMUM COORDINATES FOR SCREEN ON Y-AXIS
+	for tileId = 1,#gMapLayers do -- LOOPS OVER ALL LAYER OF TILES IN THE LEVEL
+		for x = minx,maxx do -- LOOPS OVER THE WIDTH OF THE SCREEN
+			for y = miny,maxy do -- LOOPS OVER THE HEIGHT OF THE SCREEN
+				local gfx = gTileGfx[TiledMap_GetMapTile(x,y,tileId)] -- RETREIVES THE TILE FOR THE CURRENT LOCATION
+				if (gfx) then
+					local sx = x*kTileSize - camx + screen_w/2 -- WHAT DOES THIS DO?
+					local sy = y*kTileSize - camy + screen_h/2 -- WHAT DOES THIS DO?
+					screen:copyfrom(gfx,nil,{x=sx,y=sy,nil,nil})
+				end
+			end
 		end
-	end
-	end
 	end
 end
 
@@ -158,27 +156,27 @@ function TiledMap_Parse(filename)
 end
 
 -- basic check collision - logic
-function hitTest (camx,camy, herox, heroy, herosize)
+function hitTest (camx, camy, herox, heroy, herosize)
 	camx,camy = floor(camx),floor(camy)
 	local screen_w = love.graphics.getWidth()
 	local screen_h = love.graphics.getHeight()
-	local minx,maxx = floor((camx-screen_w/2)/kTileSize),ceil((camx+screen_w/2)/kTileSize)
-	local miny,maxy = floor((camy-screen_h/2)/kTileSize),ceil((camy+screen_h/2)/kTileSize)
-	for z = 1,#gMapLayers do
-    for x = minx,maxx do
-      for y = miny,maxy do
-        local gfx = gTileGfx[TiledMap_GetMapTile(x,y,z)]
-        if (gfx) then
-          local sx = x*kTileSize - camx + screen_w/2
-          local sy = y*kTileSize - camy + screen_h/2
-          local temp = CheckCollision2(herox, heroy, herosize, herosize, sx, sy, kTileSize, kTileSize)
-          if temp ~= nil then
-              return temp
-          end
-    --			love.graphics.draw(gfx,sx,sy) -- x, y, r, sx, sy, ox, oy
-        end
-      end
-    end
+	local minx,maxx = floor((herox-screen_w/2)/kTileSize),ceil((herox+screen_w/2)/kTileSize)
+	local miny,maxy = floor((heroy-screen_h/2)/kTileSize),ceil((heroy+screen_h/2)/kTileSize)
+	for layerId = 1,#gMapLayers do
+	    for x = minx,maxx do
+		      for y = miny,maxy do
+		        local gfx = gTileGfx[TiledMap_GetMapTile(x,y,layerId)]
+		        if (gfx) then
+		          local sx = x*kTileSize - herox + screen_w/2
+		          local sy = y*kTileSize - heroy + screen_h/2
+		          local temp = CheckCollision2(herox, heroy, herosize, herosize, sx, sy, kTileSize, kTileSize)
+		          if temp ~= nil then
+		              return temp
+		          end
+		    --			love.graphics.draw(gfx,sx,sy) -- x, y, r, sx, sy, ox, oy
+		        end
+		      end
+	    end
 	end
   return nil
 end
