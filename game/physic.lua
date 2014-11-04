@@ -68,7 +68,14 @@ end
 -- purpose: Check Collision between two objects.
 -- input: (x,y) and (width, height) of Object A.
 -- input: (x,y) and (width, height) of Object B.
--- return: which side is collision ("ALeft" means the left side of Object A), nil if no collision occur.
+-- return: nil if no collision occur.
+--         The collision status if collision occur.
+-- example1: return value (ABottom, BTop, BLeft, ARight) means that
+-- the Bottom and Left side of Object A has collision with Top and Left side of Object B
+-- example2: return value (ALeft, ARight, ABottom, BTop) means that
+-- Object A is stand on Object B
+-- example3: return value (ALeft, ARight, BBottom, ATop) means that
+-- Object A is under Object B
 function CheckCollision2(ax1,ay1,aw,ah, bx1,by1,bw,bh)
   local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
   if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
