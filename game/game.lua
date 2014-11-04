@@ -24,10 +24,13 @@ local character_height = 32
 local tile_surface=nil
 local floor_speed = 10
 local background
-
+local gameCounter=0
+local image1 = nil
+local image2 = nil
 function start_game() 
 
-  TiledMap_Load(mapDir.."prototypeLevel.tmx") 
+ --TiledMap_Load(mapDir.."prototypeLevel.tmx") 
+  Level.load_level(1)
   if character==nil then
     character = character_object(character_width,character_height,imageDir.."character/squirrel1.png")
     character:add_image(imageDir.."character/squirrel2.png")
@@ -40,6 +43,7 @@ function start_game()
   end
   player.cur_x = 330
   player.cur_y = 450 
+  image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
   change_character_timer = sys.new_timer(100, "update_game_character")
   pos_change = 0
@@ -67,47 +71,18 @@ function update_game_character()
 end
 
 
---Taken directly from Zenterio's game since I think we will need this or is this for a later user story?
+-- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
 function update_cb() 
-  if lives > 0 then
-    dt=0.001    
-    
-     --player.new_y = player.cur_y + getNewYStep(dt)
-    if direction_flag=="down" then
-      for y=1, getNewYStep(dt), 1 do
-        player.new_y = player.cur_y + y
-        if hitTest(player.cur_x, player.new_y, character_width, character_height) ~= nil then
-          player.new_y = player.new_y - 1--THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
-          break
+  screen:clear()
+  local sf = nil
+    for k,v in pairs(Level.tiles) do     
+        if((v.x-gameCounter)+v.width>=0) then          
+          screen:copyfrom(image1,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
+          gfx.update()
         end
-      end
-    else
-       for y=0, getNewYStep(dt),-1 do
-        player.new_y = player.cur_y + y
-        if hitTest(player.cur_x, player.new_y, character_width, character_height) ~= nil then
-          player.new_y = player.new_y + 1--THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
-          break
-        end
-      end
     end
-
-     -- go ahead
-    for x=1, 5 do
-      player.new_x = player.cur_x + x
-      if hitTest(player.new_x, player.new_y, character_width, character_height) ~= nil then
-        player.new_x = player.new_x-1 --THIS MAKES THE SQUIRREL STOP MOVING FORWARD IF IT RUNS INTO SOMEHTING
-        break
-      end
-    end    
-       
-    player.cur_x = player.new_x
-    player.cur_y = player.new_y
+  gameCounter=gameCounter+5  
   
-    draw_screen()
-  else
-   -- game_over()
-    --print ("YOU LOST!!")
-  end
 end
 
 function draw_screen()

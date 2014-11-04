@@ -8,7 +8,7 @@ Level = {
   
 }
 function Level.load_level (level_number)
-  loaded_level = require("game/levels/level" .. level_number)
+  loaded_level = require("map/level"..level_number)
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
@@ -39,10 +39,9 @@ function get_tiles()
         x = ((k-1) % Level.raw_level.width) * tilesets[firstgid].tilewidth,
         y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[firstgid].tileheight
       }
+      print(((k-1) % Level.raw_level.width) )
       table.insert(tiles, tile)
-      
-      
-    end 
+    end
   end
   return tiles
 end
