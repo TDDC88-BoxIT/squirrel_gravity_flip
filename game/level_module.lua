@@ -150,7 +150,9 @@ local function getLayers(node)
 end
 
 function TiledMap_Parse(filename)
-	local xml = LoadXML(love.filesystem.read(filename))
+--	local xml = LoadXML(love.filesystem.read(filename))
+  local xml = LoadXML(io.open(filename, "r"):read("*all"))
+  
 	local tiles = getTilesets(xml[2])
 	local layers = getLayers(xml[2])
 	return tiles, layers
