@@ -70,7 +70,7 @@ end
 --Taken directly from Zenterio's game since I think we will need this or is this for a later user story?
 function update_cb() 
   if lives > 0 then
-    dt=0.01    
+    dt=0.001    
     
      --player.new_y = player.cur_y + getNewYStep(dt)
     if direction_flag=="down" then
