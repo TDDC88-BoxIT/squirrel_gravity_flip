@@ -25,7 +25,9 @@ local tile_surface=nil
 local floor_speed = 10
 local background
 
+
 function start_game() 
+  game_score = 100
 
   TiledMap_Load(mapDir.."prototypeLevel.tmx") 
   if character==nil then
@@ -69,7 +71,8 @@ end
 
 --Taken directly from Zenterio's game since I think we will need this or is this for a later user story?
 function update_cb() 
-  if lives > 0 then
+  -- if lives > 0 then
+  if game_score > 0 then
     dt=0.01    
     
      --player.new_y = player.cur_y + getNewYStep(dt)
@@ -102,12 +105,18 @@ function update_cb()
        
     player.cur_x = player.new_x
     player.cur_y = player.new_y
-  
+    
+    game_score = game_score - 1
+    
     draw_screen()
   else
    -- game_over()
-    --print ("YOU LOST!!")
-  end
+    print ("YOU LOST!!")
+    stop_game()
+    change_global_game_state(0)
+    set_menu_state("pause_menu")
+    start_menu()  
+    end
 end
 
 function draw_screen()
