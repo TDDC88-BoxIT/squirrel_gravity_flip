@@ -45,6 +45,7 @@ JUST BEFORE THE
 WILL CREATE A NEW SURFACE FOR THE CHARACTER OBJECT.
 --]]
 
+require("class")
 -- THE MENU CONSTRUCTOR SETS START VALUES FOR THE MENU
 character_object = class(function (self, character_width, character_height, character_img)
 

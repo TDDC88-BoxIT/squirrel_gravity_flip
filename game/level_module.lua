@@ -38,6 +38,7 @@ function get_tile_data_value (tx,ty,layerid) -- coords in tiles
 	return row and row[tx] or kMapTileTypeEmpty
 end
 
+--[[
 function draw_tiles (player_x,player_y)
 	player_x,player_y = floor(player_x),floor(player_y)
 	local screen_w = screen:get_width()
@@ -57,7 +58,7 @@ function draw_tiles (player_x,player_y)
 		end
 	end
 end
-
+]]
 
 -- ***** ***** ***** ***** ***** xml parser
 
@@ -158,6 +159,7 @@ function TiledMap_Parse(filename)
 	return tiles, layers
 end
 
+--[[
 -- basic check collision - logic
 function hitTest (herox, heroy, hero_width, hero_height)
 	herox,heroy = floor(herox),floor(heroy)
@@ -182,7 +184,7 @@ function hitTest (herox, heroy, hero_width, hero_height)
 	end
   return nil
 end
-
+]]
 -- basic check collesion
 function checkCollesion(ax1,ay1,aw,ah, bx1,by1,bw,bh)
   local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh

@@ -24,13 +24,15 @@ local character_height = 32
 local tile_surface=nil
 local floor_speed = 10
 local background
+background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
+local gameSpeed = 5
 local image1 = nil
 local image2 = nil
 function start_game() 
-
+  gameCounter=0
  --TiledMap_Load(mapDir.."prototypeLevel.tmx") 
-  Level.load_level(1)
+  Level.load_level(3)
   if character==nil then
     character = character_object(character_width,character_height,imageDir.."character/squirrel1.png")
     character:add_image(imageDir.."character/squirrel2.png")
@@ -41,78 +43,138 @@ function start_game()
     ToBottom()
     direction_flag="down"
   end
-  player.cur_x = 330
-  player.cur_y = 450 
+  player.start_xpos=200 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
+  player.start_ypos=32*7 -- WHARE WE WANT THE CHARACTER TO BE ON THE Y-AXIS WHEN HE STARTS
+  player.cur_x = 50
+  player.cur_y = player.start_ypos
+  player.new_x = player.cur_x -- INITIALLY NEW X-POS IS THE SAME AS CURRENT POSITION
+  player.new_y = player.cur_y -- INITIALLY NEW Y-POS IS THE SAME AS CURRENT POSITION
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
-  change_character_timer = sys.new_timer(100, "update_game_character")
+  change_character_timer = sys.new_timer(400, "update_game_character")
   pos_change = 0
   lives = 10
-
 end
 
 function resume_game()   
   timer = sys.new_timer(20, "update_cb")
-  change_character_timer = sys.new_timer(100, "update_game_character")
+  change_character_timer = sys.new_timer(400, "update_game_character")
 end
 
 function stop_game()
-  screen:clear()
-  timer:stop()
-  timer = nil
-  change_character_timer:stop()
-  change_character_timer=nil   
+  --screen:clear()
+  if timer~=nil then
+    timer:stop()
+    timer = nil
+  end
+  if change_character_timer~=nil then
+    change_character_timer:stop()
+    change_character_timer=nil 
+  end  
 end
-
 
 function update_game_character()
   character:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
   character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
 end
 
-
 -- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
 function update_cb() 
   screen:clear()
-  local sf = nil
-    for k,v in pairs(Level.tiles) do     
-        if((v.x-gameCounter)+v.width>=0) then          
-          screen:copyfrom(image1,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
-          gfx.update()
-        end
-    end
-  gameCounter=gameCounter+5  
-  
+  draw_screen()
+  gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
+end
+
+function move_character()
+  if direction_flag == "down" then
+    -- MOVE CHARACTER ON THE Y-AXIS
+    for i=0, 5, 1 do
+      player.new_y=player.cur_y+i
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
+        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+      else
+        break
+      end
+    end 
+  elseif direction_flag == "up" then
+    -- MOVE CHARACTER ON THE Y-AXIS
+    for i=0, 5, 1 do
+      player.new_y=player.cur_y-i
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
+        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+      else
+        break
+      end
+    end 
+  end 
 end
 
 function draw_screen()
-  screen:clear()
-  background = gfx.loadpng("images/level_sky.png")
-  screen:copyfrom(background,nil,nil)
-  background:destroy()
-  
-  draw_tiles(player.new_x,player.new_y)
-
-  -- THE GAME CHARACTER IS COPIED TO THE SCREEN
-  screen:copyfrom(character:get_surface(), nil,{x=player.new_x,y=player.new_y},true)
-  
+  --draw_background()
+  draw_tiles()
+  move_character()
+  draw_character()
   gfx.update()
-
 end
 
+function draw_background()
+  --background = gfx.loadpng("images/level_sky.png")
+  screen:copyfrom(background,nil,nil)
+  --background:destroy()
+end
+
+--[[ 
+LOOPS THROUGH TILES AND DRAWS THEM ON SCREEN
+WHERE THE TILES ARE DRAWN DEPENDS ON THE gameCounter WHICH STARTS TO COUNT FROM 0 WHEN THE GAME STARTS
+THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
+]]  
+function draw_tiles()
+  local sf = nil
+    for k,v in pairs(Level.tiles) do
+      if v.x-gameCounter+v.width>0 then 
+        screen:copyfrom(image1,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
+      end
+    end
+end
+
+--[[
+SETS NEW X AND Y COORDINATES FOR THE CHARACTER AND PERFORMS A HIT-TEST
+IF NOTHING IS HIT, THEN THE CHARACTER IS MOVED, ELSE THE CHARACTER STOPS
+]]
+function draw_character()
+  -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
+  for i = 1,gameSpeed,1 do
+    if hitTest(gameCounter, Level.tiles, player.cur_x+i, player.cur_y, character.width, character.height)~=nil then
+      player.cur_x = player.cur_x-1 -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
+    elseif player.cur_x<player.start_xpos then
+      player.cur_x = player.cur_x+0.5 -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
+    end
+  end
+
+  if player.cur_x<-1 then
+    trigger_squize_reaction()
+  end
+    screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
+end
+
+-- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+function trigger_squize_reaction()
+  stop_game()
+  screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
+end
 
 function game_navigation(key, state)
   if key=="ok" and state== 'up' then
     if direction_flag == "down" then
-       if hitTest(player.cur_x, player.cur_y+1, character_width, character_height) ~= nil then
+       if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character_width, character_height) ~= nil then
         character:flip()
-        ToTop()
+        --ToTop()
         direction_flag="up"
       end
     else
-      if hitTest(player.cur_x, player.cur_y-1, character_width, character_height) ~= nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character_width, character_height) ~= nil then
         character:flip()
-        ToBottom()
+        --ToBottom()
         direction_flag="down"
       end
     end

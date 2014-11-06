@@ -45,9 +45,41 @@ function get_tiles()
         x = ((k-1) % Level.raw_level.width) * tilesets[gid].tilewidth,
         y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[gid].tileheight
       }
-      print(((k-1) % Level.raw_level.width) )
       table.insert(tiles, tile)
     end
   end
   return tiles
+end
+
+-- basic check collision - logic
+function hitTest (gameCounter,tileSet, herox, heroy, hero_width, hero_height)
+  for k,v in pairs(tileSet) do
+    local temp1,temp2,temp3,temp4 = CheckCollision2(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
+    if temp1 ~= nil then
+      return temp1,temp2,temp3,temp4
+    end
+  end
+  return nil
+  --[[herox,heroy = floor(herox),floor(heroy)
+  local screen_w = screen:get_width()
+  local screen_h = screen:get_height()
+  local minx,maxx = floor((herox-screen_w/2)/tile_width),ceil((herox+screen_w/2)/tile_width)
+  local miny,maxy = floor((heroy-screen_h/2)/tile_height),ceil((heroy+screen_h/2)/tile_height)
+  for layer_id = 1,#tile_layers do  -- LOOPS OVER ALL LAYER OF TILES IN THE LEVEL
+    for x = minx,maxx do      -- LOOPS OVER THE WIDTH OF THE SCREEN
+      for y = miny,maxy do    -- LOOPS OVER THE HEIGHT OF THE SCREEN
+        local tile = game_tile_set[get_tile_data_value(x,y,layer_id)]
+        if (tile) then
+          local sx = x*tile_width - herox + screen_w/2
+          local sy = y*tile_height - heroy + screen_h/2
+          local temp1,temp2,temp3,temp4 = CheckCollision2(herox, heroy, hero_width, hero_height, sx, sy, tile_width, tile_height)
+          if temp1 ~= nil then
+            return temp1,temp2,temp3,temp4
+          end
+        end
+      end
+      end
+  end
+  return nil
+  ]]
 end
