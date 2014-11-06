@@ -40,7 +40,6 @@ function Level.get_floor()
       }
       table.insert(floors, floor_tile)
       
-      
     end 
   end
   return floors
