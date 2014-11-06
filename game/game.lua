@@ -29,7 +29,7 @@ local background
 function start_game() 
   game_score = 1000
 
-  TiledMap_Load(mapDir.."prototypeLevel.tmx") 
+  TiledMap_Load(mapDir.."prototypeLevel1.tmx") 
   if character==nil then
     character = character_object(character_width,character_height,imageDir.."character/squirrel1.png")
     character:add_image(imageDir.."character/squirrel2.png")
@@ -120,22 +120,21 @@ function update_cb()
   end
 end
 
+
+--the function that draws the score in the top left score 
 function draw_score()
   local string_score = tostring(game_score)
   position = 1
   -- loops through the score that is stored as a string
   while position <= string.len(string_score) do
+    -- calls on the print function for the digit, sends the number as a string
     draw_number(string.sub(string_score,position,position),position)
     position = position + 1
   end
---draw_number("0", position - 1)
- -- draw_number(number, position - 1)
 end
 
 function draw_number(number, position)
-  print (number)
-  print ("TROLLLAR")
-  print (position)
+-- loads the picture corresponding to the correct digit
   if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
   elseif number == "1" then 
     score = gfx.loadpng("images/numbers/one.png")
@@ -156,9 +155,7 @@ function draw_number(number, position)
   elseif number == "9" then 
     score = gfx.loadpng("images/numbers/nine.png")
   end
-
-
-
+  -- prints the loaded picture
   screen:copyfrom(score,nil ,{x=10+position*30, y = 10, height = 50, width = 30}, true)
   score:destroy()
 
@@ -170,6 +167,7 @@ function draw_screen()
   background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
   background:destroy()
+  
 
   draw_tiles(player.new_x,player.new_y)
 
