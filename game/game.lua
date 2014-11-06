@@ -27,7 +27,7 @@ local background
 
 
 function start_game() 
-  game_score = 100
+  game_score = 1000
 
   TiledMap_Load(mapDir.."prototypeLevel.tmx") 
   if character==nil then
@@ -74,8 +74,8 @@ function update_cb()
   -- if lives > 0 then
   if game_score > 0 then
     dt=0.01    
-    
-     --player.new_y = player.cur_y + getNewYStep(dt)
+
+    --player.new_y = player.cur_y + getNewYStep(dt)
     if direction_flag=="down" then
       for y=1, getNewYStep(dt), 1 do
         player.new_y = player.cur_y + y
@@ -85,7 +85,7 @@ function update_cb()
         end
       end
     else
-       for y=0, getNewYStep(dt),-1 do
+      for y=0, getNewYStep(dt),-1 do
         player.new_y = player.cur_y + y
         if hitTest(player.cur_x, player.new_y, character_width, character_height) ~= nil then
           player.new_y = player.new_y + 1--THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
@@ -94,7 +94,7 @@ function update_cb()
       end
     end
 
-     -- go ahead
+    -- go ahead
     for x=1, 5 do
       player.new_x = player.cur_x + x
       if hitTest(player.new_x, player.new_y, character_width, character_height) ~= nil then
@@ -102,34 +102,81 @@ function update_cb()
         break
       end
     end    
-       
+
     player.cur_x = player.new_x
     player.cur_y = player.new_y
-    
+
     game_score = game_score - 1
-    
+
     draw_screen()
+
   else
-   -- game_over()
+    -- game_over()
     print ("YOU LOST!!")
     stop_game()
     change_global_game_state(0)
     set_menu_state("pause_menu")
     start_menu()  
-    end
+  end
 end
+
+function draw_score()
+  local string_score = tostring(game_score)
+  position = 1
+  -- loops through the score that is stored as a string
+  while position <= string.len(string_score) do
+    draw_number(string.sub(string_score,position,position),position)
+    position = position + 1
+  end
+--draw_number("0", position - 1)
+ -- draw_number(number, position - 1)
+end
+
+function draw_number(number, position)
+  print (number)
+  print ("TROLLLAR")
+  print (position)
+  if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
+  elseif number == "1" then 
+    score = gfx.loadpng("images/numbers/one.png")
+  elseif number == "2" then 
+    score = gfx.loadpng("images/numbers/two.png")
+  elseif number == "3" then 
+    score = gfx.loadpng("images/numbers/three.png")
+  elseif number == "4" then 
+    score = gfx.loadpng("images/numbers/four.png")
+  elseif number == "5" then 
+    score = gfx.loadpng("images/numbers/five.png")
+  elseif number == "6" then 
+    score = gfx.loadpng("images/numbers/six.png")
+  elseif number == "7" then 
+    score = gfx.loadpng("images/numbers/seven.png")
+  elseif number == "8" then 
+    score = gfx.loadpng("images/numbers/eight.png") 
+  elseif number == "9" then 
+    score = gfx.loadpng("images/numbers/nine.png")
+  end
+
+
+
+  screen:copyfrom(score,nil ,{x=10+position*30, y = 10, height = 50, width = 30}, true)
+  score:destroy()
+
+end
+
 
 function draw_screen()
   screen:clear()
   background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
   background:destroy()
-  
+
   draw_tiles(player.new_x,player.new_y)
 
   -- THE GAME CHARACTER IS COPIED TO THE SCREEN
   screen:copyfrom(character:get_surface(), nil,{x=player.new_x,y=player.new_y},true)
-  
+  draw_score()
+
   gfx.update()
 
 end
@@ -138,7 +185,7 @@ end
 function game_navigation(key, state)
   if key=="ok" and state== 'up' then
     if direction_flag == "down" then
-       if hitTest(player.cur_x, player.cur_y+1, character_width, character_height) ~= nil then
+      if hitTest(player.cur_x, player.cur_y+1, character_width, character_height) ~= nil then
         character:flip()
         ToTop()
         direction_flag="up"
