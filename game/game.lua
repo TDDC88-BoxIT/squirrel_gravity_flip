@@ -126,6 +126,11 @@ function draw_screen()
 end
 
 
+function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
+  set_menu_state(levelwin_menu)
+  start_menu()
+end
+
 function game_navigation(key, state)
   if key=="ok" and state== 'up' then
     if direction_flag == "down" then
