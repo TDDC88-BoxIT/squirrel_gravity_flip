@@ -1,3 +1,5 @@
+-- CURRENTLY NOT USED
+
 -- varibales list
 mgravity = 10
 mspeed = 100

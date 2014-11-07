@@ -25,7 +25,7 @@ local tile_surface=nil
 local background
 --background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
-local gameSpeed = 10
+local gameSpeed = 5
 local image1 = nil
 local image2 = nil
 
