@@ -83,30 +83,16 @@ end
 
 -- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
 function update_cb() 
-<<<<<<< HEAD
   -- if lives > 0 then
-  if game_score > 0 then
-    dt=0.01    
+  -- if game_score > 0 then
 
-    --player.new_y = player.cur_y + getNewYStep(dt)
-    if direction_flag=="down" then
-      for y=1, getNewYStep(dt), 1 do
-        player.new_y = player.cur_y + y
-        if hitTest(player.cur_x, player.new_y, character_width, character_height) ~= nil then
-          player.new_y = player.new_y - 1--THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
-          break
-        end
-      end
-    else
-      for y=0, getNewYStep(dt),-1 do
-        player.new_y = player.cur_y + y
-        if hitTest(player.cur_x, player.new_y, character_width, character_height) ~= nil then
-          player.new_y = player.new_y + 1--THIS MAKES THE CHARACTED STOP FALLING OR RISING IF IT HITS SOMETHING
-          break
-        end
-=======
   screen:clear()
   draw_screen()
+  if game_score > 0 then
+    game_score = game_score -10
+  else
+    print ("you lost!")
+    end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
 
@@ -120,38 +106,10 @@ function move_character()
       if player.cur_x<-1 then
         trigger_squize_reaction() -- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
         --break
->>>>>>> origin/physicsfix
       end
     elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
     end
-<<<<<<< HEAD
-
-    -- go ahead
-    for x=1, 5 do
-      player.new_x = player.cur_x + x
-      if hitTest(player.new_x, player.new_y, character_width, character_height) ~= nil then
-        player.new_x = player.new_x-1 --THIS MAKES THE SQUIRREL STOP MOVING FORWARD IF IT RUNS INTO SOMEHTING
-        break
-      end
-    end    
-
-    player.cur_x = player.new_x
-    player.cur_y = player.new_y
-
-    game_score = game_score - 1
-
-    draw_screen()
-
-  else --if score goes below zero
-    -- game_over()
-    print ("YOU LOST!!")
-    stop_game()
-    change_global_game_state(0)
-    set_menu_state("pause_menu")
-    start_menu()  
-  end
-=======
   --end
 
   -- MOVE CHARACTER ON THE Y-AXIS
@@ -167,7 +125,6 @@ function move_character()
         break
       end
     end  
->>>>>>> origin/physicsfix
 end
 
 
@@ -217,24 +174,13 @@ function draw_screen()
   draw_tiles()
   move_character()
   draw_character()
+  draw_score()
   gfx.update()
 end
 
 function draw_background()
   --background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
-<<<<<<< HEAD
-  background:destroy()
-  
-
-  draw_tiles(player.new_x,player.new_y)
-
-  -- THE GAME CHARACTER IS COPIED TO THE SCREEN
-  screen:copyfrom(character:get_surface(), nil,{x=player.new_x,y=player.new_y},true)
-  draw_score()
-
-  gfx.update()
-=======
   --background:destroy()
 end
 
@@ -251,7 +197,6 @@ function draw_tiles()
       end
     end
 end
->>>>>>> origin/physicsfix
 
 --[[
 SETS NEW X AND Y COORDINATES FOR THE CHARACTER AND PERFORMS A HIT-TEST
@@ -269,11 +214,7 @@ end
 function game_navigation(key, state)
   if key=="ok" and state== 'up' then
     if direction_flag == "down" then
-<<<<<<< HEAD
-      if hitTest(player.cur_x, player.cur_y+1, character_width, character_height) ~= nil then
-=======
        if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character_width, character_height) ~= nil then
->>>>>>> origin/physicsfix
         character:flip()
         --ToTop()
         direction_flag="up"
