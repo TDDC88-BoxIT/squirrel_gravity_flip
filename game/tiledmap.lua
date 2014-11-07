@@ -1,3 +1,5 @@
+-- CURRENTLY NOT USED
+
 -- loader for "tiled" map editor maps (.tmx,xml-based) http://www.mapeditor.org/
 -- supports multiple layers
 -- NOTE : function ReplaceMapTileClass (tx,ty,oldTileType,newTileType,fun_callback) end
