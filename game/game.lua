@@ -110,7 +110,7 @@ function update_cb()
 
     draw_screen()
 
-  else
+  else --if score goes below zero
     -- game_over()
     print ("YOU LOST!!")
     stop_game()
