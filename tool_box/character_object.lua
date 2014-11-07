@@ -76,12 +76,12 @@ end
 
 -- ADDS NEW MENU ITEMS
 function character_object:add_image(img_Path)
-	table.insert(self.character_images, table.getn(self.character_images)+1, img_Path)
+	table.insert(self.character_images, #self.character_images+1, img_Path)
 end
 
 -- ADDS NEW FLIPPED MENU ITEMS
 function character_object:add_flipped_image(img_Path)
-	table.insert(self.character_flipped_images, table.getn(self.character_flipped_images)+1, img_Path)
+	table.insert(self.character_flipped_images, #self.character_flipped_images+1, img_Path)
 end
 
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
@@ -118,13 +118,13 @@ end
 -- CHANGES THE IMAGE INDEX IN ORDER TO CREATE AN ANIMATION OF THE CHARACTER IMAGES
 local function animate(self)
 	if self.show_flipped_images==true then
-		if self.current_character_image<table.getn(self.character_flipped_images) then
+		if self.current_character_image<#self.character_flipped_images then
 			self.current_character_image=self.current_character_image+1
 		else
 			self.current_character_image=1
 		end
 	else
-		if self.current_character_image<table.getn(self.character_images) then
+		if self.current_character_image<#self.character_images then
 			self.current_character_image=self.current_character_image+1
 		else
 			self.current_character_image=1

@@ -22,16 +22,16 @@ local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local character_width = 32
 local character_height = 32
 local tile_surface=nil
-local floor_speed = 10
 local background
-background = gfx.loadpng("images/level_sky.png")
+--background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
-local gameSpeed = 5
+local gameSpeed = 10
 local image1 = nil
 local image2 = nil
+
+
 function start_game() 
   gameCounter=0
- --TiledMap_Load(mapDir.."prototypeLevel.tmx") 
   Level.load_level(3)
   if character==nil then
     character = character_object(character_width,character_height,imageDir.."character/squirrel1.png")
@@ -51,14 +51,14 @@ function start_game()
   player.new_y = player.cur_y -- INITIALLY NEW Y-POS IS THE SAME AS CURRENT POSITION
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
-  change_character_timer = sys.new_timer(400, "update_game_character")
+  change_character_timer = sys.new_timer(200, "update_game_character")
   pos_change = 0
   lives = 10
 end
 
 function resume_game()   
   timer = sys.new_timer(20, "update_cb")
-  change_character_timer = sys.new_timer(400, "update_game_character")
+  change_character_timer = sys.new_timer(200, "update_game_character")
 end
 
 function stop_game()
@@ -86,27 +86,34 @@ function update_cb()
 end
 
 function move_character()
-  if direction_flag == "down" then
-    -- MOVE CHARACTER ON THE Y-AXIS
-    for i=0, 5, 1 do
-      player.new_y=player.cur_y+i
+  -- MOVE CHARACTER ON THE X-AXIS
+  -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
+  --for i = 1,gameSpeed,1 do
+    player.new_x=player.cur_x+1
+    if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
+      player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
+      if player.cur_x<-1 then
+        trigger_squize_reaction() -- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+        --break
+      end
+    elseif player.cur_x<player.start_xpos then
+      player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
+    end
+  --end
+
+  -- MOVE CHARACTER ON THE Y-AXIS
+    for i=0, gameSpeed, 1 do
+      if direction_flag == "down" then 
+        player.new_y=player.cur_y+i
+      else
+        player.new_y=player.cur_y-i
+      end
       if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
         player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
       else
         break
       end
-    end 
-  elseif direction_flag == "up" then
-    -- MOVE CHARACTER ON THE Y-AXIS
-    for i=0, 5, 1 do
-      player.new_y=player.cur_y-i
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
-        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-      else
-        break
-      end
-    end 
-  end 
+    end  
 end
 
 function draw_screen()
@@ -142,22 +149,9 @@ SETS NEW X AND Y COORDINATES FOR THE CHARACTER AND PERFORMS A HIT-TEST
 IF NOTHING IS HIT, THEN THE CHARACTER IS MOVED, ELSE THE CHARACTER STOPS
 ]]
 function draw_character()
-  -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
-  for i = 1,gameSpeed,1 do
-    if hitTest(gameCounter, Level.tiles, player.cur_x+i, player.cur_y, character.width, character.height)~=nil then
-      player.cur_x = player.cur_x-1 -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
-    elseif player.cur_x<player.start_xpos then
-      player.cur_x = player.cur_x+0.5 -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
-    end
-  end
-
-  if player.cur_x<-1 then
-    trigger_squize_reaction()
-  end
-    screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
+  screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
 end
 
--- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
 function trigger_squize_reaction()
   stop_game()
   screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)

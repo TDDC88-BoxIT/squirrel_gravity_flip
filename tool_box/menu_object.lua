@@ -92,7 +92,7 @@ end
 
 -- ADDS NEW MENU ITEMS
 function menu_object:add_button(button_id, img_Path)
-	table.insert(self.menu_items, table.getn(self.menu_items)+1, {id=button_id,img=img_Path})
+	table.insert(self.menu_items, #self.menu_items+1, {id=button_id,img=img_Path})
 end
 
 -- CLEARS ALL ADDED MENU ITEMS
@@ -117,7 +117,7 @@ end
 
 -- INCREASES THE INDEX FOR CURRENTLY SELECTED MENU ITEM
 function menu_object:increase_index()
-  if self.indexed_item<table.getn(self.menu_items) then
+  if self.indexed_item<#self.menu_items then
     self.indexed_item=self.indexed_item+1
   end
 end
@@ -164,7 +164,7 @@ end
 -- CREATES ALL MENU BUTTONS AND ADDS THEM TO THE MENU
 local function make_buttons(self)
   -- LOOPS THROUGH ALL ITEMS WHICH HAVE BEEN ADDE TO THE MENU AND CREATES A SET OF BUTTONS FOR THESE
-  for i = 1, table.getn(self.menu_items), 1 do
+  for i = 1, #self.menu_items, 1 do
     -- SETS THE BUTTON IMAGE
     local img_surface=nil
     img_surface = gfx.loadpng(self.menu_items[i].img)
@@ -187,8 +187,8 @@ local function update(self)
   if self.menu_surface == nil then
     self.menu_surface=gfx.new_surface(self.width, self.height)
   end
-  if self.height<table.getn(self.menu_items)*(self.button_height+20) then
-    self:set_button_size(nil,(self.height-(table.getn(self.menu_items))*20)/table.getn(self.menu_items))
+  if self.height<#self.menu_items*(self.button_height+20) then
+    self:set_button_size(nil,(self.height-(#self.menu_items)*20)/#self.menu_items)
   end
   make_bakground(self)
   make_buttons(self)
