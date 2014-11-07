@@ -1,0 +1,10 @@
+Hitting the "3 of each" goal seems pretty hard from a creative standpoint with such a simple game. Is it possible we could reduce this?
+
+Ups:
+Faster scrolling and character speed
+What more can be added? Suddenly spawning more obstacles?
+
+Downs:
+Invulnerability to regular obstacles (should we really label them "powerups" and "powerdowns" with this in mind?)
+Slower scrolling and character speed
+???
