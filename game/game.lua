@@ -12,6 +12,8 @@ require "game/level"
 require ("game/physic")
 require ("game/level_module")
 require ("tool_box/character_object")
+require ("game/score")
+require ("game/power_up")
 
 gKeyPressed = {}
 local imageDir = "images/"
@@ -34,7 +36,9 @@ function start_game()
   game_score = 1000
 
   gameCounter=0
+
   Level.load_level(13)
+
   
   if character==nil then
     character = character_object(character_width,character_height,imageDir.."character/squirrel1.png")
@@ -54,6 +58,7 @@ function start_game()
   player.new_y = player.cur_y -- INITIALLY NEW Y-POS IS THE SAME AS CURRENT POSITION
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
+  timer_score = sys.new_timer(100, "update_score")
   change_character_timer = sys.new_timer(200, "update_game_character")
   pos_change = 0
   lives = 10
@@ -88,13 +93,18 @@ function update_cb()
 
   screen:clear()
   draw_screen()
-  if game_score > 0 then
-    game_score = game_score -10
-  else
-    print ("you lost!")
-    end
+ -- if game_score > 0 then
+ --   game_score = game_score -10
+ -- else
+ --   print ("you lost!")
+ --   end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
+
+function update_score()
+    game_score = game_score - 1
+end
+
 
 function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
@@ -128,45 +138,9 @@ function move_character()
 end
 
 
---the function that draws the score in the top left score 
-function draw_score()
-  local string_score = tostring(game_score)
-  position = 1
-  -- loops through the score that is stored as a string
-  while position <= string.len(string_score) do
-    -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_score,position,position),position)
-    position = position + 1
-  end
-end
 
-function draw_number(number, position)
--- loads the picture corresponding to the correct digit
-  if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
-  elseif number == "1" then 
-    score = gfx.loadpng("images/numbers/one.png")
-  elseif number == "2" then 
-    score = gfx.loadpng("images/numbers/two.png")
-  elseif number == "3" then 
-    score = gfx.loadpng("images/numbers/three.png")
-  elseif number == "4" then 
-    score = gfx.loadpng("images/numbers/four.png")
-  elseif number == "5" then 
-    score = gfx.loadpng("images/numbers/five.png")
-  elseif number == "6" then 
-    score = gfx.loadpng("images/numbers/six.png")
-  elseif number == "7" then 
-    score = gfx.loadpng("images/numbers/seven.png")
-  elseif number == "8" then 
-    score = gfx.loadpng("images/numbers/eight.png") 
-  elseif number == "9" then 
-    score = gfx.loadpng("images/numbers/nine.png")
-  end
-  -- prints the loaded picture
-  screen:copyfrom(score,nil ,{x=10+position*30, y = 10, height = 50, width = 30}, true)
-  score:destroy()
 
-end
+
 
 
 function draw_screen()
