@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="500" height="14" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="floor1" tilewidth="32" tileheight="32">
+  <image source="../../../images/floor1.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="2" name="powerup1" tilewidth="32" tileheight="32">
+  <image source="../../../images/powerup1.png" width="32" height="32"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="500" height="14">
+  <data encoding="base64" compression="zlib">
+   eJzt20EOgCAMBED1/4/2bpQYoVBhJuFsetpS6rbRy144AAAAwBru5gBmAwBkVZprR50ZrFYvAP/3NpMisksuAvAX2e96o/O85Aj4JgDQ1jXPs/Q4ADBaizttrxx9k+eR7/tPdeojABih9Qx/VJ4DQK2WO93Z330j7rlf+gh5DkBvEf9wZd6T62Hm2gBgFfIcAHKr2UcDgBnVzuSj5vbyGIBsTpQ+AMs=
+  </data>
+ </layer>
+</map>
