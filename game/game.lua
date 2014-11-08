@@ -163,7 +163,14 @@ function draw_number(number, position)
     score = gfx.loadpng("images/numbers/nine.png")
   end
   -- prints the loaded picture
-  screen:copyfrom(score,nil ,{x=10+position*30, y = 10, height = 50, width = 30}, true)
+   if global_game_state == 1 then --game situation
+    xplace = 10
+    yplace = 10
+  elseif global_game_state == 0 then --menu situation
+    xplace = 550
+    yplace = 350
+  end
+  screen:copyfrom(score,nil ,{x=xplace+position*30, y = yplace, height = 50, width = 30}, true)
   score:destroy()
 
 end
@@ -238,6 +245,8 @@ function game_navigation(key, state)
     change_global_game_state(0)
     set_menu_state("pause_menu")
     start_menu()
+  elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
+    levelwin()
   end
 end 
 
