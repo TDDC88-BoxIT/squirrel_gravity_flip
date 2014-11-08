@@ -75,12 +75,12 @@ end
 -- CREATES A SPACE BAR CHARACTER WHICH WILL HELP THE GAMER IN THE TUTORIAL
 function create_tutorial_helper()
   if space_bar_character==nil then
-    space_bar_character = character_object(300,50,imageDir.."tutorialImg/spaceBarDown.png")
+    space_bar_character = character_object(236,219,imageDir.."tutorialImg/spaceBarDown.png")
     space_bar_character:add_image(imageDir.."tutorialImg/spaceBarUp.png")
   else
     space_bar_character:reset()
   end
-  change_space_bar_timer = sys.new_timer(500, "update_space_bar_character")
+  change_space_bar_timer = sys.new_timer(500, "update_tutorial_helper")
 end
 
 function update_game_character()
@@ -88,7 +88,7 @@ function update_game_character()
   character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
 end
 
-function update_space_bar_character()
+function update_tutorial_helper()
   space_bar_character:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
   space_bar_character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
 end
@@ -145,10 +145,8 @@ function draw_screen()
   draw_tiles()
   move_character()
   draw_character()
-  print("GT: "..current_game_type)
   if current_game_type=="tutorial" then
-    print("NOW")
-    draw_space_bar()
+    draw_tutorial_helper()
   end
   gfx.update()
 end
@@ -183,8 +181,8 @@ end
 --[[
 DRAWS TUTORIAL SPACE BAR ON SCREEN
 ]]
-function draw_space_bar()
-  screen:copyfrom(space_bar_character:get_surface(), nil,{x=(screen:get_width()/2)-150,y=500},true)
+function draw_tutorial_helper()
+  screen:copyfrom(space_bar_character:get_surface(), nil,{x=(screen:get_width()/2)-150,y=400},true)
 end
 
 function trigger_squize_reaction()
