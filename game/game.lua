@@ -36,7 +36,7 @@ function start_game()
   game_score = 1000
 
   gameCounter=0
-  Level.load_level(3)
+  Level.load_level(5)
   
   if character==nil then
     character = character_object(character_width,character_height,imageDir.."character/squirrel1.png")
