@@ -62,9 +62,11 @@ function add_menu_bling()
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
 
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
+  if menuState == "start_menu" or menuState == "pause_menu" then
   backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
   backdrop:fill({r=0,g=0,b=0,a=200})
   screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
+  end
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
   thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
