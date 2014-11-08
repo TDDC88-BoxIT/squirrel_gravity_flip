@@ -12,6 +12,8 @@ require "game/level"
 require ("game/physic")
 require ("game/level_module")
 require ("tool_box/character_object")
+require ("game/score")
+require ("game/power_up")
 
 gKeyPressed = {}
 local imageDir = "images/"
@@ -31,8 +33,13 @@ local image2 = nil
 
 
 function start_game() 
+  game_score = 1000
+
   gameCounter=0
-  Level.load_level(3)
+
+  Level.load_level(5)
+
+  
   if character==nil then
     character = character_object(character_width,character_height,imageDir.."character/squirrel1.png")
     character:add_image(imageDir.."character/squirrel2.png")
@@ -51,6 +58,7 @@ function start_game()
   player.new_y = player.cur_y -- INITIALLY NEW Y-POS IS THE SAME AS CURRENT POSITION
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
+  timer_score = sys.new_timer(100, "update_score")
   change_character_timer = sys.new_timer(200, "update_game_character")
   pos_change = 0
   lives = 10
@@ -80,10 +88,23 @@ end
 
 -- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
 function update_cb() 
+  -- if lives > 0 then
+  -- if game_score > 0 then
+
   screen:clear()
   draw_screen()
+ -- if game_score > 0 then
+ --   game_score = game_score -10
+ -- else
+ --   print ("you lost!")
+ --   end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
+
+function update_score()
+    game_score = game_score - 1
+end
+
 
 function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
@@ -116,11 +137,18 @@ function move_character()
     end  
 end
 
+
+
+
+
+
+
 function draw_screen()
   --draw_background()
   draw_tiles()
   move_character()
   draw_character()
+  draw_score()
   gfx.update()
 end
 
@@ -138,8 +166,10 @@ THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
 function draw_tiles()
   local sf = nil
     for k,v in pairs(Level.tiles) do
-      if v.x-gameCounter+v.width>0 then 
-        screen:copyfrom(image1,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
+      if v.x-gameCounter+v.width>0 and v.visibility == true then 
+        screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
+     
+        -- screen:copyfrom(image1,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
       end
     end
 end

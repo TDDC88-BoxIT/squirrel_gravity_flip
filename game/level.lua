@@ -9,7 +9,7 @@ Level = {
   version = nil,
   width = nil,
   tiles = nil;
-  
+
 }
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
 function Level.load_level (level_number)
@@ -26,7 +26,7 @@ function get_tiles()
   tile_layer_data = Level.raw_level.layers[1].data
   tilesets = {}
   tiles = {} 
-  
+
   -- Saves the tilesets data into an array with the firstgid index, this is the same number as in the tile_layer_data
   for k,v in pairs(Level.raw_level.tilesets) do 
     tilesets[v.firstgid] = v
@@ -38,6 +38,8 @@ function get_tiles()
     if gid ~= 0 then
       -- Get the information about the current tile from it's tileset 
       tile = {
+        gid = tilesets[gid].firstgid,
+        visibility = true,
         width = tilesets[gid].tilewidth,
         height = tilesets[gid].tileheight,
         image = tilesets[gid].image,
@@ -54,7 +56,7 @@ end
 -- basic check collision - logic
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   for k,v in pairs(tileSet) do
-    local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
+    local temp1,temp2,temp3,temp4 = CheckCollision(v, v.gid, herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
     if temp1 ~= nil then
       return temp1,temp2,temp3,temp4
     end
@@ -79,6 +81,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
         end
       end
       end
+>>>>>>> origin/physicsfix
   end
   return nil
   ]]
@@ -95,17 +98,29 @@ end
 -- Object A is stand on Object B
 -- example3: return value (ALeft, ARight, BBottom, ATop) means that
 -- Object A is under Object B
-function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
-  local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
-  if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
-    local X={{"ALeft",ax1},{"ARight",ax2},{"BLeft",bx1},{"BRight",bx2}}
-    local Y={{"ABottom",ay1},{"ATop",ay2},{"BBottom",by1},{"BTop",by2}}
-    local comp = function(a,b)
-      return a[2] < b[2] 
+function CheckCollision(v, gid, ax1,ay1,aw,ah, bx1,by1,bw,bh)
+  if gid == 1 then
+    local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
+    if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
+      local X={{"ALeft",ax1},{"ARight",ax2},{"BLeft",bx1},{"BRight",bx2}}
+      local Y={{"ABottom",ay1},{"ATop",ay2},{"BBottom",by1},{"BTop",by2}}
+      local comp = function(a,b)
+        return a[2] < b[2] 
+      end
+      table.sort(X, comp)
+      table.sort(Y,comp)
+      return X[2][1], X[3][1], Y[2][1], Y[3][1], true
     end
-    table.sort(X, comp)
-    table.sort(Y,comp)
-    return X[2][1], X[3][1], Y[2][1], Y[3][1]
+  
+  
+  elseif gid == 2 then
+    local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
+    if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 and v.visibility == true then
+      game_score = game_score + 500
+      v.visibility = false
+    end
+  
+  else
+    return nil
   end
-  return nil
 end
