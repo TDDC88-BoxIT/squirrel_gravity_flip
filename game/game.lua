@@ -37,7 +37,7 @@ function start_game()
 
   gameCounter=0
 
-  Level.load_level(12)
+  Level.load_level(5)
 
   
   if character==nil then
@@ -166,7 +166,7 @@ THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
 function draw_tiles()
   local sf = nil
     for k,v in pairs(Level.tiles) do
-      if v.x-gameCounter+v.width>0 then 
+      if v.x-gameCounter+v.width>0 and v.visibility == true then 
         screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
      
         -- screen:copyfrom(image1,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})

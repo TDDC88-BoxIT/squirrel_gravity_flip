@@ -56,7 +56,7 @@ end
 -- basic check collision - logic
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   for k,v in pairs(tileSet) do
-    local temp1,temp2,temp3,temp4 = CheckCollision(v.gid, herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
+    local temp1,temp2,temp3,temp4 = CheckCollision(v, v.gid, herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
     if temp1 ~= nil then
       return temp1,temp2,temp3,temp4
     end
@@ -98,7 +98,7 @@ end
 -- Object A is stand on Object B
 -- example3: return value (ALeft, ARight, BBottom, ATop) means that
 -- Object A is under Object B
-function CheckCollision(gid, ax1,ay1,aw,ah, bx1,by1,bw,bh)
+function CheckCollision(v, gid, ax1,ay1,aw,ah, bx1,by1,bw,bh)
   if gid == 1 then
     local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
     if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
@@ -115,9 +115,9 @@ function CheckCollision(gid, ax1,ay1,aw,ah, bx1,by1,bw,bh)
   
   elseif gid == 2 then
     local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
-    if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
-      game_score = game_score + 5
-      
+    if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 and v.visibility == true then
+      game_score = game_score + 500
+      v.visibility = false
     end
   
   else
