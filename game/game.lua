@@ -37,7 +37,7 @@ function start_game()
 
   gameCounter=0
 
-  Level.load_level(13)
+  Level.load_level(12)
 
   
   if character==nil then
