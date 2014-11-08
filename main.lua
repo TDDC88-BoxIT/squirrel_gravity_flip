@@ -154,7 +154,7 @@ function love.run()
 
     for i,t in ipairs(sys.timers) do
       if t.running then
-        if t.time_since >= t.interval_millisec then
+        if t.time_since >= t.interval_millisec then 
           if type(t.callback) == "function" then
             t.callback()
           elseif type(t.callback) == "string" then
