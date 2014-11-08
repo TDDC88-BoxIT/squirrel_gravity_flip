@@ -4,13 +4,14 @@ local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN W
 local menu_height= 300
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
-local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu"
+local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu"
 local menu = nil  -- THE MENU SURFACE VARIABLE
 
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
 local background_image_path = imageDir.."/menuImg/gravityFlip.jpg"
+local background_image2_path = imageDir.."/menuImg/levelwin.jpg" -- TO BE CHANGED TO OTHER PICTURE! THIS IS THE BACKGROUND IMAGE FOR THE LEVELWIN MENU
 local squirrelImg1 = imageDir.."character/squirrel1.png" 
 local squirrelImg2 = imageDir.."character/squirrel2.png"
 local backgroundImage = nil
@@ -39,7 +40,7 @@ function stop_menu()
 function add_menu_items()
   menu:add_button("start_new",imageDir.."menuImg/start.png")
 
-  if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
+  if menuState == "start_menu" or menuState == "levelwin_menu" then -- THE START MENU AND THE LEVELWIN MENU HAS THE HIGH SCORE BUTTON
     menu:add_button("high_score",imageDir.."menuImg/highScore.png")
   elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
     menu:add_button("resume",imageDir.."menuImg/resume.png")
@@ -52,7 +53,12 @@ end
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
-  backgroundImage = gfx.loadpng(background_image_path)
+  if menuState == "start_menu" or menuState == "pause_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
+    backgroundImage = gfx.loadpng(background_image_path)
+  elseif menuState == "levelwin_menu" then
+    backgroundImage = gfx.loadpng(background_image2_path)
+  end
+
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
 
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
@@ -89,10 +95,10 @@ function add_menu_bling()
   squirrel2:destroy()
 end
 
--- SETS A MENU STATE WHICH DETERMINES WHICH MENU WILL BE SHOWN. POSSIBLE STATES ARE: "pause_menu" AND "start_menu"
+-- SETS A MENU STATE WHICH DETERMINES WHICH MENU WILL BE SHOWN. POSSIBLE STATES ARE: "pause_menu" AND "start_menu" AND "levelwin_menu"
 function set_menu_state(state)
   if menuState~=state then
-    if state=="start_menu" or state=="pause_menu" then
+    if state=="start_menu" or state=="pause_menu" or state=="levelwin_menu" then
       menuState=state
     else 
       menuState="start_menu"
