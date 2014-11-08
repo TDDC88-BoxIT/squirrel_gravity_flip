@@ -15,6 +15,3 @@ function onStart()
   --startGame()
   start_menu() 
 end
-
-
-

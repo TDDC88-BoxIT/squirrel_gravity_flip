@@ -79,6 +79,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
         end
       end
       end
+>>>>>>> origin/physicsfix
   end
   return nil
   ]]
