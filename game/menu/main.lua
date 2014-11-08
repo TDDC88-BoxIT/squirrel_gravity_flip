@@ -1,7 +1,7 @@
 require("../tool_box/menu_object")
 require("../tool_box/character_object")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
-local menu_height= 300
+local menu_height= 400
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu"
@@ -41,6 +41,7 @@ function add_menu_items()
 
   if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
     menu:add_button("high_score",imageDir.."menuImg/highScore.png")
+    menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
   elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
     menu:add_button("resume",imageDir.."menuImg/resume.png")
   end
@@ -133,11 +134,15 @@ function menu_navigation(key, state)
       -- COMMAND TO START GAME
       stop_menu()
       change_global_game_state(1)
-      start_game()
+      start_game(1,"story")
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
       resume_game()
+    elseif menu:get_indexed_item().id=="tutorial" then
+      stop_menu()
+      change_global_game_state(1)
+      start_game(1,"tutorial")
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then
