@@ -1,5 +1,3 @@
-
-
 function read_from_file()
   ScoreBoard={} 
   -- text file where score is saved is opened
@@ -62,17 +60,6 @@ function table_length(T)
 end
 
 
-function draw_score(game_score)
-  local string_score = tostring(game_score)
-  position = 1
-  -- loops through the score that is stored as a string
-  while position <= string.len(string_score) do
-    -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_score,position,position),position)
-    position = position + 1
-  end
-end
-
 function draw_number(number, position)
 -- loads the picture corresponding to the correct digit
   if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
@@ -98,5 +85,18 @@ function draw_number(number, position)
   -- prints the loaded picture
   screen:copyfrom(score,nil ,{x=10+position*30, y = 10, height = 50, width = 30}, true)
   score:destroy()
-
 end
+
+
+--the function that draws the score in the top left score 
+function draw_score()
+  local string_score = tostring(game_score)
+  position = 1
+  -- loops through the score that is stored as a string
+  while position <= string.len(string_score) do
+    -- calls on the print function for the digit, sends the number as a string
+    draw_number(string.sub(string_score,position,position),position)
+    position = position + 1
+  end
+end
+
