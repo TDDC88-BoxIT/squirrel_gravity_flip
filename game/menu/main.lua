@@ -1,5 +1,6 @@
 require("../tool_box/menu_object")
 require("../tool_box/character_object")
+require("../tool_box/timelog")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
 local menu_height= 400
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
@@ -23,6 +24,8 @@ local squirrel1 = nil
 local squirrel2 = nil
 
 function start_menu()
+  logstartover()
+  logprint("start menu")
   menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   add_menu_items()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
@@ -109,13 +112,18 @@ function get_menu_state()
 end
 
 function draw_menu()
+  logprint("draw menu start")
   screen:clear()
   if addBling==true then
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
+  --logprint("3 end")
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  --logprint("4 end")
   menu:destroy()
+  --logprint("5 end")
   gfx.update()
+  logprint("draw menu end")
 end
 
 function update_menu()
@@ -124,7 +132,7 @@ end
 
 --HANDLES MENU NAVIGATION AND COMMANDS 
 function menu_navigation(key, state)
- 
+  logstartover()
   if key=="down" and state=='up' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
       update_menu()   
