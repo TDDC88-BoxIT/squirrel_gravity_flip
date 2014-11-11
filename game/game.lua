@@ -29,7 +29,7 @@ local image2 = nil
 
 local current_game_type=nil
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
-function start_game(level_number,game_type) 
+function start_game(level_number,game_type,life) 
   game_score = 10000
   gameCounter=0
   current_game_type=game_type
@@ -43,13 +43,20 @@ function start_game(level_number,game_type)
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
   pos_change = 0
-  lives = 10
+  lives = life
 end
 
 function resume_game()   
   timer = sys.new_timer(20, "update_cb")
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
+
+function restart_game()
+  gameCounter=0
+  set_character_start_position()
+  change_character_timer = sys.new_timer(200, "update_game_character")
+  pos_change = 0
+  end
 
 function stop_game()
   --screen:clear()
@@ -150,6 +157,7 @@ function draw_screen()
   move_character()
   draw_character()
   draw_score(game_score)
+  draw_lives()
   if current_game_type=="tutorial" then
     draw_tutorial_helper()
   end
@@ -181,6 +189,31 @@ DRAWS THE GAME CHARACTER ON SCREEN
 ]]
 function draw_character()
   screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
+end
+
+
+function draw_lives()
+  life = gfx.loadpng("images/Game-hearts-icon.png")
+  for i=0, lives-1, 1 do
+  screen:copyfrom(life,nil,{x=0,y=0})
+  screen:copyfrom(life,nil,{x=0+30*i,y=0})
+  end
+  life:destroy()
+end
+
+function check_alive()
+  if lives>0 then
+  return true
+else
+  return false
+end
+end
+function decrease_life()
+  lives = lives-1
+end
+
+function get_lives()
+  return lives  
 end
 
 
