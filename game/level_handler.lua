@@ -57,6 +57,7 @@ function get_tiles()
   return tiles
 end
 
+
 -- basic check collision - logic
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   for k,v in pairs(tileSet) do
@@ -128,3 +129,4 @@ function CheckCollision(v, gid, ax1,ay1,aw,ah, bx1,by1,bw,bh)
     return nil
   end
 end
+
