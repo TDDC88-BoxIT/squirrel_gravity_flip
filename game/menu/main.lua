@@ -25,14 +25,11 @@ function start_menu()
   menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   add_menu_items()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
-  timer = sys.new_timer(100, "update_menu")
   draw_menu()
 end 
 
 function stop_menu()
-  screen:clear()
-  timer:stop()
-  timer = nil 
+  screen:clear() 
  end
 
 -- ADDS THE MENU ITEMS
@@ -72,10 +69,8 @@ function add_menu_bling()
   
   -- ADD TWO A RUNNING SQUIRRELS
   if squirrel1 == nil and squirrel2 == nil then
-    squirrel1=character_object(117,140,squirrelImg1)
-    squirrel1:add_image(squirrelImg2)
+    squirrel1=character_object(117,140,squirrelImg2)
     squirrel2=character_object(117,140,squirrelImg1)
-    squirrel2:add_image(squirrelImg2) 
   end
   squirrel1:update()
   squirrel2:update()
@@ -125,9 +120,11 @@ end
 function menu_navigation(key, state)
  
   if key=="down" and state=='up' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
-      menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU    
+      menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
+      update_menu()   
   elseif key=="up" and state=='up' then
       menu:decrease_index()
+      update_menu()
   elseif key=="ok" and state=='up' then
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then

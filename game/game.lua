@@ -9,22 +9,20 @@
 --package.path = package.path .. arg[1] .. "\\game\\?.lua"
 --package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
 require "game/level"
-require ("game/physic")
-require ("game/level_module")
 require ("tool_box/character_object")
 
 local imageDir = "images/"
 local mapDir = "map/"
 local player = {}
 local character = nil
-local space_bar_character=nil
+local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local background
 local gameCounter=0
 local gameSpeed = 5
 local image1 = nil
 local image2 = nil
-local current_game_type
+local current_game_type=nil
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type) 
   gameCounter=0
@@ -32,7 +30,8 @@ function start_game(level_number,game_type)
   Level.load_level(level_number,current_game_type)
   create_game_character()
   if current_game_type=="tutorial" then
-    create_tutorial_helper()
+    require("tutorial/tutorial_handler")
+    create_tutorial_helper(level_number)
   end
   set_character_start_position()
   image1 = gfx.loadpng(imageDir.."floor1.png")
@@ -72,25 +71,11 @@ function create_game_character()
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
 
--- CREATES A SPACE BAR CHARACTER WHICH WILL HELP THE GAMER IN THE TUTORIAL
-function create_tutorial_helper()
-  if space_bar_character==nil then
-    space_bar_character = character_object(236,219,imageDir.."tutorialImg/spaceBarDown.png")
-    space_bar_character:add_image(imageDir.."tutorialImg/spaceBarUp.png")
-  else
-    space_bar_character:reset()
-  end
-  change_space_bar_timer = sys.new_timer(500, "update_tutorial_helper")
-end
+
 
 function update_game_character()
   character:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
   character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
-end
-
-function update_tutorial_helper()
-  space_bar_character:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
-  space_bar_character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
 end
 
 function set_character_start_position()
@@ -112,7 +97,6 @@ end
 function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
-  --for i = 1,gameSpeed,1 do
     player.new_x=player.cur_x+1
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
@@ -123,7 +107,6 @@ function move_character()
     elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
     end
-  --end
 
   -- MOVE CHARACTER ON THE Y-AXIS
     for i=0, gameSpeed, 1 do
@@ -178,12 +161,6 @@ function draw_character()
   screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
 end
 
---[[
-DRAWS TUTORIAL SPACE BAR ON SCREEN
-]]
-function draw_tutorial_helper()
-  screen:copyfrom(space_bar_character:get_surface(), nil,{x=(screen:get_width()/2)-150,y=400},true)
-end
 
 function trigger_squize_reaction()
   stop_game()
@@ -208,6 +185,10 @@ function game_navigation(key, state)
     change_global_game_state(0)
     set_menu_state("pause_menu")
     start_menu()
+  end
+
+  if current_game_type=="tutorial" and state=='up' then
+      update_tutorial_handler(key)
   end
 end 
 
