@@ -7,9 +7,13 @@
 
 --package.path = package.path .. arg[1] .. "\\game\\?.lua"
 --package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
+
 require "game/level_handler"
 require "game/collision_handler"
 require ("tool_box/character_object")
+require ("game/score")
+require ("game/power_up")
+
 
 local imageDir = "images/"
 local mapDir = "map/"
@@ -22,9 +26,11 @@ local gameCounter=0
 local gameSpeed = 5
 local image1 = nil
 local image2 = nil
+
 local current_game_type=nil
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type) 
+  game_score = 10000
   gameCounter=0
   current_game_type=game_type
   Level.load_level(level_number,current_game_type)
@@ -36,7 +42,6 @@ function start_game(level_number,game_type)
   set_character_start_position()
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
-  
   pos_change = 0
   lives = 10
 end
@@ -56,6 +61,8 @@ function stop_game()
     change_character_timer:stop()
     change_character_timer=nil 
   end  
+  -- character name is only 3 characters no
+  score_page("pl1", game_score)
 end
 
 function create_game_character()
@@ -89,10 +96,23 @@ end
 
 -- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
 function update_cb() 
+  -- if lives > 0 then
+  -- if game_score > 0 then
+
   screen:clear()
   draw_screen()
+ -- if game_score > 0 then
+ --   game_score = game_score -10
+ -- else
+ --   print ("you lost!")
+ --   end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
+
+function update_score()
+    game_score = game_score - 1
+end
+
 
 function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
@@ -122,11 +142,14 @@ function move_character()
     end  
 end
 
+
+--the function that draws the score in the top left score 
 function draw_screen()
   --draw_background()
   draw_tiles()
   move_character()
   draw_character()
+  draw_score(game_score)
   if current_game_type=="tutorial" then
     draw_tutorial_helper()
   end

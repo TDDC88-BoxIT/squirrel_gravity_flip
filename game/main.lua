@@ -13,6 +13,3 @@ global_game_state = 0
 function onStart()
   start_menu() 
 end
-
-
-
