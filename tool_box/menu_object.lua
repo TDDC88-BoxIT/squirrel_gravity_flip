@@ -187,7 +187,7 @@ local function update(self)
   if self.menu_surface == nil then
     self.menu_surface=gfx.new_surface(self.width, self.height)
   end
-  if self.height<#self.menu_items*(self.button_height+20) then
+  if self.height~=#self.menu_items*(self.button_height+20) then
     self:set_button_size(nil,(self.height-(#self.menu_items)*20)/#self.menu_items)
   end
   make_bakground(self)

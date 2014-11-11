@@ -1,7 +1,7 @@
 require("../tool_box/menu_object")
 require("../tool_box/character_object")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
-local menu_height= 300
+local menu_height= 400
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu"
@@ -26,14 +26,11 @@ function start_menu()
   menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   add_menu_items()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
-  timer = sys.new_timer(100, "update_menu")
   draw_menu()
 end 
 
 function stop_menu()
-  screen:clear()
-  timer:stop()
-  timer = nil 
+  screen:clear() 
  end
 
 -- ADDS THE MENU ITEMS
@@ -42,6 +39,7 @@ function add_menu_items()
 
   if menuState == "start_menu" or menuState == "levelwin_menu" then -- THE START MENU AND THE LEVELWIN MENU HAS THE HIGH SCORE BUTTON
     menu:add_button("high_score",imageDir.."menuImg/highScore.png")
+    menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
   elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
     menu:add_button("resume",imageDir.."menuImg/resume.png")
   end
@@ -77,10 +75,8 @@ function add_menu_bling()
   
   -- ADD TWO A RUNNING SQUIRRELS
   if squirrel1 == nil and squirrel2 == nil then
-    squirrel1=character_object(117,140,squirrelImg1)
-    squirrel1:add_image(squirrelImg2)
+    squirrel1=character_object(117,140,squirrelImg2)
     squirrel2=character_object(117,140,squirrelImg1)
-    squirrel2:add_image(squirrelImg2) 
   end
   squirrel1:update()
   squirrel2:update()
@@ -130,20 +126,26 @@ end
 function menu_navigation(key, state)
  
   if key=="down" and state=='up' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
-      menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU    
+      menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
+      update_menu()   
   elseif key=="up" and state=='up' then
       menu:decrease_index()
+      update_menu()
   elseif key=="ok" and state=='up' then
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then
       -- COMMAND TO START GAME
       stop_menu()
       change_global_game_state(1)
-      start_game()
+      start_game(1,"story")
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
       resume_game()
+    elseif menu:get_indexed_item().id=="tutorial" then
+      stop_menu()
+      change_global_game_state(1)
+      start_game(1,"tutorial")
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then

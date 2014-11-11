@@ -12,8 +12,12 @@ Level = {
   
 }
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
-function Level.load_level (level_number)
-  loaded_level = require("map/level"..level_number)
+function Level.load_level (level_number,game_type)
+  if game_type=="tutorial" then
+    loaded_level = require("map/tutorialLevel"..level_number)
+  else
+    loaded_level = require("map/level"..level_number)
+  end
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
@@ -60,28 +64,6 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
     end
   end
   return nil
-  --[[herox,heroy = floor(herox),floor(heroy)
-  local screen_w = screen:get_width()
-  local screen_h = screen:get_height()
-  local minx,maxx = floor((herox-screen_w/2)/tile_width),ceil((herox+screen_w/2)/tile_width)
-  local miny,maxy = floor((heroy-screen_h/2)/tile_height),ceil((heroy+screen_h/2)/tile_height)
-  for layer_id = 1,#tile_layers do  -- LOOPS OVER ALL LAYER OF TILES IN THE LEVEL
-    for x = minx,maxx do      -- LOOPS OVER THE WIDTH OF THE SCREEN
-      for y = miny,maxy do    -- LOOPS OVER THE HEIGHT OF THE SCREEN
-        local tile = game_tile_set[get_tile_data_value(x,y,layer_id)]
-        if (tile) then
-          local sx = x*tile_width - herox + screen_w/2
-          local sy = y*tile_height - heroy + screen_h/2
-          local temp1,temp2,temp3,temp4 = CheckCollision2(herox, heroy, hero_width, hero_height, sx, sy, tile_width, tile_height)
-          if temp1 ~= nil then
-            return temp1,temp2,temp3,temp4
-          end
-        end
-      end
-      end
-  end
-  return nil
-  ]]
 end
 
 -- purpose: Check Collision between two objects.
