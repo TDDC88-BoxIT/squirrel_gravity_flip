@@ -12,8 +12,12 @@ Level = {
 
 }
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
-function Level.load_level (level_number)
-  loaded_level = require("map/level"..level_number)
+function Level.load_level (level_number,game_type)
+  if game_type=="tutorial" then
+    loaded_level = require("map/tutorialLevel"..level_number)
+  else
+    loaded_level = require("map/level"..level_number)
+  end
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
@@ -62,6 +66,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
     end
   end
   return nil
+
   --[[herox,heroy = floor(herox),floor(heroy)
   local screen_w = screen:get_width()
   local screen_h = screen:get_height()
@@ -81,7 +86,6 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
         end
       end
       end
->>>>>>> origin/physicsfix
   end
   return nil
   ]]

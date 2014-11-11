@@ -47,7 +47,9 @@ function save_to_file(ScoreBoard, file)
   io.output(file)
   --the table with the scores is written to the file
   for i=1,table_length(ScoreBoard) do
-    io.write(ScoreBoard[i][1] .. tostring(ScoreBoard[i][2]) .. "\n")
+    if ScoreBoard[i][1] ~= nil and ScoreBoard[i][2] ~= nil then
+      io.write(ScoreBoard[i][1] .. tostring(ScoreBoard[i][2]) .. "\n")
+    end
   end
   io.close(file)
 end
@@ -89,7 +91,7 @@ end
 
 
 --the function that draws the score in the top left score 
-function draw_score()
+function draw_score(game_score)
   local string_score = tostring(game_score)
   position = 1
   -- loops through the score that is stored as a string
