@@ -101,8 +101,7 @@ function move_character()
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
       if player.cur_x<-1 then
-        trigger_squize_reaction() -- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
-        --break
+        get_squeezed() -- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
       end
     elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
@@ -161,11 +160,6 @@ function draw_character()
   screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
 end
 
-
-function trigger_squize_reaction()
-  stop_game()
-  screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
-end
 
 function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
   set_menu_state(levelwin_menu)

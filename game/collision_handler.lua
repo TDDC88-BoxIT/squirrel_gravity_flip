@@ -34,3 +34,9 @@ function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
   end
   return nil
 end
+
+function get_squeezed()
+  stop_game()
+  start_game(3,"story") 
+  -- DO SOMETHING WHEN SQUEEZED
+end
