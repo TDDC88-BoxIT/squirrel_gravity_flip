@@ -215,5 +215,12 @@ function game_navigation(key, state)
   end
 end 
 
+function change_game_speed(new_speed, time)
+  gameSpeed = new_speed
+  speed_timer = sys.new_timer(time, "reset_game_speed")
+  end
 
-
+function reset_game_speed()
+  gameSpeed = 5
+  speed_timer:stop()
+  end
