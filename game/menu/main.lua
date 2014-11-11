@@ -10,8 +10,8 @@ local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
-local background_image_path = imageDir.."/menuImg/gravityFlip.jpg"
-local background_image2_path = imageDir.."/menuImg/levelwin.jpg" -- TO BE CHANGED TO OTHER PICTURE! THIS IS THE BACKGROUND IMAGE FOR THE LEVELWIN MENU
+local background_image_path
+local background_image2_path -- TO BE CHANGED TO OTHER PICTURE! THIS IS THE BACKGROUND IMAGE FOR THE LEVELWIN MENU
 local squirrelImg1 = imageDir.."character/squirrel1.png" 
 local squirrelImg2 = imageDir.."character/squirrel2.png"
 local backgroundImage = nil
@@ -25,9 +25,15 @@ local squirrel2 = nil
 function start_menu()
   menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   add_menu_items()
+  loadpng()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
   draw_menu()
 end 
+
+function loadpng()
+  background_image_path = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
+  background_image2_path = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
+end
 
 function stop_menu()
   screen:clear() 
@@ -52,9 +58,9 @@ end
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
   if menuState == "start_menu" or menuState == "pause_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
-    backgroundImage = gfx.loadpng(background_image_path)
+    backgroundImage = background_image_path
   elseif menuState == "levelwin_menu" then
-    backgroundImage = gfx.loadpng(background_image2_path)
+    backgroundImage = background_image2_path
   end
 
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
@@ -84,7 +90,7 @@ function add_menu_bling()
   screen:copyfrom(squirrel2:get_surface(), nil,{x=(screen:get_width()-(squirrel2:get_size().width+200)),y=250,width=squirrel2:get_size().width,height=squirrel2:get_size().height},true)
   
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
-  backgroundImage:destroy()
+  --backgroundImage:destroy()
   thunderAcorn.img:destroy()
   backdrop:destroy()
   squirrel1:destroy()
