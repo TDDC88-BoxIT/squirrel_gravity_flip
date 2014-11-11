@@ -195,8 +195,8 @@ end
 function draw_lives()
   life = gfx.loadpng("images/Game-hearts-icon.png")
   for i=0, lives-1, 1 do
-  screen:copyfrom(life,nil,{x=0,y=0})
-  screen:copyfrom(life,nil,{x=0+30*i,y=0})
+  screen:copyfrom(life,nil,{x=200,y=20})
+  screen:copyfrom(life,nil,{x=200+30*i,y=20})
   end
   life:destroy()
 end
