@@ -22,7 +22,7 @@ local player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
-local background
+local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
 local gameSpeed = 5
 local image1 = nil
@@ -34,7 +34,6 @@ function start_game(level_number,game_type)
   game_score = 10000
   game_levelCounter = 5 --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
-
 
   current_game_type=game_type
   Level.load_level(level_number,current_game_type)
@@ -92,7 +91,7 @@ end
 
 function set_character_start_position()
   player.start_xpos=200 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
-  player.start_ypos=0 -- WHARE WE WANT THE CHARACTER TO BE ON THE Y-AXIS WHEN HE STARTS
+  player.start_ypos=40 -- WHARE WE WANT THE CHARACTER TO BE ON THE Y-AXIS WHEN HE STARTS
   player.cur_x = 50
   player.cur_y = player.start_ypos
   player.new_x = player.cur_x -- INITIALLY NEW X-POS IS THE SAME AS CURRENT POSITION
@@ -215,7 +214,7 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
-  --draw_background()
+  draw_background()
   draw_tiles()
   move_character()
   draw_character()
@@ -227,9 +226,9 @@ function draw_screen()
 end
 
 function draw_background()
-  background = gfx.loadpng("images/level_sky.png")
+  --background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
-  background:destroy()
+  --background:destroy()
 end
 
 --[[ 
