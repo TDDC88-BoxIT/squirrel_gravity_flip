@@ -1,3 +1,5 @@
+
+
 -- basic check collision - logic
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   for k,v in pairs(tileSet) do
@@ -37,6 +39,10 @@ end
 
 function get_squeezed()
   stop_game()
-  start_game(3,"story") 
+  decrease_life()
+  if check_alive() then
+  start_game(3,"story",get_lives())
+  end
+  
   -- DO SOMETHING WHEN SQUEEZED
 end
