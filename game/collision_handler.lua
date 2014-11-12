@@ -17,7 +17,7 @@ end
 -- return: nil if no collision occur.
 --         The collision status if collision occur.
 -- example1: return value (ABottom, BTop, BLeft, ARight) means that
--- the Bottom and Left side of Object A has collision with Top and Left side of Object B
+-- the Bottom and right side of Object A has collision with Top and Left side of Object B
 -- example2: return value (ALeft, ARight, ABottom, BTop) means that
 -- Object A is stand on Object B
 -- example3: return value (ALeft, ARight, BBottom, ATop) means that

@@ -8,8 +8,9 @@
 --package.path = package.path .. arg[1] .. "\\game\\?.lua"
 --package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
 
-require "game/level_handler"
-require "game/collision_handler"
+require ("game/level_handler")
+require ("game/collision_handler")
+require ("game/fail_and_success_handler")
 require ("tool_box/character_object")
 require ("game/score")
 require ("game/power_up")
@@ -21,17 +22,19 @@ local player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
-local background
+local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
 local gameSpeed = 5
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
+
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type,life) 
   game_score = 10000
-  game_levelCounter = 1 --TO BE PLACED SOMEWHERE ELSE
+  game_levelCounter = 5 --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
+
   current_game_type=game_type
   Level.load_level(level_number,current_game_type)
   create_game_character()
@@ -39,6 +42,7 @@ function start_game(level_number,game_type,life)
     require("tutorial/tutorial_handler")
     create_tutorial_helper(level_number)
   end
+  
   set_character_start_position()
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
@@ -94,7 +98,7 @@ end
 
 function set_character_start_position()
   player.start_xpos=200 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
-  player.start_ypos=0 -- WHARE WE WANT THE CHARACTER TO BE ON THE Y-AXIS WHEN HE STARTS
+  player.start_ypos=40 -- WHARE WE WANT THE CHARACTER TO BE ON THE Y-AXIS WHEN HE STARTS
   player.cur_x = 50
   player.cur_y = player.start_ypos
   player.new_x = player.cur_x -- INITIALLY NEW X-POS IS THE SAME AS CURRENT POSITION
@@ -217,7 +221,7 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
-  --draw_background()
+  draw_background()
   draw_tiles()
   move_character()
   draw_character()
@@ -230,9 +234,9 @@ function draw_screen()
 end
 
 function draw_background()
-  background = gfx.loadpng("images/level_sky.png")
+  --background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
-  background:destroy()
+  --background:destroy()
 end
 
 --[[ 
@@ -319,5 +323,12 @@ function game_navigation(key, state)
   end
 end 
 
+function change_game_speed(new_speed, time)
+  gameSpeed = new_speed
+  speed_timer = sys.new_timer(time, "reset_game_speed")
+  end
 
-
+function reset_game_speed()
+  gameSpeed = 5
+  speed_timer:stop()
+  end
