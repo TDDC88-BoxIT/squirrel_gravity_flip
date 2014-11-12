@@ -40,3 +40,13 @@ function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
   end
   return nil
 end
+
+function get_squeezed()
+  stop_game()
+  decrease_life()
+  if check_alive() then
+  start_game(3,"story",get_lives())
+  end
+  
+  -- DO SOMETHING WHEN SQUEEZED
+end
