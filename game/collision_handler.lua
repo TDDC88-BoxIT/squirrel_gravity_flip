@@ -1,9 +1,15 @@
--- basic check collision - logic
+-- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   for k,v in pairs(tileSet) do
     local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
     if temp1 ~= nil then
-      return temp1,temp2,temp3,temp4
+      if v.gid==1 then -- gid==1 IS A FLOOR TILE
+        return temp1,temp2,temp3,temp4
+      elseif v.gid==2 then -- HANDLE COLLISION WITH POWERUP 1
+
+      elseif v.gid==3 then -- HANDLE COLLISION WITH POWERUP 2
+
+      end
     end
   end
   return nil
