@@ -91,7 +91,7 @@ function update_cb()
   if game_score > 0 then
     game_score = game_score -10
   else
-    print ("you lost!")
+    -- GAME IS LOST
     end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
