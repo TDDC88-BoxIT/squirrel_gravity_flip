@@ -35,17 +35,20 @@ function stop_menu()
 
 -- ADDS THE MENU ITEMS
 function add_menu_items()
-  menu:add_button("start_new",imageDir.."menuImg/start.png")
-
-  if menuState == "start_menu" or menuState == "levelwin_menu" then -- THE START MENU AND THE LEVELWIN MENU HAS THE HIGH SCORE BUTTON
-    menu:add_button("high_score",imageDir.."menuImg/highScore.png")
-    menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
-  elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
-    menu:add_button("resume",imageDir.."menuImg/resume.png")
+  if menuState == "start_menu" or menuState == "pause_menu" then
+    menu:add_button("start_new",imageDir.."menuImg/start.png")
+    if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
+      menu:add_button("high_score",imageDir.."menuImg/highScore.png")
+      menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
+    elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
+      menu:add_button("resume",imageDir.."menuImg/resume.png")
+    end
+    menu:add_button("settings",imageDir.."menuImg/settings.png")
+    menu:add_button("exit",imageDir.."menuImg/exit.png") 
+  elseif menuState == "levelwin_menu" then
+    menu:add_button("continue", imageDir.."menuImg/continue.png")
   end
-
-  menu:add_button("settings",imageDir.."menuImg/settings.png")
-  menu:add_button("exit",imageDir.."menuImg/exit.png")    
+     
 end
 
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
@@ -61,7 +64,11 @@ function add_menu_bling()
 
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
   backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
+  if menuState == "start_menu" or menuState == "pause_menu" then
   backdrop:fill({r=0,g=0,b=0,a=200})
+  elseif menuState == "levelwin_menu" then
+  backdrop:fill({r=0,g=0,b=0,a=100})
+  end
   screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
@@ -114,6 +121,10 @@ function draw_menu()
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  if menuState == "levelwin_menu" then
+    --draw_level() --STILL TO BE IMPLEMENTED
+    draw_score()
+  end
   menu:destroy()
   gfx.update()
 end
@@ -152,6 +163,10 @@ function menu_navigation(key, state)
       -- COMMAND TO VIEW SETTINGS
     elseif menu:get_indexed_item().id=="exit" then
       sys.stop() -- COMMAND TO EXIT
+    elseif menu:get_indexed_item().id=="continue" then
+      stop_menu()
+      set_menu_state("start_menu")
+      start_menu()
     end
   end
 end
