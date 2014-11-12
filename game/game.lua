@@ -32,8 +32,10 @@ local current_game_type=nil
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type) 
   game_score = 10000
-  game_levelCounter = 1 --TO BE PLACED SOMEWHERE ELSE
+  game_levelCounter = 5 --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
+
+
   current_game_type=game_type
   Level.load_level(level_number,current_game_type)
   create_game_character()
@@ -41,6 +43,7 @@ function start_game(level_number,game_type)
     require("tutorial/tutorial_handler")
     create_tutorial_helper(level_number)
   end
+  
   set_character_start_position()
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
@@ -289,5 +292,12 @@ function game_navigation(key, state)
   end
 end 
 
+function change_game_speed(new_speed, time)
+  gameSpeed = new_speed
+  speed_timer = sys.new_timer(time, "reset_game_speed")
+  end
 
-
+function reset_game_speed()
+  gameSpeed = 5
+  speed_timer:stop()
+  end
