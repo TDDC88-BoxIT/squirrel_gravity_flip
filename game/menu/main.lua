@@ -1,7 +1,7 @@
 require("../tool_box/menu_object")
 require("../tool_box/character_object")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
-local menu_height= 300
+local menu_height= 400
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu"
@@ -10,8 +10,8 @@ local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
-local background_image_path = imageDir.."/menuImg/gravityFlip.jpg"
-local background_image2_path = imageDir.."/menuImg/levelwin.jpg" -- TO BE CHANGED TO OTHER PICTURE! THIS IS THE BACKGROUND IMAGE FOR THE LEVELWIN MENU
+local background_image_path
+local background_image2_path -- TO BE CHANGED TO OTHER PICTURE! THIS IS THE BACKGROUND IMAGE FOR THE LEVELWIN MENU
 local squirrelImg1 = imageDir.."character/squirrel1.png" 
 local squirrelImg2 = imageDir.."character/squirrel2.png"
 local backgroundImage = nil
@@ -25,45 +25,56 @@ local squirrel2 = nil
 function start_menu()
   menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   add_menu_items()
+  loadpng()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
-  timer = sys.new_timer(100, "update_menu")
   draw_menu()
 end 
 
+function loadpng()
+  background_image_path = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
+  background_image2_path = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
+end
+
 function stop_menu()
-  screen:clear()
-  timer:stop()
-  timer = nil 
+  screen:clear() 
  end
 
 -- ADDS THE MENU ITEMS
 function add_menu_items()
-  menu:add_button("start_new",imageDir.."menuImg/start.png")
-
-  if menuState == "start_menu" or menuState == "levelwin_menu" then -- THE START MENU AND THE LEVELWIN MENU HAS THE HIGH SCORE BUTTON
-    menu:add_button("high_score",imageDir.."menuImg/highScore.png")
-  elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
-    menu:add_button("resume",imageDir.."menuImg/resume.png")
+  if menuState == "start_menu" or menuState == "pause_menu" then
+    menu:add_button("start_new",imageDir.."menuImg/start.png")
+    if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
+      menu:add_button("high_score",imageDir.."menuImg/highScore.png")
+      menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
+    elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
+      menu:add_button("resume",imageDir.."menuImg/resume.png")
+    end
+    menu:add_button("settings",imageDir.."menuImg/settings.png")
+    menu:add_button("exit",imageDir.."menuImg/exit.png") 
+  elseif menuState == "levelwin_menu" then
+    menu:add_button("continue", imageDir.."menuImg/continue.png")
   end
-
-  menu:add_button("settings",imageDir.."menuImg/settings.png")
-  menu:add_button("exit",imageDir.."menuImg/exit.png")    
+     
 end
 
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
   if menuState == "start_menu" or menuState == "pause_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
-    backgroundImage = gfx.loadpng(background_image_path)
+    backgroundImage = background_image_path
   elseif menuState == "levelwin_menu" then
-    backgroundImage = gfx.loadpng(background_image2_path)
+    backgroundImage = background_image2_path
   end
 
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
 
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
   backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
+  if menuState == "start_menu" or menuState == "pause_menu" then
   backdrop:fill({r=0,g=0,b=0,a=200})
+  elseif menuState == "levelwin_menu" then
+  backdrop:fill({r=0,g=0,b=0,a=100})
+  end
   screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
@@ -77,10 +88,8 @@ function add_menu_bling()
   
   -- ADD TWO A RUNNING SQUIRRELS
   if squirrel1 == nil and squirrel2 == nil then
-    squirrel1=character_object(117,140,squirrelImg1)
-    squirrel1:add_image(squirrelImg2)
+    squirrel1=character_object(117,140,squirrelImg2)
     squirrel2=character_object(117,140,squirrelImg1)
-    squirrel2:add_image(squirrelImg2) 
   end
   squirrel1:update()
   squirrel2:update()
@@ -88,7 +97,7 @@ function add_menu_bling()
   screen:copyfrom(squirrel2:get_surface(), nil,{x=(screen:get_width()-(squirrel2:get_size().width+200)),y=250,width=squirrel2:get_size().width,height=squirrel2:get_size().height},true)
   
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
-  backgroundImage:destroy()
+  --backgroundImage:destroy()
   thunderAcorn.img:destroy()
   backdrop:destroy()
   squirrel1:destroy()
@@ -118,6 +127,10 @@ function draw_menu()
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  if menuState == "levelwin_menu" then
+    --draw_level() --STILL TO BE IMPLEMENTED
+    draw_score()
+  end
   menu:destroy()
   gfx.update()
 end
@@ -130,26 +143,36 @@ end
 function menu_navigation(key, state)
  
   if key=="down" and state=='up' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
-      menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU    
+      menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
+      update_menu()   
   elseif key=="up" and state=='up' then
       menu:decrease_index()
+      update_menu()
   elseif key=="ok" and state=='up' then
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then
       -- COMMAND TO START GAME
       stop_menu()
       change_global_game_state(1)
-      start_game()
+      start_game(3,"story")
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
       resume_game()
+    elseif menu:get_indexed_item().id=="tutorial" then
+      stop_menu()
+      change_global_game_state(1)
+      start_game(1,"tutorial")
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then
       -- COMMAND TO VIEW SETTINGS
     elseif menu:get_indexed_item().id=="exit" then
       sys.stop() -- COMMAND TO EXIT
+    elseif menu:get_indexed_item().id=="continue" then
+      stop_menu()
+      set_menu_state("start_menu")
+      start_menu()
     end
   end
 end
