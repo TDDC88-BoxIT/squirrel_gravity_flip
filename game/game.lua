@@ -8,8 +8,9 @@
 --package.path = package.path .. arg[1] .. "\\game\\?.lua"
 --package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
 
-require "game/level_handler"
-require "game/collision_handler"
+require ("game/level_handler")
+require ("game/collision_handler")
+require ("game/fail_and_success_handler")
 require ("tool_box/character_object")
 require ("game/score")
 require ("game/power_up")

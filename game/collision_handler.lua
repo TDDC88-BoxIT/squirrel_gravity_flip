@@ -15,7 +15,7 @@ end
 -- return: nil if no collision occur.
 --         The collision status if collision occur.
 -- example1: return value (ABottom, BTop, BLeft, ARight) means that
--- the Bottom and Left side of Object A has collision with Top and Left side of Object B
+-- the Bottom and right side of Object A has collision with Top and Left side of Object B
 -- example2: return value (ALeft, ARight, ABottom, BTop) means that
 -- Object A is stand on Object B
 -- example3: return value (ALeft, ARight, BBottom, ATop) means that
@@ -33,10 +33,4 @@ function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
     return X[2][1], X[3][1], Y[2][1], Y[3][1]
   end
   return nil
-end
-
-function get_squeezed()
-  stop_game()
-  start_game(3,"story") 
-  -- DO SOMETHING WHEN SQUEEZED
 end
