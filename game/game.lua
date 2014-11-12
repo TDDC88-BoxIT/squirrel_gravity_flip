@@ -32,6 +32,7 @@ local image2 = nil
 
 function start_game() 
   game_score = 1000
+  game_levelCounter = 1 --TO BE PLACED SOMEWHERE ELSE
 
   gameCounter=0
   Level.load_level(3)
@@ -128,19 +129,46 @@ function move_character()
 end
 
 
---the function that draws the score in the top left score 
+--the function that draws the score and the level
 function draw_score()
+  --DRAWS SCORE
+  if global_game_state == 1 then --game situation, place score in the upper left corner of the screen
+    xplace = 10
+    yplace = 10
+  elseif global_game_state == 0 then --menu situation, place score in the center of the screen
+    xplace = 550
+    yplace = 370
+  end
   local string_score = tostring(game_score)
-  position = 1
+  position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
   -- loops through the score that is stored as a string
   while position <= string.len(string_score) do
     -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_score,position,position),position)
+    draw_number(string.sub(string_score,position,position),position, xplace, yplace)
     position = position + 1
   end
+  
+  --DRAWS LEVEL
+  if global_game_state == 1 then --game situation, place level in the upper right corner of the screen
+    xplace = 1000
+    yplace = 10
+  elseif global_game_state == 0 then --menu situation, place level in the center of the screen
+    xplace = 550
+    yplace = 300
+  end
+  local string_levelCounter = tostring(game_levelCounter)
+  position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
+  -- loops through the levelCounter that is stored as a string
+  while position <= string.len(string_levelCounter) do
+    -- calls on the print function for the digit, sends the number as a string
+    draw_number(string.sub(string_levelCounter,position,position),position, xplace, yplace)
+    position = position + 1
+  end
+  
 end
 
-function draw_number(number, position)
+
+function draw_number(number, position, xplace, yplace)
 -- loads the picture corresponding to the correct digit
   if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
   elseif number == "1" then 
@@ -163,13 +191,6 @@ function draw_number(number, position)
     score = gfx.loadpng("images/numbers/nine.png")
   end
   -- prints the loaded picture
-   if global_game_state == 1 then --game situation
-    xplace = 10
-    yplace = 10
-  elseif global_game_state == 0 then --menu situation
-    xplace = 550
-    yplace = 350
-  end
   screen:copyfrom(score,nil ,{x=xplace+position*30, y = yplace, height = 50, width = 30}, true)
   score:destroy()
 
@@ -219,6 +240,10 @@ function trigger_squize_reaction()
 end
 
 function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
+  --levelCounter = levelCounter+1 --LEVELCOUNTER - STILL TO BE IMPLEMENTED - NEEDS TO BE READ FROM FILE BETWEEN RUNS?!
+  --levelCounter = 1
+  --print(levelCounter)
+  
   stop_game()
   change_global_game_state(0)
   set_menu_state("levelwin_menu")
