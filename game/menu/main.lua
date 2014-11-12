@@ -154,7 +154,7 @@ function menu_navigation(key, state)
       -- COMMAND TO START GAME
       stop_menu()
       change_global_game_state(1)
-      start_game(1,"story")
+      start_game(3,"story")
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)

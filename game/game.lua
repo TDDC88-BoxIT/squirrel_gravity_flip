@@ -27,6 +27,7 @@ local gameSpeed = 5
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
+
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type) 
   game_score = 10000
