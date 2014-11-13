@@ -5,6 +5,12 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
     if temp1 ~= nil then
       if v.gid==1 then -- gid==1 IS A FLOOR TILE
         return temp1,temp2,temp3,temp4
+      
+    else
+      activate_power_up(v.gid)
+      v.visibility = false
+      end
+      --[[
       elseif v.gid==2 then -- HANDLE COLLISION WITH POWERUP 1
         v.visibility=false
       elseif v.gid==3 then -- HANDLE COLLISION WITH POWERUP 2
@@ -14,6 +20,8 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
       elseif v.gid==5 then -- HANDLE COLLISION WITH POWERUP 2
         v.visibility=false
       end
+      
+      ]]--
     end
   end
   return nil
