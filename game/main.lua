@@ -11,5 +11,5 @@ require "game/input_handler"
 
 global_game_state = 0
 function onStart()
-  start_menu() 
+  start_menu("start_menu") 
 end

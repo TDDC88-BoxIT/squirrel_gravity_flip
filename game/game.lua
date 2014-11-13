@@ -22,7 +22,7 @@ local player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
-local background = gfx.loadpng("images/level_sky.png")
+--local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
 local gameSpeed = 5
 local image1 = nil
@@ -63,7 +63,6 @@ function restart_game()
   end
 
 function stop_game()
-  --screen:clear()
   if timer~=nil then
     timer:stop()
     timer = nil
@@ -221,7 +220,7 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
-  draw_background()
+ --draw_background()
   draw_tiles()
   move_character()
   draw_character()
@@ -312,8 +311,7 @@ function game_navigation(key, state)
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
     stop_game()
     change_global_game_state(0)
-    set_menu_state("pause_menu")
-    start_menu()
+    start_menu("pause_menu")
   elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
     levelwin()
   end
