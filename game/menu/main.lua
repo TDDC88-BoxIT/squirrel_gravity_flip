@@ -57,7 +57,6 @@ function configure_menu_height()
   menu:set_size(nil,menuHeight)
 end
 
-
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
@@ -136,7 +135,7 @@ function menu_navigation(key, state)
   elseif key=="up" and state=='down' then
       menu:decrease_index()
       update_menu()
-  elseif key=="ok" and state=='down' then
+  elseif key=="ok" and state=='up' then
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then
       -- COMMAND TO START GAME

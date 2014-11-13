@@ -42,11 +42,12 @@ function get_tiles()
     if gid ~= 0 then
       -- Get the information about the current tile from it's tileset 
       tile = {
+        name = tilesets[gid].name,
         gid = tilesets[gid].firstgid,
         visibility = true,
         width = tilesets[gid].tilewidth,
         height = tilesets[gid].tileheight,
-        image = get_image(gid),    --tilesets[gid].image,
+        image = get_image(tilesets[gid].name),    --tilesets[gid].image,
         -- Calculates the X and Y coordinates depending in the position in the layer data number array and the width of the current tile
         x = ((k-1) % Level.raw_level.width) * tilesets[gid].tilewidth,
         y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[gid].tileheight
@@ -58,7 +59,8 @@ function get_tiles()
 end
 
 function get_image(tile_name)
-  if tile_name == "floor1" then
+  print (tile_name)
+  if tile_name == "floor" then
     return gfx.loadpng("images/floor1.png")
     end
   if tile_name == "powerup1" then
