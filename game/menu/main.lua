@@ -135,7 +135,7 @@ function menu_navigation(key, state)
   elseif key=="up" and state=='down' then
       menu:decrease_index()
       update_menu()
-  elseif key=="ok" and state=='down' then
+  elseif key=="ok" and state=='up' then
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then
       -- COMMAND TO START GAME
