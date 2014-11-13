@@ -9,7 +9,7 @@ return {
   properties = {},
   tilesets = {
     {
-      name = "floorTile1",
+      name = "floor",
       firstgid = 1,
       tilewidth = 32,
       tileheight = 32,
@@ -26,7 +26,7 @@ return {
       tiles = {}
     },
     {
-      name = "winTile",
+      name = "win",
       firstgid = 2,
       tilewidth = 32,
       tileheight = 32,

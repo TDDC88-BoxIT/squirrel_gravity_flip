@@ -131,6 +131,7 @@ function move_character()
       if player.cur_x<-1 then
         get_squeezed() -- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
       end
+      return
     elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
     end
@@ -280,16 +281,6 @@ end
 
 function get_lives()
   return lives  
-end
-
-
-function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
-  --levelCounter = levelCounter+1 --LEVELCOUNTER - STILL TO BE IMPLEMENTED - NEEDS TO BE READ FROM FILE BETWEEN RUNS?!
-  --levelCounter = 1
-  --print(levelCounter)
-  stop_game()
-  change_global_game_state(0)
-  start_menu("levelwin_menu")
 end
 
 function game_navigation(key, state)
