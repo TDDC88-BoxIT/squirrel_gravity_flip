@@ -22,9 +22,10 @@ local player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
---local background = gfx.loadpng("images/level_sky.png")
+local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
-local gameSpeed = 5
+local gameSpeed = 10
+local current_level
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
@@ -32,7 +33,7 @@ local current_game_type=nil
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type,life) 
   game_score = 10000
-  game_levelCounter = 5 --TO BE PLACED SOMEWHERE ELSE
+  current_level = level_number --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
 
   current_game_type=game_type
@@ -44,14 +45,13 @@ function start_game(level_number,game_type,life)
   end
   
   set_character_start_position()
-  image1 = gfx.loadpng(imageDir.."floor1.png")
-  timer = sys.new_timer(20, "update_cb")
+  timer = sys.new_timer(20, "update_game")
   pos_change = 0
   lives = life
 end
 
 function resume_game()   
-  timer = sys.new_timer(20, "update_cb")
+  timer = sys.new_timer(20, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
 
@@ -88,8 +88,6 @@ function create_game_character()
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
 
-
-
 function update_game_character()
   character:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
   character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
@@ -105,7 +103,7 @@ function set_character_start_position()
 end
 
 -- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
-function update_cb() 
+function update_game() 
   -- if lives > 0 then
   -- if game_score > 0 then
 
@@ -179,7 +177,7 @@ function draw_score()
     xplace = 550
     yplace = 300
   end
-  local string_levelCounter = tostring(game_levelCounter)
+  local string_levelCounter = tostring(current_level)
   position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
   -- loops through the levelCounter that is stored as a string
   while position <= string.len(string_levelCounter) do
@@ -220,7 +218,7 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
- --draw_background()
+ draw_background()
   draw_tiles()
   move_character()
   draw_character()

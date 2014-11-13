@@ -57,7 +57,6 @@ function configure_menu_height()
   menu:set_size(nil,menuHeight)
 end
 
-
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN

@@ -15,7 +15,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "../images/floor2.png",
+      mage = gfx.loadpng("images/floor2.png"),
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
@@ -32,7 +32,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "../images/floor1.png",
+      mage = gfx.loadpng("images/floor1.png"),
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {

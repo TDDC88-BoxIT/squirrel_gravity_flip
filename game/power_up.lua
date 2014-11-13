@@ -1,4 +1,3 @@
-
 -- ACTIVATES A POWERUP DEPENDING ON pu-type
 function activate_power_up(pu_type)
 	if(pu_type==1) then
