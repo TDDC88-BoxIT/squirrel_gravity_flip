@@ -46,7 +46,7 @@ function get_tiles()
         visibility = true,
         width = tilesets[gid].tilewidth,
         height = tilesets[gid].tileheight,
-        image = tilesets[gid].image,
+        image = get_image(gid),    --tilesets[gid].image,
         -- Calculates the X and Y coordinates depending in the position in the layer data number array and the width of the current tile
         x = ((k-1) % Level.raw_level.width) * tilesets[gid].tilewidth,
         y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[gid].tileheight
@@ -57,6 +57,29 @@ function get_tiles()
   return tiles
 end
 
+function get_image(tile_name)
+  if tile_name == "floor1" then
+    return gfx.loadpng("images/floor1.png")
+    end
+  if tile_name == "powerup1" then
+    return gfx.loadpng("images/powerup1.png")
+  end
+  if tile_name == "powerup2" then
+    return gfx.loadpng("images/powerup2.png")
+  end
+  if tile_name == "powerup3" then
+    return gfx.loadpng("images/powerup3.png")
+  end
+  if tile_name == "powerup4" then
+    return gfx.loadpng("images/powerup4.png")
+  end
+  if tile_name == "win" then
+    return gfx.loadpng("images/powerup4.png")
+  end
+  
+  
+return gfx.loadpng("images/powerup4.png")
+end
 
 -- basic check collision - logic
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
