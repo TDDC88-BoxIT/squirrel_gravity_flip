@@ -247,8 +247,8 @@ THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
 function draw_tiles()
   local sf = nil
     for k,v in pairs(Level.tiles) do
-      if v.x-gameCounter+v.width>0 then
-        screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
+      if v.x-gameCounter+v.width>0 and v.visibility==true then
+        screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
       end
     end
 end
