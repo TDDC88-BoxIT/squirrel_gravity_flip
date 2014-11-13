@@ -15,7 +15,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "../images/floor2.png",
+      image = gfx.loadpng("images/floor2.png"),
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
@@ -32,7 +32,24 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "../images/floor1.png",
+      image = gfx.loadpng("images/floor1.png"),
+      imagewidth = 32,
+      imageheight = 32,
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      properties = {},
+      tiles = {}
+    },
+    {
+      name = "flame1",
+      firstgid = 3,
+      tilewidth = 32,
+      tileheight = 32,
+      spacing = 0,
+      margin = 0,
+      image = gfx.loadpng("images/flame1.png"),
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
