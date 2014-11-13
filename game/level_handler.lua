@@ -42,6 +42,7 @@ function get_tiles()
     if gid ~= 0 then
       -- Get the information about the current tile from it's tileset 
       tile = {
+        name = tilesets[gid].name,
         gid = tilesets[gid].firstgid,
         visibility = true,
         width = tilesets[gid].tilewidth,
