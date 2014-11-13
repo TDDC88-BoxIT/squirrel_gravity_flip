@@ -24,7 +24,7 @@ local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 --local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
-local gameSpeed = 20
+local gameSpeed = 5
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
@@ -289,11 +289,9 @@ function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN ME
   --levelCounter = levelCounter+1 --LEVELCOUNTER - STILL TO BE IMPLEMENTED - NEEDS TO BE READ FROM FILE BETWEEN RUNS?!
   --levelCounter = 1
   --print(levelCounter)
-  
   stop_game()
   change_global_game_state(0)
-  set_menu_state("levelwin_menu")
-  start_menu()
+  start_menu("levelwin_menu")
 end
 
 function game_navigation(key, state)

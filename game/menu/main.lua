@@ -1,7 +1,6 @@
 require("../tool_box/menu_object")
 require("../tool_box/character_object")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
-local menu_height= 400
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu"
@@ -27,10 +26,7 @@ function start_menu(state)
     menu:clear_buttons()
   end
   add_menu_items()
-  
-  if(state==levelwin_menu) then
-    loadpng()
-  end
+  configure_menu_height()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
   draw_menu()
 end 
@@ -54,8 +50,13 @@ function add_menu_items()
   elseif menuState == "levelwin_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
   end
-     
 end
+
+function configure_menu_height()
+  local menuHeight= 20+(menu:get_button_size().height+15)*(menu:get_item_amount()) 
+  menu:set_size(nil,menuHeight)
+end
+
 
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
@@ -158,8 +159,7 @@ function menu_navigation(key, state)
       sys.stop() -- COMMAND TO EXIT
     elseif menu:get_indexed_item().id=="continue" then
       stop_menu()
-      set_menu_state("start_menu")
-      start_menu()
+      start_menu("start_menu")
     end
   end
 end
