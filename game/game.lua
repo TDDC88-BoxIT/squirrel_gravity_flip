@@ -8,8 +8,9 @@
 --package.path = package.path .. arg[1] .. "\\game\\?.lua"
 --package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
 
-require "game/level_handler"
-require "game/collision_handler"
+require ("game/level_handler")
+require ("game/collision_handler")
+require ("game/fail_and_success_handler")
 require ("tool_box/character_object")
 require ("game/score")
 require ("game/power_up")
@@ -21,17 +22,19 @@ local player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
-local background
+--local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
-local gameSpeed = 5
+local gameSpeed = 10
 local image1 = nil
 local image2 = nil
-
 local current_game_type=nil
+
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
-function start_game(level_number,game_type) 
+function start_game(level_number,game_type,life) 
   game_score = 10000
+  game_levelCounter = 5 --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
+
   current_game_type=game_type
   Level.load_level(level_number,current_game_type)
   create_game_character()
@@ -39,11 +42,12 @@ function start_game(level_number,game_type)
     require("tutorial/tutorial_handler")
     create_tutorial_helper(level_number)
   end
+  
   set_character_start_position()
   image1 = gfx.loadpng(imageDir.."floor1.png")
   timer = sys.new_timer(20, "update_cb")
   pos_change = 0
-  lives = 10
+  lives = life
 end
 
 function resume_game()   
@@ -51,8 +55,14 @@ function resume_game()
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
 
+function restart_game()
+  gameCounter=0
+  set_character_start_position()
+  change_character_timer = sys.new_timer(200, "update_game_character")
+  pos_change = 0
+  end
+
 function stop_game()
-  --screen:clear()
   if timer~=nil then
     timer:stop()
     timer = nil
@@ -87,7 +97,7 @@ end
 
 function set_character_start_position()
   player.start_xpos=200 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
-  player.start_ypos=0 -- WHARE WE WANT THE CHARACTER TO BE ON THE Y-AXIS WHEN HE STARTS
+  player.start_ypos=40 -- WHARE WE WANT THE CHARACTER TO BE ON THE Y-AXIS WHEN HE STARTS
   player.cur_x = 50
   player.cur_y = player.start_ypos
   player.new_x = player.cur_x -- INITIALLY NEW X-POS IS THE SAME AS CURRENT POSITION
@@ -101,11 +111,11 @@ function update_cb()
 
   screen:clear()
   draw_screen()
- -- if game_score > 0 then
- --   game_score = game_score -10
- -- else
- --   print ("you lost!")
- --   end
+  if game_score > 0 then
+    game_score = game_score -10
+  else
+    -- GAME IS LOST
+    end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
 
@@ -142,14 +152,80 @@ function move_character()
     end  
 end
 
+--the function that draws the score and the level
+function draw_score()
+  --DRAWS SCORE
+  if global_game_state == 1 then --game situation, place score in the upper left corner of the screen
+    xplace = 10
+    yplace = 10
+  elseif global_game_state == 0 then --menu situation, place score in the center of the screen
+    xplace = 550
+    yplace = 370
+  end
+  local string_score = tostring(game_score)
+  position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
+  -- loops through the score that is stored as a string
+  while position <= string.len(string_score) do
+    -- calls on the print function for the digit, sends the number as a string
+    draw_number(string.sub(string_score,position,position),position, xplace, yplace)
+    position = position + 1
+  end
+  
+  --DRAWS LEVEL
+  if global_game_state == 1 then --game situation, place level in the upper right corner of the screen
+    xplace = 1000
+    yplace = 10
+  elseif global_game_state == 0 then --menu situation, place level in the center of the screen
+    xplace = 550
+    yplace = 300
+  end
+  local string_levelCounter = tostring(game_levelCounter)
+  position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
+  -- loops through the levelCounter that is stored as a string
+  while position <= string.len(string_levelCounter) do
+    -- calls on the print function for the digit, sends the number as a string
+    draw_number(string.sub(string_levelCounter,position,position),position, xplace, yplace)
+    position = position + 1
+  end
+  
+end
 
---the function that draws the score in the top left score 
+
+function draw_number(number, position, xplace, yplace)
+-- loads the picture corresponding to the correct digit
+  if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
+  elseif number == "1" then 
+    score = gfx.loadpng("images/numbers/one.png")
+  elseif number == "2" then 
+    score = gfx.loadpng("images/numbers/two.png")
+  elseif number == "3" then 
+    score = gfx.loadpng("images/numbers/three.png")
+  elseif number == "4" then 
+    score = gfx.loadpng("images/numbers/four.png")
+  elseif number == "5" then 
+    score = gfx.loadpng("images/numbers/five.png")
+  elseif number == "6" then 
+    score = gfx.loadpng("images/numbers/six.png")
+  elseif number == "7" then 
+    score = gfx.loadpng("images/numbers/seven.png")
+  elseif number == "8" then 
+    score = gfx.loadpng("images/numbers/eight.png") 
+  elseif number == "9" then 
+    score = gfx.loadpng("images/numbers/nine.png")
+  end
+  -- prints the loaded picture
+  screen:copyfrom(score,nil ,{x=xplace+position*30, y = yplace, height = 50, width = 30}, true)
+  score:destroy()
+
+end
+
 function draw_screen()
-  --draw_background()
+ --draw_background()
   draw_tiles()
   move_character()
   draw_character()
   draw_score(game_score)
+  draw_lives()
   if current_game_type=="tutorial" then
     draw_tutorial_helper()
   end
@@ -157,9 +233,9 @@ function draw_screen()
 end
 
 function draw_background()
-  background = gfx.loadpng("images/level_sky.png")
+  --background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
-  background:destroy()
+  --background:destroy()
 end
 
 --[[ 
@@ -170,8 +246,8 @@ THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
 function draw_tiles()
   local sf = nil
     for k,v in pairs(Level.tiles) do
-      if v.x-gameCounter+v.width>0 then 
-        screen:copyfrom(image1,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height})
+      if v.x-gameCounter+v.width>0 and v.visibility==true then
+        screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
       end
     end
 end
@@ -184,9 +260,38 @@ function draw_character()
 end
 
 
+function draw_lives()
+  life = gfx.loadpng("images/Game-hearts-icon.png")
+  for i=0, lives-1, 1 do
+  screen:copyfrom(life,nil,{x=200+30*i,y=20},true)
+  end
+  life:destroy()
+end
+
+function check_alive()
+  if lives>0 then
+  return true
+else
+  return false
+end
+end
+function decrease_life()
+  print(lives)
+  lives = lives-1
+end
+
+function get_lives()
+  return lives  
+end
+
+
 function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
-  set_menu_state(levelwin_menu)
-  start_menu()
+  --levelCounter = levelCounter+1 --LEVELCOUNTER - STILL TO BE IMPLEMENTED - NEEDS TO BE READ FROM FILE BETWEEN RUNS?!
+  --levelCounter = 1
+  --print(levelCounter)
+  stop_game()
+  change_global_game_state(0)
+  start_menu("levelwin_menu")
 end
 
 function game_navigation(key, state)
@@ -205,8 +310,9 @@ function game_navigation(key, state)
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
     stop_game()
     change_global_game_state(0)
-    set_menu_state("pause_menu")
-    start_menu()
+    start_menu("pause_menu")
+  elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
+    levelwin()
   end
 
   if current_game_type=="tutorial" and state=='up' then
@@ -214,5 +320,12 @@ function game_navigation(key, state)
   end
 end 
 
+function change_game_speed(new_speed, time)
+  gameSpeed = new_speed
+  speed_timer = sys.new_timer(time, "reset_game_speed")
+  end
 
-
+function reset_game_speed()
+  gameSpeed = 5
+  speed_timer:stop()
+  end

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="500" height="14" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="floor1" tilewidth="32" tileheight="32">
+  <image source="../images/floor1.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="2" name="powerup1" tilewidth="32" tileheight="32">
+  <image source="../images/powerup1.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="3" name="powerup2" tilewidth="32" tileheight="32">
+  <image source="../images/powerup2.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="4" name="powerup3" tilewidth="32" tileheight="32">
+  <image source="../images/powerup3.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="5" name="powerup4" tilewidth="32" tileheight="32">
+  <image source="../images/powerup4.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="6" name="winTile" tilewidth="32" tileheight="32">
+  <image source="../images/winTile.png" width="32" height="32"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="500" height="14">
+  <data encoding="base64" compression="zlib">
+   eJzt3EmOgzAQBVDS0/2PnEUWvYqIy2VcNu9J3iCSFCbS9yB4HMfx2KBV9GmdWdcd6ZvZ903bp/0dAPfwO7sAGEiew3q+ZhcQcDa3APrIc9jX98TflttwLXkOazmbm0f33q4wc3zxiZY+6jmvCvsPe5HnAC9VsnbkuKviOI8c8hzWseK+eSVnWVUlv97VUaU+apLnAC9V8lKeEyHPYQ2RuflPehX/ouu1Peu8o9eIWz47um9bjkeNvAauJ89hbRnvobjjvC9zHDGitpbj7871P7gXeQ712TfPVzm7rLcTIc+BO6qcjfKcCHkOtfXMzXd9vjhj3/fqbGx59v6qPK/+PgDayHOYK2v/e2aLXEtvX2T040hZfZr5ndreTZ7DXE/uoQL/
+  </data>
+ </layer>
+</map>

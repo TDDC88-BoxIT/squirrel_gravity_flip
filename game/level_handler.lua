@@ -117,16 +117,37 @@ function CheckCollision(v, gid, ax1,ay1,aw,ah, bx1,by1,bw,bh)
       return X[2][1], X[3][1], Y[2][1], Y[3][1], true
     end
   
-  
-  elseif gid == 2 then
+  elseif gid > 1 then -- power up collision test
     local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
     if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 and v.visibility == true then
-      game_score = game_score + 500
+      
+      if gid == 2 then --speed boost power_up
+        change_game_speed(10, 7000)
+            
+      end
+      
+      if gid == 3 then --game score adder, kinda like the coins in more old school platform game 
+        game_score = game_score + 500
+      end
+      
+      if gid == 4 then --freeze 
+        change_game_speed(0, 3000)
+      end
+      
+      if gid == 5 then
+        
+      end
+      
+      --removed the power ups from the game, making it impossible to activate them again.
       v.visibility = false
     end
-  
+  elseif (gid == 3 or gid == 5) then -- Ground- and ceiling-facing spikes.
+    local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
+    if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 and v.visibility == true then
+      game_score = game_score - 1000
+      v.visibility = false
+    end
   else
     return nil
   end
 end
-

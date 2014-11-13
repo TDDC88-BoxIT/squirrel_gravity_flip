@@ -74,7 +74,7 @@ end
 
 -- RETURNS MENU button SIZE
 function menu_object:get_button_size()
-	local size={widht=self.button_widht, height=self.button_widht}
+	local size={widht=self.button_widht, height=self.button_height}
 	return size
 end
 
@@ -98,6 +98,11 @@ end
 -- CLEARS ALL ADDED MENU ITEMS
 function menu_object:clear_buttons()
   self.menu_items={}
+end
+
+-- RETURNS THE AMOUNT OF ITEMS WHICH HAVE BEEN ADDED TO THE MENU
+function menu_object:get_item_amount()
+  return #self.menu_items
 end
 
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
@@ -188,7 +193,7 @@ local function update(self)
     self.menu_surface=gfx.new_surface(self.width, self.height)
   end
   if self.height~=#self.menu_items*(self.button_height+20) then
-    self:set_button_size(nil,(self.height-(#self.menu_items)*20)/#self.menu_items)
+    --self:set_button_size(nil,(self.height-(#self.menu_items)*20)/#self.menu_items)
   end
   make_bakground(self)
   make_buttons(self)

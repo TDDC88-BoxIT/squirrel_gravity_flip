@@ -15,7 +15,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "../images/floor1.png",
+      image = gfx.loadpng("images/floor1.png"),
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
