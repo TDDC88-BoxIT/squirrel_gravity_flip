@@ -24,7 +24,7 @@ local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
-local gameSpeed = 10
+local gameSpeed = 5
 local current_level
 local image1 = nil
 local image2 = nil
