@@ -48,6 +48,7 @@ function start_game(level_number,game_type,life)
   timer = sys.new_timer(20, "update_cb")
   pos_change = 0
   lives = life
+  player.invulnerable = false
 end
 
 function resume_game()   
@@ -294,6 +295,7 @@ function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN ME
   start_menu("levelwin_menu")
 end
 
+
 function game_navigation(key, state)
   if key=="ok" and state== 'up' then
     if direction_flag == "down" then
@@ -323,9 +325,23 @@ end
 function change_game_speed(new_speed, time)
   gameSpeed = new_speed
   speed_timer = sys.new_timer(time, "reset_game_speed")
-  end
+end
+
+function activate_invulnerability(time)
+  player.invulnerable = true
+  invul_timer = sys.new_timer(time, "end_invulnerability")
+end
+
+function get_invulnerability_state()
+  return player.invulnerable
+end
+
+function end_invulnerability()
+  player.invulnerable = false
+  invul_timer:stop()
+end
 
 function reset_game_speed()
-  gameSpeed = 5
+  gameSpeed = 10
   speed_timer:stop()
   end
