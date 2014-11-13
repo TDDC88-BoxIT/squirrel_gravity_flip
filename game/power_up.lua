@@ -9,10 +9,10 @@ function activate_power_up(pu_type)
 	elseif(pu_type==4) then -- Freeze tile
     change_game_speed(1,1000)    
 	elseif(pu_type==5) then -- Invulnerability tile
-    activate_invulnerability(1000)
+    activate_invulnerability(10000)
   elseif(pu_type == 6) then -- Win tile!
     levelwin()
-  elseif((pu_type == 7 or pu_type == 8) and not get_invulnerability_state()) then -- Obstacles
+  elseif((pu_type == 7 or pu_type == 8 or pu_type == 9 or pu_type == 10) and not get_invulnerability_state()) then -- Obstacles
     stop_game() -- This NEEDS to be changed to the actual fail screen when that has been implemented
   end
 end

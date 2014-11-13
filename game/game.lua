@@ -248,9 +248,49 @@ function draw_tiles()
   local sf = nil
     for k,v in pairs(Level.tiles) do
       if v.x-gameCounter+v.width>0 and v.visibility==true then
+        if v.gid == 9 then
+          move_cloud(v)
+        elseif v.gid == 10 then
+          move_flame(v)
+        end
         screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
       end
     end
+end
+
+--[[
+Handles the movement of clouds. If no thread timer is active, creates one.
+If thread timer has counted to 20, invert direction (invert vaue of attribute "up")
+Afterwards, either move cloud.y up or down by a certain value.
+
+This should be called at some point during update before the screen:copyfrom function call in draw_tiles. For the moment, it is called from draw_tiles, thtough it probably shouldn't be.
+]]
+function move_cloud(cloud)
+  if(cloud.directionTimer == nil) then
+    cloud.directionTimer = 0
+  end
+  cloud.directionTimer = cloud.directionTimer + 1
+  if(cloud.directionTimer >= 20) then
+    cloud.up = not cloud.up
+    cloud.directionTimer = 0
+  end
+  if(cloud.up == true) then
+    cloud.y = cloud.y + 8
+  else
+    cloud.y = cloud.y - 8
+  end
+end
+
+--[[
+Handles the movement of flames. Moves the flame to the left at a steady rate. toDo: Make it not start moving until it's close to entering the screen.
+This should be called at some point during update before the screen:copyfrom function call in draw_tiles. For the moment, it is called from draw_tiles, thtough it probably shouldn't be.
+]]
+function move_flame(flame)
+  -- The flame and player x comparison currently doesn't work properly, I'll take a look at why ASAP. For now, the flame starts moving as soon as the game starts though the idea is that
+  -- it should start moving just before entering the screen.
+  --if(flame.x > player.cur_x) then
+    flame.x = flame.x - 25    
+  --end
 end
 
 --[[
