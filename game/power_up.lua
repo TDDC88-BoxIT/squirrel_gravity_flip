@@ -11,5 +11,7 @@ function activate_power_up(pu_type)
 
 	elseif(pu_type==5) then
 
-	end
+  elseif(pu_type == 6) then
+    levelwin()
+  end
 end

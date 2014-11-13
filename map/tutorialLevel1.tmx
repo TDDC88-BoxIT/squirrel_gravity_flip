@@ -6,9 +6,12 @@
  <tileset firstgid="2" name="floorTile1" tilewidth="32" tileheight="32">
   <image source="../images/floor1.png" width="32" height="32"/>
  </tileset>
+ <tileset firstgid="3" name="winTile" tilewidth="32" tileheight="32">
+  <image source="../images/winTile.png" width="32" height="32"/>
+ </tileset>
  <layer name="Tile Layer 1" width="50" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BgASMUMyFhfGKMOOTRMSMWs9DZ2NQNB8A00A6gEhiNj8EF0P2BLT+i07jyHTEYVx7Flp/xyWPDwxEAAH1rAII=
+   eJxjYBgFo2BgASMUMyFhfGKMOOTRMSMWs9DZ6DQzjf1KLzDqj8EFhqs/sOVHdBpXviMGYzMTV37GJ4+Oh0t8oAMAlvsAiw==
   </data>
  </layer>
 </map>
