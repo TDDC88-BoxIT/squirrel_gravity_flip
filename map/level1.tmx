@@ -15,9 +15,12 @@
  <tileset firstgid="5" name="powerup4" tilewidth="32" tileheight="32">
   <image source="../images/powerup4.png" width="32" height="32"/>
  </tileset>
+ <tileset firstgid="6" name="winTile" tilewidth="32" tileheight="32">
+  <image source="../images/winTile.png" width="32" height="32"/>
+ </tileset>
  <layer name="Tile Layer 1" width="500" height="14">
   <data encoding="base64" compression="zlib">
-   eJzt3EkOgzAMAEC6/f/LPbYXBEkcYpIZyRdEW2MqOYvgsW3bY4LI6GyeUdddU5vR902sEQAz+YxOAAD+PEcnUMH8AQDqvAb+tr4NAPuO5uaZ99dGji/OKKlRy3lZ2H8AYEZZem3PcVfGcR7Aau64b57JUa/K0r/28siSHwBklqVf6ucA86qZm7/Ds/ipXa9tWeftvUZc8tnetS05XqvnNQBQJuJdEyvO+yLHET1yKzm+d67/AUAu9s3jZe5d1tsB4JzMvVE/B5hPy9x81ueLI/Z9r+6NJc/eX9XPs78PAOBOova/R0bNtbTWIqKOPUXVNPI7xboB9PcFFF8CuQ==
+   eJzt3EmOgzAQBVDS0/2PnEUWvYqIy2VcNu9J3iCSFCbS9yB4HMfx2KBV9GmdWdcd6ZvZ903bp/0dAPfwO7sAGEiew3q+ZhcQcDa3APrIc9jX98TflttwLXkOazmbm0f33q4wc3zxiZY+6jmvCvsPe5HnAC9VsnbkuKviOI8c8hzWseK+eSVnWVUlv97VUaU+apLnAC9V8lKeEyHPYQ2RuflPehX/ouu1Peu8o9eIWz47um9bjkeNvAauJ89hbRnvobjjvC9zHDGitpbj7871P7gXeQ712TfPVzm7rLcTIc+BO6qcjfKcCHkOtfXMzXd9vjhj3/fqbGx59v6qPK/+PgDayHOYK2v/e2aLXEtvX2T040hZfZr5ndreTZ7DXE/uoQL/
   </data>
  </layer>
 </map>
