@@ -15,8 +15,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
         v.visibility=false
     elseif v.gid==6 then
       --Do Winning
-      print("Winning")
-      stop_game()
+      levelwin()
     end
     end
   end
