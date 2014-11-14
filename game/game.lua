@@ -22,7 +22,6 @@ local player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
-local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
 local gameSpeed = 10
 local current_level
@@ -40,7 +39,7 @@ function start_game(level_number,game_type,life)
   Level.load_level(level_number,current_game_type)
   create_game_character()
   if current_game_type=="tutorial" then
-    require("tutorial/tutorial_handler")
+    require("game/tutorial/tutorial_handler")
     create_tutorial_helper(level_number)
   end
   
@@ -219,7 +218,7 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
- draw_background()
+ --draw_background()
   draw_tiles()
   move_character()
   draw_character()

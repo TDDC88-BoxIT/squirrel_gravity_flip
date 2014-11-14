@@ -22,8 +22,8 @@ function start_menu(state)
   menuState=state
   if(menu==nil) then
     menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
-  else
-    menu:clear_buttons()
+  else 
+    menu:reset()
   end
   add_menu_items()
   configure_menu_height()
@@ -136,9 +136,9 @@ function menu_navigation(key, state)
       menu:decrease_index()
       update_menu()
   elseif key=="ok" and state=='up' then
+    print("ITEMS: "..menu:get_item_amount())
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then
-      -- COMMAND TO START GAME
       stop_menu()
       change_global_game_state(1)
       start_game(1,"story",10)
