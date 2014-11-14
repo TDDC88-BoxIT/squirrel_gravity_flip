@@ -34,10 +34,10 @@ function start_game(level_number,game_type,life)
   game_score = 10000
   current_level = level_number --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
-
   current_game_type=game_type
   Level.load_level(level_number,current_game_type)
   create_game_character()
+
   if current_game_type=="tutorial" then
     require("game/tutorial/tutorial_handler")
     create_tutorial_helper(level_number)
@@ -48,6 +48,8 @@ function start_game(level_number,game_type,life)
   pos_change = 0
   lives = life
   player.invulnerable = false
+
+
 end
 
 function resume_game()   
@@ -337,7 +339,7 @@ end
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
     if direction_flag == "down" then
-       if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
         character:flip()
         direction_flag="up"
       end

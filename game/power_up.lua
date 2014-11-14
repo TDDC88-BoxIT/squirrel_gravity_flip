@@ -1,18 +1,17 @@
 -- ACTIVATES A POWERUP DEPENDING ON pu-type
 
-function activate_power_up(pu_type)
-  
-	if(pu_type==2) then -- Score tile
+function activate_power_up(pu_name)
+	if(pu_name=="powerup1") then -- Score tile
     game_score = game_score + 100
-	elseif(pu_type==3) then -- Speed tile
+	elseif(pu_name=="powerup2") then -- Speed tile
     change_game_speed(15,1000)
-	elseif(pu_type==4) then -- Freeze tile
+	elseif(pu_name=="powerup3") then -- Freeze tile
     change_game_speed(1,1000)    
-	elseif(pu_type==5) then -- Invulnerability tile
+	elseif(pu_name=="powerup4") then -- Invulnerability tile
     activate_invulnerability(10000)
-  elseif(pu_type == 6) then -- Win tile!
+  elseif(pu_name == "win") then -- Win tile!
     levelwin()
-  elseif((pu_type == 7 or pu_type == 8 or pu_type == 9 or pu_type == 10) and not get_invulnerability_state()) then -- Obstacles
+  elseif((pu_name == "obstacle1" or pu_name == "obstacle2" or pu_name == "obstacle3" or pu_name == "obstacle4") and not get_invulnerability_state()) then -- Obstacles
     stop_game() -- This NEEDS to be changed to the actual fail screen when that has been implemented
   end
 end
