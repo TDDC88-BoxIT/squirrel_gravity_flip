@@ -47,7 +47,7 @@ function get_tiles()
         visibility = true,
         width = tilesets[gid].tilewidth,
         height = tilesets[gid].tileheight,
-        image = tilesets[gid].image,
+        image = get_image(tilesets[gid].name),    --tilesets[gid].image,
         -- Calculates the X and Y coordinates depending in the position in the layer data number array and the width of the current tile
         x = ((k-1) % Level.raw_level.width) * tilesets[gid].tilewidth,
         y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[gid].tileheight
@@ -58,6 +58,42 @@ function get_tiles()
   return tiles
 end
 
+function get_image(tile_name)
+  print (tile_name)
+  if tile_name == "floor" then
+    return gfx.loadpng("images/floor1.png")
+    end
+  if tile_name == "powerup1" then
+    return gfx.loadpng("images/powerup1.png")
+  end
+  if tile_name == "powerup2" then
+    return gfx.loadpng("images/powerup2.png")
+  end
+  if tile_name == "powerup3" then
+    return gfx.loadpng("images/powerup3.png")
+  end
+  if tile_name == "powerup4" then
+    return gfx.loadpng("images/powerup4.png")
+  end
+  if tile_name == "obstacle1" then
+    return gfx.loadpng("images/obstacleGroundSpike.png")
+  end
+  if tile_name == "obstacle2" then
+    return gfx.loadpng("images/obstacleCeilingSpike.png")
+  end
+  if tile_name == "obstacle3" then
+    return gfx.loadpng("images/obstacle3.png")
+  end
+  if tile_name == "obstacle4" then
+    return gfx.loadpng("images/flame1.png")
+  end
+  if tile_name == "win" then
+    return gfx.loadpng("images/winTile.png")
+  end
+  
+  
+return nil
+end
 
 -- basic check collision - logic
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
@@ -104,51 +140,4 @@ end
 -- Object A is stand on Object B
 -- example3: return value (ALeft, ARight, BBottom, ATop) means that
 -- Object A is under Object B
-function CheckCollision(v, gid, ax1,ay1,aw,ah, bx1,by1,bw,bh)
-  if gid == 1 then
-    local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
-    if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
-      local X={{"ALeft",ax1},{"ARight",ax2},{"BLeft",bx1},{"BRight",bx2}}
-      local Y={{"ABottom",ay1},{"ATop",ay2},{"BBottom",by1},{"BTop",by2}}
-      local comp = function(a,b)
-        return a[2] < b[2] 
-      end
-      table.sort(X, comp)
-      table.sort(Y,comp)
-      return X[2][1], X[3][1], Y[2][1], Y[3][1], true
-    end
-  
-  elseif gid > 1 then -- power up collision test
-    local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
-    if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 and v.visibility == true then
-      
-      if gid == 2 then --speed boost power_up
-        change_game_speed(10, 7000)
-            
-      end
-      
-      if gid == 3 then --game score adder, kinda like the coins in more old school platform game 
-        game_score = game_score + 500
-      end
-      
-      if gid == 4 then --freeze 
-        change_game_speed(0, 3000)
-      end
-      
-      if gid == 5 then
-        
-      end
-      
-      --removed the power ups from the game, making it impossible to activate them again.
-      v.visibility = false
-    end
-  elseif (gid == 3 or gid == 5) then -- Ground- and ceiling-facing spikes.
-    local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
-    if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 and v.visibility == true then
-      game_score = game_score - 1000
-      v.visibility = false
-    end
-  else
-    return nil
-  end
-end
+
