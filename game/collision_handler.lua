@@ -1,17 +1,6 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   for k,v in pairs(tileSet) do
---[[<<<<<<< HEAD
-    local colCheck = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
-    if colCheck == "hit" then
-      if v.name=="floor" then
-        return 1
-      elseif v.name=="win" then
-        levelwin()
-      else
-        activate_power_up(v.name)
-        v.visibility = false
-=======]]
     local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
     if temp1 ~= nil then
       if v.gid==1 then -- gid==1 IS A FLOOR TILE
@@ -20,7 +9,6 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
     elseif v.visibility == true then
       activate_power_up(v.gid)
       v.visibility = false
--->>>>>>> ea4fc487e345b660dd6f4cc582f708b0850d7b17
       end
     end
   end

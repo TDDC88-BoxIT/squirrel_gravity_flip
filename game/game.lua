@@ -24,7 +24,7 @@ local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
-local gameSpeed = 5
+local gameSpeed = 10
 local current_level
 local image1 = nil
 local image2 = nil
@@ -336,7 +336,7 @@ end
 
 
 function game_navigation(key, state)
-  if key=="ok" and state== 'up' then
+  if key=="ok" and state== 'down' then
     if direction_flag == "down" then
        if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
         character:flip()
