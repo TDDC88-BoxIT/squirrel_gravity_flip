@@ -18,9 +18,15 @@
  <tileset firstgid="6" name="winTile" tilewidth="32" tileheight="32">
   <image source="../images/winTile.png" width="32" height="32"/>
  </tileset>
+ <tileset firstgid="7" name="obstacle1" tilewidth="32" tileheight="32">
+  <image source="../images/obstacleGroundSpike.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="8" name="obstacle2" tilewidth="32" tileheight="32">
+  <image source="../images/obstacleCeilingSpike.png" width="32" height="32"/>
+ </tileset>
  <layer name="Tile Layer 1" width="500" height="14">
   <data encoding="base64" compression="zlib">
-   eJzt3EmOgzAQBVDS0/2PnEUWvYqIy2VcNu9J3iCSFCbS9yB4HMfx2KBV9GmdWdcd6ZvZ903bp/0dAPfwO7sAGEiew3q+ZhcQcDa3APrIc9jX98TflttwLXkOazmbm0f33q4wc3zxiZY+6jmvCvsPe5HnAC9VsnbkuKviOI8c8hzWseK+eSVnWVUlv97VUaU+apLnAC9V8lKeEyHPYQ2RuflPehX/ouu1Peu8o9eIWz47um9bjkeNvAauJ89hbRnvobjjvC9zHDGitpbj7871P7gXeQ712TfPVzm7rLcTIc+BO6qcjfKcCHkOtfXMzXd9vjhj3/fqbGx59v6qPK/+PgDayHOYK2v/e2aLXEtvX2T040hZfZr5ndreTZ7DXE/uoQL/
+   eJzt3MtuwyAQBVCnz/z/F3fRRVUpqQsMMJhzJDaWk4xJpMsj9u04jtsFWkb/rTPqumv6Zvb3pl2nfRzAzu6zCxjovfH1O/UV65HnsJ6X2QVUOJtbAG3kOVzX64Njn4M+W27DWPIc1nI2N6/de4v2aG360fgik5I+ajkvi9b9B3KR5wDfsmRtz3HX7HEe/chzWMeK++aZnGVVlvx6VkeW+shJngO7uB9//0c9S17Kc2rIc1hDzdz8LbyKH7XrtS3rvL3XiEte27tvS47X6nkNjCfPYW0Rz6HYcd4XOY7oUVvJ8Wfn+h3sRZ5DfhH75p6F8lvm7LLeTg15DuwoczbKc2rIc8itZW5+1fuLI/Z9R2djyb33o/I8+/MAKCPPYa6o/e+ZreZaWvsioh97iurTyPfUrt3kOcz1BULRAzY=
   </data>
  </layer>
 </map>
