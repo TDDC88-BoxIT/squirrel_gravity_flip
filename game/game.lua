@@ -130,8 +130,8 @@ function move_character()
     player.new_x=player.cur_x+1
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
-      if player.cur_x<-1 then
-        get_squeezed() -- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+      if player.cur_x<-1 then -- WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+        get_killed()
       end
       return
     elseif player.cur_x<player.start_xpos then
@@ -323,16 +323,6 @@ end
 
 function get_lives()
   return lives  
-end
-
-
-function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
-  --levelCounter = levelCounter+1 --LEVELCOUNTER - STILL TO BE IMPLEMENTED - NEEDS TO BE READ FROM FILE BETWEEN RUNS?!
-  --levelCounter = 1
-  --print(levelCounter)
-  stop_game()
-  change_global_game_state(0)
-  start_menu("levelwin_menu")
 end
 
 

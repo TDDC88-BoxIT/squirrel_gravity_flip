@@ -47,7 +47,7 @@ function add_menu_items()
     end
     menu:add_button("settings",imageDir.."menuImg/settings.png")
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
-  elseif menuState == "levelwin_menu" then
+  elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
   end
 end
@@ -64,6 +64,8 @@ function add_menu_bling()
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
+  elseif menuState == "gameover_menu" then
+    backgroundImage = gfx.loadpng(imageDir.."/menuImg/gameover.png")
   end
 
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
@@ -114,7 +116,7 @@ function draw_menu()
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-  if menuState == "levelwin_menu" then
+  if menuState == "levelwin_menu" or menuState == "gameover_menu" then
     --draw_level() --STILL TO BE IMPLEMENTED
     draw_score()
   end
@@ -141,7 +143,7 @@ function menu_navigation(key, state)
     if menu:get_indexed_item().id=="start_new" then
       stop_menu()
       change_global_game_state(1)
-      start_game(1,"story",10)
+      start_game(3,"story",1)
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
