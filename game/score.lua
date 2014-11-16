@@ -12,40 +12,35 @@ function read_from_file()
     local player = ""
     local score = ""
     local level_reads
+    -- iterates through all text in score_table
     for line in io.lines("game/score_table.txt") do
       s_line = tostring(line)
+      -- checks whether the line contains the level,name or score and stores it as such
       if string.sub(s_line,1,5) == "level" then
         level_read = string.sub(s_line,6,string.len(s_line))
         score_board[tostring(level_read)] = {}
+        player_i = 1
         score_or_name = "player"
+        print(level_read)
       elseif score_or_name== "player" then
         player = s_line
         score_or_name= "score"
+        print(player)
       elseif score_or_name == "score" then
         score = s_line
-        score_or_name = "player"
-        print("score")
         print(score)
-        print("level_read")
-        print(level_read)
-        print("player_i")
-        print(player_i)
-        print("player")
-        print(player)
-        print("level_read")
-        print(level_read)
+        score_or_name = "player"
         score_board[tostring(level_read)][tostring(player_i)] = {player,score}
         player_i = player_i+1 
       end
     end
     io.close(file)
-    print("level_read")
-    print(level_read)
     return level_read
   else
     return 0
   end
 end  
+
 
 function score_page(player,score,level)
   local unlocked_levels = read_from_file()
@@ -53,21 +48,16 @@ function score_page(player,score,level)
     score_board[tostring(level)] = {}
     unlocked_levels = unlocked_levels + 1
   end
-  print("unlocked_levels")
-  print(unlocked_levels)
+  --if the score is good enough it is saved in its correct position which is given by the score
   for i=1,nr_of_scores_saved do
     if score_board[tostring(level)][tostring(i)]==nil then
       score_board[tostring(level)][tostring(i)]={player,score}
-      print(score_board[tostring(level)][tostring(i)][1])
-      print(score_board[tostring(level)][tostring(i)][2])
       break
     elseif score>= tonumber(score_board[tostring(level)][tostring(i)][2]) then
-      for t=nr_of_scores_saved,2,-1 do 
-        score_board[tostring(level)][tostring(t)] = score_board[tostring(level)][tostring(t+1)]
+      for t=nr_of_scores_saved-1,1,-1 do 
+        score_board[tostring(level)][tostring(t+1)] = score_board[tostring(level)][tostring(t)]
       end
       score_board[tostring(level)][tostring(i)]={player,score}
-      print(score_board[tostring(level)][tostring(i)][1])
-      print(score_board[tostring(level)][tostring(i)][2])
       break
     end
   end
@@ -80,27 +70,15 @@ end
 
 
 function save_to_file(score_board, file, unlocked_levels)
-  print("score_board")
-  print(score_board)
   -- if the file does not exist it is created
   file = io.open("game/score_table.txt","w+")
   io.output(file)
   --the table with the scores is written to the file
-  print ("table_length(score_board)")
-  print (table_length(score_board))
   for level_read=1, unlocked_levels do
     io.write("level".. tostring(level_read).."\n")
   -- for each level go through the level under here
-    print ("table_length(score_board[(level_read)])")
-    print (table_length(score_board[tostring(level_read)]))
     for player_i=1,table_length(score_board[tostring(level_read)]) do
-      print("loop index")
-      print(player_i)
       if score_board[tostring(level_read)][tostring(player_i)] ~= nil then
-        print("score_board[tostring(level_read)][tostring(player_i)][1]")
-        print(score_board[tostring(level_read)][tostring(player_i)][1])
-        print("score_board[tostring(level_read)][tostring(player_i)][2]")
-        print(score_board[tostring(level_read)][tostring(player_i)][2])
         io.write(score_board[tostring(level_read)][tostring(player_i)][1].."\n".. score_board[tostring(level_read)][tostring(player_i)][2].."\n") 
       end
     end

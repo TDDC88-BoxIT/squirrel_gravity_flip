@@ -1,8 +1,22 @@
 level1
 Amanda
 99999999
-Satan
-9880
+Amanda
+99999999
+Amanda
+99999999
+Bob the builder
+9971
+Bob the builder
+9951
 level2
-Anna
-9900
+Bob the builder
+9991
+Bob the builder
+9991
+Bob the builder
+9971
+Bob the builder
+9951
+Bob the builder
+9901

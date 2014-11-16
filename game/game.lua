@@ -71,11 +71,8 @@ function stop_game()
     change_character_timer:stop()
     change_character_timer=nil 
   end  
-  -- character name is only 3 characters no
-  print("game_score")
-  print(game_score)
   -- the 1 represent the current level bein played, should be made generic as soon as possible
-  score_page("Anna", game_score, 2)
+  score_page("Bob the builder", game_score, 1)
 end
 
 function create_game_character()
@@ -193,7 +190,7 @@ function draw_score()
   
 end
 
-
+--isn't this a copy of the function in score.lua?
 function draw_number(number, position, xplace, yplace)
 -- loads the picture corresponding to the correct digit
   if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
