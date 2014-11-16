@@ -21,14 +21,11 @@ function read_from_file()
         score_board[tostring(level_read)] = {}
         player_i = 1
         score_or_name = "player"
-        print(level_read)
       elseif score_or_name== "player" then
         player = s_line
         score_or_name= "score"
-        print(player)
       elseif score_or_name == "score" then
         score = s_line
-        print(score)
         score_or_name = "player"
         score_board[tostring(level_read)][tostring(player_i)] = {player,score}
         player_i = player_i+1 

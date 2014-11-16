@@ -72,7 +72,7 @@ function stop_game()
     change_character_timer=nil 
   end  
   -- the 1 represent the current level bein played, should be made generic as soon as possible
-  score_page("Bob the builder", game_score, 1)
+  score_page("Squirrel killer", game_score, 4)
 end
 
 function create_game_character()
