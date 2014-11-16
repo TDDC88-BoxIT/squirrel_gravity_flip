@@ -96,8 +96,9 @@ function menu_object:add_button(button_id, img_Path)
 end
 
 -- CLEARS ALL ADDED MENU ITEMS
-function menu_object:clear_buttons()
+function menu_object:reset()
   self.menu_items={}
+  self.indexed_item=1
 end
 
 -- RETURNS THE AMOUNT OF ITEMS WHICH HAVE BEEN ADDED TO THE MENU

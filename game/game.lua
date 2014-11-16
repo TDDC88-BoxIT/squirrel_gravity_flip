@@ -15,43 +15,57 @@ require ("tool_box/character_object")
 require ("game/score")
 require ("game/power_up")
 
-
 local imageDir = "images/"
 local mapDir = "map/"
 local player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
---local background = gfx.loadpng("images/level_sky.png")
 local gameCounter=0
-local gameSpeed = 10
+local gameSpeed = 10 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
+local current_level
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
+local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
+local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type,life) 
   game_score = 10000
-  game_levelCounter = 5 --TO BE PLACED SOMEWHERE ELSE
+  current_level = level_number --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
-
   current_game_type=game_type
   Level.load_level(level_number,current_game_type)
+  load_level_atttributes()
+
   create_game_character()
+
   if current_game_type=="tutorial" then
-    require("tutorial/tutorial_handler")
+    require("game/tutorial/tutorial_handler")
     create_tutorial_helper(level_number)
   end
   
   set_character_start_position()
-  image1 = gfx.loadpng(imageDir.."floor1.png")
-  timer = sys.new_timer(20, "update_cb")
+  timer = sys.new_timer(20, "update_game")
   pos_change = 0
   lives = life
+  player.invulnerable = false
+
+
+end
+ 
+-- LOADS THE LEVEL ATTRIBUTES IF THERE ARE ANY SPECIFIED IN THE LEVEL INPUT FILE
+function load_level_atttributes()
+  if (Level.attributes ~= nil) then
+    gameSpeed = Level.attributes.speed
+    upper_bound_y = Level.attributes.upper_bound_y
+    lower_bound_y = Level.attributes.lower_bound_y
+  end
 end
 
 function resume_game()   
-  timer = sys.new_timer(20, "update_cb")
+  timer = sys.new_timer(20, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
 
@@ -88,8 +102,6 @@ function create_game_character()
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
 
-
-
 function update_game_character()
   character:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
   character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
@@ -105,7 +117,7 @@ function set_character_start_position()
 end
 
 -- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
-function update_cb() 
+function update_game() 
   -- if lives > 0 then
   -- if game_score > 0 then
 
@@ -130,9 +142,10 @@ function move_character()
     player.new_x=player.cur_x+1
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
-      if player.cur_x<-1 then
-        get_squeezed() -- THIS FUNTION IS TRIGGERED WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+      if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+        get_killed()
       end
+      return
     elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
     end
@@ -143,6 +156,10 @@ function move_character()
         player.new_y=player.cur_y+i
       else
         player.new_y=player.cur_y-i
+      end
+      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+        get_killed()
+        break;
       end
       if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
         player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
@@ -179,7 +196,7 @@ function draw_score()
     xplace = 550
     yplace = 300
   end
-  local string_levelCounter = tostring(game_levelCounter)
+  local string_levelCounter = tostring(current_level)
   position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
   -- loops through the levelCounter that is stored as a string
   while position <= string.len(string_levelCounter) do
@@ -247,9 +264,49 @@ function draw_tiles()
   local sf = nil
     for k,v in pairs(Level.tiles) do
       if v.x-gameCounter+v.width>0 and v.visibility==true then
+        if v.gid == 9 then
+          move_cloud(v)
+        elseif v.gid == 10 then
+          move_flame(v)
+        end
         screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
       end
     end
+end
+
+--[[
+Handles the movement of clouds. If no thread timer is active, creates one.
+If thread timer has counted to 20, invert direction (invert vaue of attribute "up")
+Afterwards, either move cloud.y up or down by a certain value.
+
+This should be called at some point during update before the screen:copyfrom function call in draw_tiles. For the moment, it is called from draw_tiles, thtough it probably shouldn't be.
+]]
+function move_cloud(cloud)
+  if(cloud.directionTimer == nil) then
+    cloud.directionTimer = 0
+  end
+  cloud.directionTimer = cloud.directionTimer + 1
+  if(cloud.directionTimer >= 20) then
+    cloud.up = not cloud.up
+    cloud.directionTimer = 0
+  end
+  if(cloud.up == true) then
+    cloud.y = cloud.y + 8
+  else
+    cloud.y = cloud.y - 8
+  end
+end
+
+--[[
+Handles the movement of flames. Moves the flame to the left at a steady rate. toDo: Make it not start moving until it's close to entering the screen.
+This should be called at some point during update before the screen:copyfrom function call in draw_tiles. For the moment, it is called from draw_tiles, thtough it probably shouldn't be.
+]]
+function move_flame(flame)
+  -- The flame and player x comparison currently doesn't work properly, I'll take a look at why ASAP. For now, the flame starts moving as soon as the game starts though the idea is that
+  -- it should start moving just before entering the screen.
+  --if(flame.x > player.cur_x) then
+    flame.x = flame.x - 25    
+  --end
 end
 
 --[[
@@ -285,19 +342,10 @@ function get_lives()
 end
 
 
-function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
-  --levelCounter = levelCounter+1 --LEVELCOUNTER - STILL TO BE IMPLEMENTED - NEEDS TO BE READ FROM FILE BETWEEN RUNS?!
-  --levelCounter = 1
-  --print(levelCounter)
-  stop_game()
-  change_global_game_state(0)
-  start_menu("levelwin_menu")
-end
-
 function game_navigation(key, state)
-  if key=="ok" and state== 'up' then
+  if key=="ok" and state== 'down' then
     if direction_flag == "down" then
-       if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
         character:flip()
         direction_flag="up"
       end
@@ -323,9 +371,23 @@ end
 function change_game_speed(new_speed, time)
   gameSpeed = new_speed
   speed_timer = sys.new_timer(time, "reset_game_speed")
-  end
+end
+
+function activate_invulnerability(time)
+  player.invulnerable = true
+  invul_timer = sys.new_timer(time, "end_invulnerability")
+end
+
+function get_invulnerability_state()
+  return player.invulnerable
+end
+
+function end_invulnerability()
+  player.invulnerable = false
+  invul_timer:stop()
+end
 
 function reset_game_speed()
-  gameSpeed = 5
+  gameSpeed = 10
   speed_timer:stop()
   end

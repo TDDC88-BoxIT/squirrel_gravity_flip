@@ -3,25 +3,12 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   for k,v in pairs(tileSet) do
     local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
     if temp1 ~= nil then
-      if v.gid==1 then -- gid==1 IS A FLOOR TILE
-        return temp1,temp2,temp3,temp4
-      
-    else
-      activate_power_up(v.gid)
+      if v.name=="floor" then -- gid==1 IS A FLOOR TILE
+        return temp1,temp2,temp3,temp4   
+    elseif v.visibility == true then
+      activate_power_up(v.name)
       v.visibility = false
       end
-      --[[
-      elseif v.gid==2 then -- HANDLE COLLISION WITH POWERUP 1
-        v.visibility=false
-      elseif v.gid==3 then -- HANDLE COLLISION WITH POWERUP 2
-        v.visibility=false
-      elseif v.gid==4 then -- HANDLE COLLISION WITH POWERUP 2
-        v.visibility=false
-      elseif v.gid==5 then -- HANDLE COLLISION WITH POWERUP 2
-        v.visibility=false
-      end
-      
-      ]]--
     end
   end
   return nil
@@ -41,6 +28,7 @@ end
 function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
   local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
   if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
+    --[[
     local X={{"ALeft",ax1},{"ARight",ax2},{"BLeft",bx1},{"BRight",bx2}}
     local Y={{"ABottom",ay1},{"ATop",ay2},{"BBottom",by1},{"BTop",by2}}
     local comp = function(a,b)
@@ -49,6 +37,9 @@ function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
     table.sort(X, comp)
     table.sort(Y,comp)
     return X[2][1], X[3][1], Y[2][1], Y[3][1]
+    ]]
+
+    return "hit"
   end
   return nil
 end
