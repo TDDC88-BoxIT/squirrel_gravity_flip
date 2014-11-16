@@ -1,4 +1,4 @@
-function get_killed()
+function get_killed() -- TO BE CALLED WHEN THE SQUIRREL IS KILLED. DECREAES LIFE AND CALLS GAMEOVER MENU
 	stop_game()
 	if(check_alive()) then
 		decrease_life()

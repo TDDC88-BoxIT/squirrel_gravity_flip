@@ -8,8 +8,12 @@ Level = {
   raw_level = nil,
   version = nil,
   width = nil,
-  tiles = nil;
-
+  tiles = nil,
+  attributes = {
+    speed = nil,
+    upper_bound_y = nil,
+    lower_bound_y = nil
+  }
 }
 local floorimg
 local powerup1Img
@@ -31,9 +35,12 @@ function Level.load_level (level_number,game_type)
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
+  Level.attributes = loaded_level.attributes
   -- Get all the tiles and saves them into the Level.tiles table
   Level.tiles = get_tiles()
+  --return Level
 end
+
 
 function get_tiles()
   -- Selects the first layer in the lua level file, as of today only one layer is supported

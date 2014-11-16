@@ -15,7 +15,6 @@ require ("tool_box/character_object")
 require ("game/score")
 require ("game/power_up")
 
-
 local imageDir = "images/"
 local mapDir = "map/"
 local player = {}
@@ -23,11 +22,13 @@ local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local gameCounter=0
-local gameSpeed = 10
+local gameSpeed = 10 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local current_level
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
+local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
+local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type,life) 
@@ -36,6 +37,8 @@ function start_game(level_number,game_type,life)
   gameCounter=0
   current_game_type=game_type
   Level.load_level(level_number,current_game_type)
+  load_level_atttributes()
+
   create_game_character()
 
   if current_game_type=="tutorial" then
@@ -50,6 +53,15 @@ function start_game(level_number,game_type,life)
   player.invulnerable = false
 
 
+end
+ 
+-- LOADS THE LEVEL ATTRIBUTES IF THERE ARE ANY SPECIFIED IN THE LEVEL INPUT FILE
+function load_level_atttributes()
+  if (Level.attributes ~= nil) then
+    gameSpeed = Level.attributes.speed
+    upper_bound_y = Level.attributes.upper_bound_y
+    lower_bound_y = Level.attributes.lower_bound_y
+  end
 end
 
 function resume_game()   
@@ -130,7 +142,7 @@ function move_character()
     player.new_x=player.cur_x+1
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
-      if player.cur_x<-1 then -- WHEN THE CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+      if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
         get_killed()
       end
       return
@@ -144,6 +156,10 @@ function move_character()
         player.new_y=player.cur_y+i
       else
         player.new_y=player.cur_y-i
+      end
+      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+        get_killed()
+        break;
       end
       if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
         player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING

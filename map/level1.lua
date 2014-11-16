@@ -6,6 +6,11 @@ return {
   height = 14,
   tilewidth = 32,
   tileheight = 32,
+  attributes = {
+    speed = 10,
+    upper_bound_y = 700,
+    lower_bound_y = 0
+  },
   properties = {},
   tilesets = {
     {
