@@ -72,7 +72,10 @@ function stop_game()
     change_character_timer=nil 
   end  
   -- character name is only 3 characters no
-  score_page("pl1", game_score)
+  print("game_score")
+  print(game_score)
+  -- the 1 represent the current level bein played, should be made generic as soon as possible
+  score_page("Anna", game_score, 2)
 end
 
 function create_game_character()
