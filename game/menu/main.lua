@@ -3,7 +3,7 @@ require("../tool_box/character_object")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
-local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu"
+local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu" OR "gameover_menu"
 local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
@@ -50,6 +50,22 @@ function add_menu_items()
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
+  elseif menuState == "level_menu" then
+    menu:add_button("zero",imageDir.."numbers/zero.png")
+    menu:add_button("one",imageDir.."numbers/one.png")
+    menu:add_button("two",imageDir.."numbers/two.png")
+    menu:add_button("three",imageDir.."numbers/three.png")
+    menu:add_button("four",imageDir.."numbers/four.png")
+    menu:add_button("five",imageDir.."numbers/five.png")
+    menu:add_button("six",imageDir.."numbers/six.png")
+    menu:add_button("seven",imageDir.."numbers/seven.png")
+    menu:add_button("eight",imageDir.."numbers/eight.png")
+    menu:add_button("nine",imageDir.."numbers/nine.png")
+    menu:add_button("ten",imageDir.."numbers/zero.png")
+    menu:add_button("eleven",imageDir.."numbers/one.png")
+    menu:add_button("twelve",imageDir.."numbers/two.png")
+    menu:add_button("thirteen",imageDir.."numbers/three.png")
+    menu:add_button("fourteen",imageDir.."numbers/four.png") 
   end
 end
 
@@ -61,7 +77,7 @@ end
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
-  if menuState == "start_menu" or menuState == "pause_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
+  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
@@ -73,9 +89,9 @@ function add_menu_bling()
   
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
   backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
-  if menuState == "start_menu" or menuState == "pause_menu" then
+  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" then
     backdrop:fill({r=0,g=0,b=0,a=200})
-  elseif menuState == "levelwin_menu" then
+  elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     backdrop:fill({r=0,g=0,b=0,a=100})
   end
   screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
@@ -116,10 +132,12 @@ function draw_menu()
   if addBling==true then
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
+  if menuState == "level_menu" then
+    menu_y = screen:get_height()/100 -- MAKES THE LEVEL MENU START 1/100 DOWN FROM THE TOP OF THE SCREEN, BUT FOR OTHER MENU STATES THE ORIGINAL VALUE OF MENU_Y IS KEPT (SEE TOP OF MAIN.LUA)
+  end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   if menuState == "levelwin_menu" or menuState == "gameover_menu" then
-    --draw_level() --STILL TO BE IMPLEMENTED
-    draw_score()
+    draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
   end
   menu:destroy()
   gfx.update()
@@ -145,6 +163,9 @@ function menu_navigation(key, state)
       stop_menu()
       change_global_game_state(1)
       start_game(1,"story",1)
+    elseif menu:get_indexed_item().id=="select_level" then --STARTS THE LEVEL SELECTION MENU
+      stop_menu()
+      start_menu("level_menu")
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
