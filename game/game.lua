@@ -187,7 +187,6 @@ function activate_power_up(pu_name)
   end
 end
 
---is it possible to move this back to score.lua or should score.lua be moved to this file?
 --the function that draws the score and the level
 function call_draw_score()
   --DRAWS SCORE
