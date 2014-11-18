@@ -151,7 +151,7 @@ function menu_navigation(key, state)
     elseif menu:get_indexed_item().id=="tutorial" then
       stop_menu()
       change_global_game_state(1)
-      start_game(1,"tutorial",10)
+      start_game(1,"tutorial",1)
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then
