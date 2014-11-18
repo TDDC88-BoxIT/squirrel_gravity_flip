@@ -326,7 +326,7 @@ function draw_lives()
 end
 
 function check_alive()
-  if lives>0 then
+  if lives>1 then
   return true
 else
   return false
