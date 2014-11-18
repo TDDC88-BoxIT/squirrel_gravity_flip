@@ -13,7 +13,6 @@ require ("game/collision_handler")
 require ("game/fail_and_success_handler")
 require ("tool_box/character_object")
 require ("game/score")
-require ("game/power_up")
 
 local imageDir = "images/"
 local mapDir = "map/"
@@ -85,8 +84,6 @@ function stop_game()
     change_character_timer:stop()
     change_character_timer=nil 
   end  
-  -- the 1 represent the current level bein played, should be made generic as soon as possible
-  score_page("Squirrel killer", game_score, 4)
 end
 
 function create_game_character()
@@ -169,8 +166,30 @@ function move_character()
     end  
 end
 
+
+-- ACTIVATES A POWERUP DEPENDING ON pu-type
+
+function activate_power_up(pu_name)
+  if(pu_name=="powerup1") then -- Score tile
+    game_score = game_score + 100
+  elseif(pu_name=="powerup2") then -- Speed tile
+    change_game_speed(15,1000)
+  elseif(pu_name=="powerup3") then -- Freeze tile
+    change_game_speed(1,1000)    
+  elseif(pu_name=="powerup4") then -- Invulnerability tile
+    activate_invulnerability(10000)
+  elseif(pu_name == "win") then -- Win tile!
+    -- the 1 represent the current level bein played, should be made generic as soon as possible
+    score_page("Squirrel killer", game_score, 4)
+    levelwin()
+  elseif((pu_name == "obstacle1" or pu_name == "obstacle2" or pu_name == "obstacle3" or pu_name == "obstacle4") and not get_invulnerability_state()) then -- Obstacles
+    get_killed() -- This NEEDS to be changed to the actual fail screen when that has been implemented
+  end
+end
+
+--is it possible to move this back to score.lua or should score.lua be moved to this file?
 --the function that draws the score and the level
-function draw_score()
+function call_draw_score()
   --DRAWS SCORE
   if global_game_state == 1 then --game situation, place score in the upper left corner of the screen
     xplace = 10
@@ -179,14 +198,7 @@ function draw_score()
     xplace = 550
     yplace = 370
   end
-  local string_score = tostring(game_score)
-  position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
-  -- loops through the score that is stored as a string
-  while position <= string.len(string_score) do
-    -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_score,position,position),position, xplace, yplace)
-    position = position + 1
-  end
+  draw_score(tostring(game_score), xplace,yplace)
   
   --DRAWS LEVEL
   if global_game_state == 1 then --game situation, place level in the upper right corner of the screen
@@ -196,52 +208,16 @@ function draw_score()
     xplace = 550
     yplace = 300
   end
-  local string_levelCounter = tostring(current_level)
-  position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
-  -- loops through the levelCounter that is stored as a string
-  while position <= string.len(string_levelCounter) do
-    -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_levelCounter,position,position),position, xplace, yplace)
-    position = position + 1
-  end
-  
+  draw_score(tostring(current_level), xplace,yplace)
 end
 
---isn't this a copy of the function in score.lua?
-function draw_number(number, position, xplace, yplace)
--- loads the picture corresponding to the correct digit
-  if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
-  elseif number == "1" then 
-    score = gfx.loadpng("images/numbers/one.png")
-  elseif number == "2" then 
-    score = gfx.loadpng("images/numbers/two.png")
-  elseif number == "3" then 
-    score = gfx.loadpng("images/numbers/three.png")
-  elseif number == "4" then 
-    score = gfx.loadpng("images/numbers/four.png")
-  elseif number == "5" then 
-    score = gfx.loadpng("images/numbers/five.png")
-  elseif number == "6" then 
-    score = gfx.loadpng("images/numbers/six.png")
-  elseif number == "7" then 
-    score = gfx.loadpng("images/numbers/seven.png")
-  elseif number == "8" then 
-    score = gfx.loadpng("images/numbers/eight.png") 
-  elseif number == "9" then 
-    score = gfx.loadpng("images/numbers/nine.png")
-  end
-  -- prints the loaded picture
-  screen:copyfrom(score,nil ,{x=xplace+position*30, y = yplace, height = 50, width = 30}, true)
-  score:destroy()
-
-end
 
 function draw_screen()
  --draw_background()
   draw_tiles()
   move_character()
   draw_character()
-  draw_score(game_score)
+  draw_score(tostring(game_score),10,10)
   draw_lives()
   if current_game_type=="tutorial" then
     draw_tutorial_helper()
