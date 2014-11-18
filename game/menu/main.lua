@@ -118,7 +118,7 @@ function draw_menu()
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   if menuState == "levelwin_menu" or menuState == "gameover_menu" then
     --draw_level() --STILL TO BE IMPLEMENTED
-    draw_score()
+    call_draw_score()
   end
   menu:destroy()
   gfx.update()
@@ -153,6 +153,9 @@ function menu_navigation(key, state)
       change_global_game_state(1)
       start_game(1,"tutorial",0)
     elseif menu:get_indexed_item().id=="high_score" then
+      stop_menu()
+      change_global_game_state(1)
+      draw_highscore(1)
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then
       -- COMMAND TO VIEW SETTINGS

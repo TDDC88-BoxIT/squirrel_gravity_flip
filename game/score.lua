@@ -91,7 +91,22 @@ function table_length(T)
 end
 
 
-function draw_number(number, position)
+--the function that draws the score in the top left score 
+function draw_score(game_score, x_coordinate, y_coordinate )
+  local string_score = tostring(game_score)
+  position = 1
+  -- loops through the score that is stored as a string
+  while position <= string.len(string_score) do
+    -- calls on the print function for the digit, sends the number as a string
+    draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
+    position = position + 1
+  end
+end
+
+function draw_number(number, position, x_coordinate, y_coordinate)
+  print("draw number")
+  print("number")
+  print(number)
 -- loads the picture corresponding to the correct digit
   if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
   elseif number == "1" then 
@@ -114,20 +129,32 @@ function draw_number(number, position)
     score = gfx.loadpng("images/numbers/nine.png")
   end
   -- prints the loaded picture
-  screen:copyfrom(score,nil ,{x=10+position*30, y = 10, height = 50, width = 30}, true)
+  
+  print("x_coordinate")
+  print(x_coordinate)
+  print("y_coordinate")
+  print(y_coordinate)
+  print("score")
+  print(score)
+  screen:copyfrom(score,nil ,{x=x_coordinate+position*30, y = y_coordinate, height = 50, width = 30}, true)
   score:destroy()
 end
 
 
---the function that draws the score in the top left score 
-function draw_score(game_score)
-  local string_score = tostring(game_score)
-  position = 1
-  -- loops through the score that is stored as a string
-  while position <= string.len(string_score) do
-    -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_score,position,position),position)
-    position = position + 1
-  end
+function draw_highscore(level) 
+  print("draw highscore")
+  local position
+  local x_coordinate = 100
+  local y_coordinate
+  read_from_file()
+  print("loop")
+  for i=1,5 do
+    y_coordinate = 100+80*(i-1)
+    position = 1
+    string_score= score_board[tostring(level)][tostring(i)][2] 
+    while position <= string.len(string_score) do
+      draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
+      position = position + 1
+    end
+  end  
 end
-
