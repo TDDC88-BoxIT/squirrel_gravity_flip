@@ -107,7 +107,7 @@ function draw_number(number, position, x_coordinate, y_coordinate)
   print("draw number")
   print("number")
   print(number)
--- loads the picture corresponding to the correct digit
+-- loads the picture corresponding to the correct digit or letter. Feel free to refactor 
   if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
   elseif number == "1" then 
     score = gfx.loadpng("images/numbers/one.png")
@@ -127,6 +127,64 @@ function draw_number(number, position, x_coordinate, y_coordinate)
     score = gfx.loadpng("images/numbers/eight.png") 
   elseif number == "9" then 
     score = gfx.loadpng("images/numbers/nine.png")
+  elseif number == "A" then
+    score = gfx.loadpng("images/numbers/A.png")
+  elseif number == "B" then
+    score = gfx.loadpng("images/numbers/B.png")
+  elseif number == "C" then
+    score = gfx.loadpng("images/numbers/C.png")
+  elseif number == "D" then
+    score = gfx.loadpng("images/numbers/D.png")
+  elseif number == "E" then
+    score = gfx.loadpng("images/numbers/E.png")
+  elseif number == "F" then
+    score = gfx.loadpng("images/numbers/F.png")
+  elseif number == "G" then
+    score = gfx.loadpng("images/numbers/G.png")
+  elseif number == "H" then
+    score = gfx.loadpng("images/numbers/H.png")
+  elseif number == "I" then
+    score = gfx.loadpng("images/numbers/I.png")
+  elseif number == "J" then
+    score = gfx.loadpng("images/numbers/J.png")
+  elseif number == "K" then
+    score = gfx.loadpng("images/numbers/K.png")
+  elseif number == "L" then
+    score = gfx.loadpng("images/numbers/L.png")
+  elseif number == "M" then
+    score = gfx.loadpng("images/numbers/M.png")
+  elseif number == "N" then
+    score = gfx.loadpng("images/numbers/N.png")
+  elseif number == "O" then
+    score = gfx.loadpng("images/numbers/O.png")
+  elseif number == "P" then
+    score = gfx.loadpng("images/numbers/P.png")
+  elseif number == "Q" then
+    score = gfx.loadpng("images/numbers/Q.png")
+  elseif number == "R" then
+    score = gfx.loadpng("images/numbers/R.png")
+  elseif number == "S" then
+    score = gfx.loadpng("images/numbers/S.png")
+  elseif number == "T" then
+    score = gfx.loadpng("images/numbers/T.png")
+  elseif number == "U" then
+    score = gfx.loadpng("images/numbers/U.png")
+  elseif number == "V" then
+    score = gfx.loadpng("images/numbers/V.png")
+  elseif number == "W" then
+    score = gfx.loadpng("images/numbers/W.png")
+  elseif number == "X" then
+    score = gfx.loadpng("images/numbers/X.png")
+  elseif number == "Y" then
+    score = gfx.loadpng("images/numbers/Y.png")
+  elseif number == "Z" then
+    score = gfx.loadpng("images/numbers/Z.png")
+
+    
+    
+    
+    
+    
   end
   -- prints the loaded picture
   
