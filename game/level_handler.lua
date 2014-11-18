@@ -78,7 +78,7 @@ function get_tiles()
 end
 
 function load_images(tile_name)
-  if tile_name == "floor" then
+  if tile_name == "floor1" then
     floorimg = gfx.loadpng("images/floor1.png")
   elseif tile_name == "powerup1" then
     powerup1Img = gfx.loadpng("images/powerup1.png") 
@@ -96,13 +96,13 @@ function load_images(tile_name)
     obstacle3Img = gfx.loadpng("images/obstacle3.png")
   elseif tile_name == "obstacle4" then
     flame1Img = gfx.loadpng("images/flame1.png")
-  elseif tile_name == "win" then
+  elseif tile_name == "winTile" then
     winImg = gfx.loadpng("images/winTile.png")
   end 
 end
 
 function get_image(tile_name)
-  if tile_name == "floor" then
+  if tile_name == "floor1" then
     return floorimg
   elseif tile_name == "powerup1" then
     return powerup1Img
