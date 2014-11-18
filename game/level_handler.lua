@@ -123,6 +123,6 @@ function get_image(tile_name)
   elseif tile_name == "win" then
     return winImg
   else
-    return nil
+    return winImg
   end 
 end
