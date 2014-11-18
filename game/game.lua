@@ -195,8 +195,8 @@ function call_draw_score()
     xplace = 10
     yplace = 10
   elseif global_game_state == 0 then --menu situation, place score in the center of the screen
-    xplace = 550
-    yplace = 370
+    xplace = 200
+    yplace = 10
   end
   draw_score(tostring(game_score), xplace,yplace)
   
@@ -205,8 +205,8 @@ function call_draw_score()
     xplace = 1000
     yplace = 10
   elseif global_game_state == 0 then --menu situation, place level in the center of the screen
-    xplace = 550
-    yplace = 300
+    xplace = 100
+    yplace = 10
   end
   draw_score(tostring(current_level), xplace,yplace)
 end
