@@ -187,28 +187,20 @@ function draw_number(number, position, x_coordinate, y_coordinate)
     
   end
   -- prints the loaded picture
-  
-  print("x_coordinate")
-  print(x_coordinate)
-  print("y_coordinate")
-  print(y_coordinate)
-  print("score")
-  print(score)
   screen:copyfrom(score,nil ,{x=x_coordinate+position*30, y = y_coordinate, height = 50, width = 30}, true)
   score:destroy()
 end
 
 
 function draw_highscore(level) 
-  print("draw highscore")
   local position
   local x_coordinate = 100
   local y_coordinate
   read_from_file()
-  print("loop")
   for i=1,5 do
     y_coordinate = 100+80*(i-1)
     position = 1
+    print(score_board[tostring(level)][tostring(i)][1] )
     string_score= score_board[tostring(level)][tostring(i)][2] 
     while position <= string.len(string_score) do
       draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
