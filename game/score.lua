@@ -201,7 +201,7 @@ function draw_highscore(level)
     print("in loop")
     y_coordinate = 300+60*(i-1)
     position = 1
-    draw_score(score_board[tostring(level)][tostring(i)][1], 300, y_coordinate)
+    draw_score(score_board[tostring(level)][tostring(i)][1], 380, y_coordinate)
     string_score= score_board[tostring(level)][tostring(i)][2] 
     while position <= string.len(string_score) do
       draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
