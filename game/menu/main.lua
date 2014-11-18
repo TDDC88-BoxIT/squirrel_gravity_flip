@@ -39,6 +39,7 @@ function stop_menu()
 function add_menu_items()
   if menuState == "start_menu" or menuState == "pause_menu" then
     menu:add_button("start_new",imageDir.."menuImg/start.png")
+    menu:add_button("select_level", imageDir.."menuImg/select_level.png")
     if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
       menu:add_button("high_score",imageDir.."menuImg/highScore.png")
       menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
