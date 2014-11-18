@@ -143,7 +143,7 @@ function menu_navigation(key, state)
     if menu:get_indexed_item().id=="start_new" then
       stop_menu()
       change_global_game_state(1)
-      start_game(1,"story",1)
+      start_game(1,"story",0)
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
@@ -151,7 +151,7 @@ function menu_navigation(key, state)
     elseif menu:get_indexed_item().id=="tutorial" then
       stop_menu()
       change_global_game_state(1)
-      start_game(1,"tutorial",1)
+      start_game(1,"tutorial",0)
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then

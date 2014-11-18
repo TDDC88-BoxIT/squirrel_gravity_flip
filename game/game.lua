@@ -242,7 +242,7 @@ function draw_screen()
   move_character()
   draw_character()
   draw_score(game_score)
-  --draw_lives()
+  draw_lives()
   if current_game_type=="tutorial" then
     draw_tutorial_helper()
   end
