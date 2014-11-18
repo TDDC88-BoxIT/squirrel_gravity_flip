@@ -104,9 +104,6 @@ function draw_score(game_score, x_coordinate, y_coordinate )
 end
 
 function draw_number(number, position, x_coordinate, y_coordinate)
-  print("draw number")
-  print("number")
-  print(number)
 -- loads the picture corresponding to the correct digit or letter. Feel free to refactor 
   if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
   elseif number == "1" then 
@@ -126,67 +123,68 @@ function draw_number(number, position, x_coordinate, y_coordinate)
   elseif number == "8" then 
     score = gfx.loadpng("images/numbers/eight.png") 
   elseif number == "9" then 
-    score = gfx.loadpng("images/numbers/nine.png")
-  elseif number == "A" then
-    score = gfx.loadpng("images/numbers/A.png")
-  elseif number == "B" then
-    score = gfx.loadpng("images/numbers/B.png")
-  elseif number == "C" then
-    score = gfx.loadpng("images/numbers/C.png")
-  elseif number == "D" then
-    score = gfx.loadpng("images/numbers/D.png")
-  elseif number == "E" then
-    score = gfx.loadpng("images/numbers/E.png")
-  elseif number == "F" then
-    score = gfx.loadpng("images/numbers/F.png")
-  elseif number == "G" then
-    score = gfx.loadpng("images/numbers/G.png")
-  elseif number == "H" then
-    score = gfx.loadpng("images/numbers/H.png")
-  elseif number == "I" then
-    score = gfx.loadpng("images/numbers/I.png")
-  elseif number == "J" then
-    score = gfx.loadpng("images/numbers/J.png")
-  elseif number == "K" then
-    score = gfx.loadpng("images/numbers/K.png")
-  elseif number == "L" then
-    score = gfx.loadpng("images/numbers/L.png")
-  elseif number == "M" then
-    score = gfx.loadpng("images/numbers/M.png")
-  elseif number == "N" then
-    score = gfx.loadpng("images/numbers/N.png")
-  elseif number == "O" then
-    score = gfx.loadpng("images/numbers/O.png")
-  elseif number == "P" then
-    score = gfx.loadpng("images/numbers/P.png")
-  elseif number == "Q" then
-    score = gfx.loadpng("images/numbers/Q.png")
-  elseif number == "R" then
-    score = gfx.loadpng("images/numbers/R.png")
-  elseif number == "S" then
-    score = gfx.loadpng("images/numbers/S.png")
-  elseif number == "T" then
-    score = gfx.loadpng("images/numbers/T.png")
-  elseif number == "U" then
-    score = gfx.loadpng("images/numbers/U.png")
-  elseif number == "V" then
-    score = gfx.loadpng("images/numbers/V.png")
-  elseif number == "W" then
-    score = gfx.loadpng("images/numbers/W.png")
-  elseif number == "X" then
-    score = gfx.loadpng("images/numbers/X.png")
-  elseif number == "Y" then
-    score = gfx.loadpng("images/numbers/Y.png")
-  elseif number == "Z" then
-    score = gfx.loadpng("images/numbers/Z.png")
-
+    score = gfx.loadpng("images/numbers/nine.png") 
+  else
+    number = string.upper(number)
     
-    
-    
-    
-    
+    print(number)
+    if number == "A" then
+      score = gfx.loadpng("images/font/A.png")
+    elseif number == "B" then
+      score = gfx.loadpng("images/font/B.png")
+    elseif number == "C" then
+      score = gfx.loadpng("images/font/C.png")
+    elseif number == "D" then
+      score = gfx.loadpng("images/font/D.png")
+    elseif number == "E" then
+      score = gfx.loadpng("images/font/E.png")
+    elseif number == "F" then
+      score = gfx.loadpng("images/font/F.png")
+    elseif number == "G" then
+      score = gfx.loadpng("images/font/G.png")
+    elseif number == "H" then
+      score = gfx.loadpng("images/font/H.png")
+    elseif number == "I" then
+      score = gfx.loadpng("images/font/I.png")
+    elseif number == "J" then
+      score = gfx.loadpng("images/font/J.png")
+    elseif number == "K" then
+      score = gfx.loadpng("images/font/K.png")
+    elseif number == "L" then
+      score = gfx.loadpng("images/font/L.png")
+    elseif number == "M" then
+      score = gfx.loadpng("images/font/M.png")
+    elseif number == "N" then
+      score = gfx.loadpng("images/font/N.png")
+    elseif number == "O" then
+      score = gfx.loadpng("images/font/O.png")
+    elseif number == "P" then
+      score = gfx.loadpng("images/font/P.png")
+    elseif number == "Q" then
+      score = gfx.loadpng("images/font/Q.png")
+    elseif number == "R" then
+      score = gfx.loadpng("images/font/R.png")
+    elseif number == "S" then
+      score = gfx.loadpng("images/font/S.png")
+    elseif number == "T" then
+      score = gfx.loadpng("images/font/T.png")
+    elseif number == "U" then
+      score = gfx.loadpng("images/font/U.png")
+    elseif number == "V" then
+      score = gfx.loadpng("images/font/V.png")
+    elseif number == "W" then
+      score = gfx.loadpng("images/font/W.png")
+    elseif number == "X" then
+      score = gfx.loadpng("images/font/X.png")
+    elseif number == "Y" then
+      score = gfx.loadpng("images/font/Y.png")
+    elseif number == "Z" then
+      score = gfx.loadpng("images/font/Z.png")
+    else 
+      score = gfx.loadpng("images/font/Z.png")
+    end
+    -- prints the loaded picture
   end
-  -- prints the loaded picture
   screen:copyfrom(score,nil ,{x=x_coordinate+position*30, y = y_coordinate, height = 50, width = 30}, true)
   score:destroy()
 end
@@ -197,14 +195,19 @@ function draw_highscore(level)
   local x_coordinate = 620
   local y_coordinate
   read_from_file()
-  for i=1,5 do
+  index = 1
+  i=1
+  while score_board[tostring(level)][tostring(i)] ~= nil and index<=5  do
+    print("in loop")
     y_coordinate = 300+60*(i-1)
     position = 1
-    draw_score(score_board[tostring(level)][tostring(i)][1], 10, y_coordinate)
+    draw_score(score_board[tostring(level)][tostring(i)][1], 300, y_coordinate)
     string_score= score_board[tostring(level)][tostring(i)][2] 
     while position <= string.len(string_score) do
       draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
       position = position + 1
     end
+    index = index +1
+    i = i +1
   end  
 end

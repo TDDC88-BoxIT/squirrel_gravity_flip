@@ -1,34 +1,14 @@
 level1
+Rasmus
+999999990
+Rasmus
+999999990
+Rasmus
+999999990
+Rasmus
+999999990
 Amanda
-99999999
-Amanda
-99999999
-Amanda
-99999999
-Bob the builder
-9971
-Bob the builder
-9951
+1
 level2
-Bob the builder
-9991
-Bob the builder
-9991
-Bob the builder
-9971
-Bob the builder
-9951
-Bob the builder
-9901
 level3
 level4
-Squirrel killer
-10170
-Squirrel killer
-10170
-Squirrel killer
-10170
-Squirrel killer
-10110
-Squirrel killer
-10070

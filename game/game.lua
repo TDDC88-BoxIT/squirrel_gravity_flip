@@ -180,7 +180,7 @@ function activate_power_up(pu_name)
     activate_invulnerability(10000)
   elseif(pu_name == "win") then -- Win tile!
     -- the 1 represent the current level bein played, should be made generic as soon as possible
-    score_page("Squirrel killer", game_score, 4)
+    score_page("BozzzRasmus", game_score, 1)
     levelwin()
   elseif((pu_name == "obstacle1" or pu_name == "obstacle2" or pu_name == "obstacle3" or pu_name == "obstacle4") and not get_invulnerability_state()) then -- Obstacles
     get_killed() -- This NEEDS to be changed to the actual fail screen when that has been implemented
