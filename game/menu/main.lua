@@ -143,7 +143,7 @@ function menu_navigation(key, state)
     if menu:get_indexed_item().id=="start_new" then
       stop_menu()
       change_global_game_state(1)
-      start_game(16,"story",0)
+      start_game(5,"story",0)
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
