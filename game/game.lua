@@ -279,9 +279,10 @@ This should be called at some point during update before the screen:copyfrom fun
 function move_flame(flame)
   -- The flame and player x comparison currently doesn't work properly, I'll take a look at why ASAP. For now, the flame starts moving as soon as the game starts though the idea is that
   -- it should start moving just before entering the screen.
-  --if(flame.x > player.cur_x) then
+  local distanceToEdge = 1080;
+  if(flame.x - gameCounter < player.cur_x + distanceToEdge) then
     flame.x = flame.x - 25    
-  --end
+  end
 end
 
 --[[

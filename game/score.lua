@@ -211,3 +211,4 @@ function draw_highscore(level)
     i = i +1
   end  
 end
+
