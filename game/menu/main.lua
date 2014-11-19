@@ -1,5 +1,6 @@
 require("../tool_box/menu_object")
 require("../tool_box/character_object")
+require("game/level_config")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
@@ -145,6 +146,16 @@ function menu_navigation(key, state)
       stop_menu()
       change_global_game_state(1)
       start_game(1,"story",0)
+    elseif menu:get_indexed_item().id=="select_level" then
+      local unlocked_level = read_unlocked_level()
+      local max_no_levels = 15
+      local i = nil
+      for i=1,unlocked_level do 
+        print("level " .. i .. ": unlocked") 
+      end
+      for i=(unlocked_level+1), max_no_levels do 
+        print("level " .. i .. ": locked") 
+      end
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
