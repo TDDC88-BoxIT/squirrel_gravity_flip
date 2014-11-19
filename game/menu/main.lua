@@ -70,6 +70,12 @@ function add_menu_items()
 end
 
 function configure_menu_height()
+  menuState = get_menu_state()
+  if menuState == "level_menu" then
+    local box_height = (screen:get_height()-2*screen:get_height()/100-20*menu:get_item_amount())/menu:get_item_amount()
+    menu:set_button_size(nil, box_height)
+  end
+  
   local menuHeight= 20+(menu:get_button_size().height+15)*(menu:get_item_amount()) 
   menu:set_size(nil,menuHeight)
 end
