@@ -116,7 +116,7 @@ function draw_menu()
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-  if menuState == "levelwin_menu" or menuState == "gameover_menu" then
+  if menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
     --draw_level() --STILL TO BE IMPLEMENTED
     draw_score()
   end

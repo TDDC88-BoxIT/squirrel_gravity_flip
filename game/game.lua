@@ -172,6 +172,9 @@ end
 --the function that draws the score and the level
 function draw_score()
   --DRAWS SCORE
+  if get_menu_state() == "gameover_menu" then -- Don't draw score on gameover menu
+    return
+  end
   if global_game_state == 1 then --game situation, place score in the upper left corner of the screen
     xplace = 10
     yplace = 10
@@ -243,6 +246,7 @@ function draw_screen()
   draw_character()
   draw_score(game_score)
   draw_lives()
+  
   if current_game_type=="tutorial" then
     draw_tutorial_helper()
   end
@@ -310,6 +314,9 @@ end
 DRAWS THE GAME CHARACTER ON SCREEN
 ]]
 function draw_character()
+  if get_menu_state() == "gameover_menu" or get_menu_state() == "levelwin_menu" then -- Do not draw the character on menues. Not sure why start and pause menues aren't needed here.
+    return
+  end
   screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
 end
 
