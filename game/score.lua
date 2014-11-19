@@ -131,3 +131,6 @@ function draw_score(game_score)
   end
 end
 
+function Nothingdone()
+  print("hej")
+  end
