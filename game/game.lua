@@ -275,11 +275,8 @@ function draw_tiles()
 end
 
 --[[
-Handles the movement of clouds. If no thread timer is active, creates one.
-If thread timer has counted to 20, invert direction (invert vaue of attribute "up")
-Afterwards, either move cloud.y up or down by a certain value.
-
-This should be called at some point during update before the screen:copyfrom function call in draw_tiles. For the moment, it is called from draw_tiles, thtough it probably shouldn't be.
+@desc: Handles the movement of a singular cloud up and down the screen (no collision detection used). Should be called at some point before or during draw_tiles.
+@params: cloud - a tile object identified as a cloud
 ]]
 function move_cloud(cloud)
   if(cloud.directionTimer == nil) then
@@ -298,15 +295,14 @@ function move_cloud(cloud)
 end
 
 --[[
-Handles the movement of flames. Moves the flame to the left at a steady rate. toDo: Make it not start moving until it's close to entering the screen.
-This should be called at some point during update before the screen:copyfrom function call in draw_tiles. For the moment, it is called from draw_tiles, thtough it probably shouldn't be.
+@desc: Handles the movement of a singular fireball from the right side of the screen towards the character.
+@params: flame - A tile object identified as a flame.
 ]]
 function move_flame(flame)
-  -- The flame and player x comparison currently doesn't work properly, I'll take a look at why ASAP. For now, the flame starts moving as soon as the game starts though the idea is that
-  -- it should start moving just before entering the screen.
-  local distanceToEdge = 1080;
-  if(flame.x - gameCounter < player.cur_x + distanceToEdge) then
-    flame.x = flame.x - 25    
+  local distanceToRightEdge = 1080 --1280 (screen width) minus player's relative screen position.
+  local distanceToLeftEdge = 232 --200 (character position) minus tile pixel size
+  if(flame.x - gameCounter < player.cur_x + distanceToRightEdge and flame.x - gameCounter > player.cur_x - distanceToLeftEdge) then -- Checks if the flame object is currently on-screen.
+    flame.x = flame.x - gameSpeed*2.5    
   end
 end
 
@@ -374,15 +370,30 @@ function change_game_speed(new_speed, time)
   speed_timer = sys.new_timer(time, "reset_game_speed")
 end
 
+--[[
+@desc: Makes the player character invulnerable (i.e. unable to die from touching obstacles).
+@params: time - Time (in milliseconds) to apply invulnerability.
+]]
 function activate_invulnerability(time)
-  player.invulnerable = true
-  invul_timer = sys.new_timer(time, "end_invulnerability")
+  if(player.invulnerable) then
+    return
+  else
+    player.invulnerable = true
+    invul_timer = sys.new_timer(time, "end_invulnerability")
+  end
 end
 
+--[[
+@desc: Public getter for player local attribute "invulnerable".
+@return: (bool) Whether or not the character is currently invulnerable.
+]]
 function get_invulnerability_state()
   return player.invulnerable
 end
 
+--[[
+@desc: Ends invulnerability by setting the player.invulnerable flag to false. Called by system timer, which is stopped.
+]]
 function end_invulnerability()
   player.invulnerable = false
   invul_timer:stop()
