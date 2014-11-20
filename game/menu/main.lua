@@ -23,10 +23,23 @@ local squirrel2 = nil
 
 function start_menu(state)
   menuState=state
+  print(menuState)
+  print(menu)
   if(menu==nil) then
+    print("i first if")
     menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   else 
     menu:reset()
+  end
+  if menuState == "new_name_menu" then
+    print("i if")
+    menu = menu_object(128,92)
+    menu2 = menu_object(128,92)
+    menu3 = menu_object(128,92)
+    menu2:set_background(imageDir.."menuImg/menuBackground.png")
+    menu3:set_background(imageDir.."menuImg/menuBackground.png")
+    menu2:set_button_size(nil, 10)
+    menu3:set_button_size(nil, 10)
   end
   add_menu_items()
   configure_menu_height()
@@ -53,36 +66,36 @@ function add_menu_items()
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
     
   elseif menuState == "new_name_menu" then
-    menu:add_button("name_1", imageDir.."font/1.png")
-    menu:add_button("name_2", imageDir.."font/2.png")
-    menu:add_button("name_3", imageDir.."font/3.png")
-    menu:add_button("name_4", imageDir.."font/4.png")
-    menu:add_button("name_5", imageDir.."font/5.png")
-    menu:add_button("name_6", imageDir.."font/6.png")
-    menu:add_button("name_7", imageDir.."font/7.png")
-    menu:add_button("name_8", imageDir.."font/8.png")
-    menu:add_button("name_9", imageDir.."font/9.png")
-    menu:add_button("accept_letter", imageDir.."font/Y.png")
-    menu:add_button("back", imageDir.."font/Z.png")
+    menu:add_button("name_1", imageDir.."font/1but.png")
+    menu:add_button("name_4", imageDir.."font/4but.png")
+    menu:add_button("name_7", imageDir.."font/7but.png")
+    menu2:add_button("name_2", imageDir.."font/2but.png")
+    menu2:add_button("name_5", imageDir.."font/5but.png")
+    menu2:add_button("name_8", imageDir.."font/8but.png")
+    menu2:add_button("accept_letter", imageDir.."font/Y.png")
+    menu2:add_button("back", imageDir.."font/Z.png")
+    menu3:add_button("name_3", imageDir.."font/3but.png")
+    menu3:add_button("name_6", imageDir.."font/6but.png")
+    menu3:add_button("name_9", imageDir.."font/9but.png")
     
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
   elseif menuState == "level_menu" then
-    menu:add_button("zero",imageDir.."numbers/0.png")
-    menu:add_button("one",imageDir.."numbers/1.png")
-    menu:add_button("two",imageDir.."numbers/2.png")
-    menu:add_button("three",imageDir.."numbers/3.png")
-    menu:add_button("four",imageDir.."numbers/4.png")
-    menu:add_button("five",imageDir.."numbers/5.png")
-    menu:add_button("six",imageDir.."numbers/6.png")
-    menu:add_button("seven",imageDir.."numbers/7.png")
-    menu:add_button("eight",imageDir.."numbers/8.png")
-    menu:add_button("nine",imageDir.."numbers/9.png")
-    menu:add_button("ten",imageDir.."numbers/0.png")
-    menu:add_button("eleven",imageDir.."numbers/1.png")
-    menu:add_button("twelve",imageDir.."numbers/2.png")
-    menu:add_button("thirteen",imageDir.."numbers/3.png")
-    menu:add_button("fourteen",imageDir.."numbers/4.png") 
+    menu:add_button("zero",imageDir.."font/0.png")
+    menu:add_button("one",imageDir.."font/1.png")
+    menu:add_button("two",imageDir.."font/2.png")
+    menu:add_button("three",imageDir.."font/3.png")
+    menu:add_button("four",imageDir.."font/4.png")
+    menu:add_button("five",imageDir.."font/5.png")
+    menu:add_button("six",imageDir.."font/6.png")
+    menu:add_button("seven",imageDir.."font/7.png")
+    menu:add_button("eight",imageDir.."font/8.png")
+    menu:add_button("nine",imageDir.."font/9.png")
+    menu:add_button("ten",imageDir.."font/0.png")
+    menu:add_button("eleven",imageDir.."font/1.png")
+    menu:add_button("twelve",imageDir.."font/2.png")
+    menu:add_button("thirteen",imageDir.."font/3.png")
+    menu:add_button("fourteen",imageDir.."font/4.png") 
   end
 end
 
@@ -154,11 +167,25 @@ function draw_menu()
   screen:clear()
   if addBling==true then
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   end
   if menuState == "level_menu" then
     menu_y = screen:get_height()/100 -- MAKES THE LEVEL MENU START 1/100 DOWN FROM THE TOP OF THE SCREEN, BUT FOR OTHER MENU STATES THE ORIGINAL VALUE OF MENU_Y IS KEPT (SEE TOP OF MAIN.LUA)
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   end
-  screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+
+  if menuState == "new_name_menu" then
+    menu_x = 20
+    menu_y = 20
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    menu_x = 150
+    menu_y = 20
+    screen:copyfrom(menu2:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    menu_x = 280
+    menu_y = 20
+    screen:copyfrom(menu3:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  end
+  
 
   if menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
     --draw_level() --STILL TO BE IMPLEMENTED
@@ -166,12 +193,9 @@ function draw_menu()
     if menuState == "levelwin_menu" then
       call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
     end
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   end
   
-  if menuState == "new_name_menu" then
-    
-  
-  end
   menu:destroy()
   gfx.update()
 end
