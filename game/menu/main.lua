@@ -85,6 +85,7 @@ function add_menu_bling()
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
   thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
+  thunderAcorn.img:premultiply()
   thunderAcorn.height=139
   thunderAcorn.width=101
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
