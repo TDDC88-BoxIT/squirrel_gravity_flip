@@ -51,10 +51,37 @@ function add_menu_items()
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
+  elseif menuState == "level_menu" then
+    add_level_menu_buttons(1)
   end
 end
 
+-- COMMENT!
+function add_level_menu_buttons(menu_index)
+  local levels_per_page = 3
+  local last_page_level = menu_index + levels_per_page - 1
+  local dir = imageDir .. "menuImg/level_menu/"
+  local start_index = menu_index
+
+  if (menu_index > levels_per_page) then
+    menu:add_button("previouspage", dir.."previouspage.png")
+  end
+
+  for i = menu_index, last_page_level do  
+    menu:add_button("level" .. i, dir .. "level" .. i .. ".png")
+  end
+
+  menu:add_button("nextpage", dir .. "nextpage.png")
+  menu:add_button("continue", imageDir .. "menuImg/continue.png")
+end
+
 function configure_menu_height()
+  menuState = get_menu_state()
+  --if menuState == "level_menu" then
+    --local box_height = (screen:get_height()-2*screen:get_height()/100-20*menu:get_item_amount())/menu:get_item_amount()
+    --menu:set_button_size(nil, box_height)
+  --end
+
   local menuHeight= 20+(menu:get_button_size().height+15)*(menu:get_item_amount()) 
   menu:set_size(nil,menuHeight)
 end
@@ -62,7 +89,7 @@ end
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
-  if menuState == "start_menu" or menuState == "pause_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
+  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
@@ -117,6 +144,9 @@ function draw_menu()
   if addBling==true then
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
+  --if menuState == "level_menu" then
+    --menu_y = screen:get_height()/100 -- MAKES THE LEVEL MENU START 1/100 DOWN FROM THE TOP OF THE SCREEN, BUT FOR OTHER MENU STATES THE ORIGINAL VALUE OF MENU_Y IS KEPT (SEE TOP OF MAIN.LUA)
+  --end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   if menuState == "levelwin_menu" or menuState == "gameover_menu" then
     --draw_level() --STILL TO BE IMPLEMENTED
@@ -147,6 +177,8 @@ function menu_navigation(key, state)
       change_global_game_state(1)
       start_game(1,"story",0)
     elseif menu:get_indexed_item().id=="select_level" then
+      stop_menu()
+      start_menu("level_menu")
       local unlocked_level = read_unlocked_level()
       local max_no_levels = 15
       local i = nil
@@ -173,6 +205,9 @@ function menu_navigation(key, state)
     elseif menu:get_indexed_item().id=="continue" then
       stop_menu()
       start_menu("start_menu")
+    elseif menu:get_indexed_item().id=="nextpage" then
+      stop_menu()
+      start_menu("level_menu")
     end
   end
 end
