@@ -147,7 +147,7 @@ function move_character()
       if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
         get_killed()
       end
-      return
+      --return
     elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
     end
