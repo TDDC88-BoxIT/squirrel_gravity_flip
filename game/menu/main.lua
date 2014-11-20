@@ -51,9 +51,15 @@ function add_menu_items()
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
     
   elseif menuState == "new_name_menu" then
-    menu:add_button("name_a", imageDir.."font/A.png")
-    menu:add_button("name_b", imageDir.."font/B.png")
-    menu:add_button("name_c", imageDir.."font/C.png")
+    menu:add_button("name_1", imageDir.."font/1.png")
+    menu:add_button("name_2", imageDir.."font/2.png")
+    menu:add_button("name_3", imageDir.."font/3.png")
+    menu:add_button("name_4", imageDir.."font/4.png")
+    menu:add_button("name_5", imageDir.."font/5.png")
+    menu:add_button("name_6", imageDir.."font/6.png")
+    menu:add_button("name_7", imageDir.."font/7.png")
+    menu:add_button("name_8", imageDir.."font/8.png")
+    menu:add_button("name_9", imageDir.."font/9.png")
     menu:add_button("back", imageDir.."font/Z.png")
     
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
@@ -185,18 +191,41 @@ function menu_navigation(key, state)
     --print("ITEMS: "..menu:get_item_amount())
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menuState == "new_name_menu" then
-      if menu:get_indexed_item().id=="name_a" then
+      if menu:get_indexed_item().id=="name_1" then
         player_name = player_name .. "A"
         print(player_name)
       
-      elseif menu:get_indexed_item().id=="name_b" then
+      elseif menu:get_indexed_item().id=="name_2" then
         player_name = player_name .. "B"
         print(player_name)
 
-      elseif menu:get_indexed_item().id=="name_c" then
+      elseif menu:get_indexed_item().id=="name_3" then
         player_name = player_name .. "C"
         print(player_name)
 
+      elseif menu:get_indexed_item().id=="name_4" then
+        player_name = player_name .. "C"
+        print(player_name)
+
+      elseif menu:get_indexed_item().id=="name_5" then
+        player_name = player_name .. "C"
+        print(player_name)
+
+      elseif menu:get_indexed_item().id=="name_6" then
+        player_name = player_name .. "C"
+        print(player_name)
+
+      elseif menu:get_indexed_item().id=="name_7" then
+        player_name = player_name .. "C"
+        print(player_name)
+
+      elseif menu:get_indexed_item().id=="name_8" then
+        player_name = player_name .. "C"
+        print(player_name)
+
+      elseif menu:get_indexed_item().id=="name_9" then
+        player_name = player_name .. "C"
+        print(player_name)
       elseif menu:get_indexed_item().id=="back" then
         stop_menu()
         start_menu("start_menu")
