@@ -40,6 +40,7 @@ function start_game(level_number,game_type,life)
   load_level_atttributes()
 
   create_game_character()
+  background = gfx.loadpng("images/level_sky.png")
 
   if current_game_type=="tutorial" then
     require("game/tutorial/tutorial_handler")
@@ -81,6 +82,7 @@ function stop_game()
     timer:stop()
     timer = nil
   end
+  background:destroy()
   if change_character_timer~=nil then
     change_character_timer:stop()
     change_character_timer=nil 
@@ -240,7 +242,7 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
- --draw_background()
+  draw_background()
   draw_tiles()
   move_character()
   draw_character()
@@ -254,9 +256,7 @@ function draw_screen()
 end
 
 function draw_background()
-  --background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
-  --background:destroy()
 end
 
 --[[ 
