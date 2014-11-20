@@ -14,6 +14,7 @@ local backgroundImage = nil
 local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 local current_character = 1
+local was_pressed_from_menu = false
 
 local squirrel1 = nil
 local squirrel2 = nil
@@ -25,6 +26,7 @@ function start_menu(state)
   else 
     menu:reset()
   end
+  was_pressed_from_menu = false -- This dumps the last keypress event so you can't get instantly transferred from gameover to main menu.
   add_menu_items()
   configure_menu_height()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
@@ -138,7 +140,7 @@ function menu_navigation(key, state)
   elseif key=="up" and state=='down' then
       menu:decrease_index()
       update_menu()
-  elseif key=="ok" and state=='up' then
+  elseif key=="ok" and state=='up' and was_pressed_from_menu == true then
     print("ITEMS: "..menu:get_item_amount())
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then
@@ -163,7 +165,7 @@ function menu_navigation(key, state)
       stop_menu()
       start_menu("start_menu")
     end
+  elseif key=="ok" and state=="down" and was_pressed_from_menu == false then
+    was_pressed_from_menu = true
   end
 end
-
-
