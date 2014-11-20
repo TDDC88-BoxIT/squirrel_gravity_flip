@@ -150,9 +150,8 @@ function draw_menu()
     menu_y = screen:get_height()/100 -- MAKES THE LEVEL MENU START 1/100 DOWN FROM THE TOP OF THE SCREEN, BUT FOR OTHER MENU STATES THE ORIGINAL VALUE OF MENU_Y IS KEPT (SEE TOP OF MAIN.LUA)
   end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-  if menuState == "levelwin_menu" or menuState == "gameover_menu" then
-    -- should draw_highscore be moved?
-    draw_highscore(1)
+
+  if menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
     --draw_level() --STILL TO BE IMPLEMENTED
     
     if menuState == "levelwin_menu" then
