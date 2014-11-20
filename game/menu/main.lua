@@ -57,13 +57,15 @@ function add_menu_items()
   end
 end
 
--- COMMENT!
+-- ADDS A PAGE WITH LEVEL MENU BUTTONS. NUMBER OF LEVELS DISPLAYED PER AGE AS WELL AS THE MAXIMUM NUMBER OF LEVEL MENU ITEMS CAN BE CONFIGURED
 function add_level_menu_buttons()
-  local levels_per_page = 3
-  local end_page_level = current_page * levels_per_page
-  local start_page_level = end_page_level - levels_per_page + 1
-  
+  local levels_per_page = 3 
+  local no_level_menu_items = 10
+  local start_page_level = levels_per_page * (current_page - 1) + 1
+  local end_page_level = nil
   local dir = imageDir .. "menuImg/level_menu/"
+
+  end_page_level = math.min((start_page_level + levels_per_page - 1), no_level_menu_items)
 
   if (current_page > 1) then
     menu:add_button("previouspage", dir.."previouspage.png")
@@ -73,7 +75,10 @@ function add_level_menu_buttons()
     menu:add_button("level" .. i, dir .. "level" .. i .. ".png")
   end
 
-  menu:add_button("nextpage", dir .. "nextpage.png")
+  if(end_page_level ~= no_level_menu_items) then
+    menu:add_button("nextpage", dir .. "nextpage.png")
+  end
+
   menu:add_button("continue", imageDir .. "menuImg/continue.png")
 end
 
