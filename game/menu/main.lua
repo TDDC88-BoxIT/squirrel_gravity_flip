@@ -15,6 +15,7 @@ local backgroundImage = nil
 local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 local current_character = 1
+local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR IN EXAMPLE IN THE CASE OF LEVEL MENU
 
 local squirrel1 = nil
 local squirrel2 = nil
@@ -52,22 +53,23 @@ function add_menu_items()
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
   elseif menuState == "level_menu" then
-    add_level_menu_buttons(1)
+    add_level_menu_buttons()
   end
 end
 
 -- COMMENT!
-function add_level_menu_buttons(menu_index)
+function add_level_menu_buttons()
   local levels_per_page = 3
-  local last_page_level = menu_index + levels_per_page - 1
+  local end_page_level = current_page * levels_per_page
+  local start_page_level = end_page_level - levels_per_page + 1
+  
   local dir = imageDir .. "menuImg/level_menu/"
-  local start_index = menu_index
 
-  if (menu_index > levels_per_page) then
+  if (current_page > 1) then
     menu:add_button("previouspage", dir.."previouspage.png")
   end
 
-  for i = menu_index, last_page_level do  
+  for i = start_page_level, end_page_level do  
     menu:add_button("level" .. i, dir .. "level" .. i .. ".png")
   end
 
@@ -205,7 +207,12 @@ function menu_navigation(key, state)
     elseif menu:get_indexed_item().id=="continue" then
       stop_menu()
       start_menu("start_menu")
+    elseif menu:get_indexed_item().id=="previouspage" then
+      current_page = current_page - 1
+      stop_menu()
+      start_menu("level_menu")
     elseif menu:get_indexed_item().id=="nextpage" then
+      current_page = current_page + 1
       stop_menu()
       start_menu("level_menu")
     end
