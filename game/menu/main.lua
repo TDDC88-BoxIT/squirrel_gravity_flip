@@ -220,6 +220,11 @@ function menu_navigation(key, state)
       current_page = current_page + 1
       stop_menu()
       start_menu("level_menu")
+    elseif (string.sub(menu:get_indexed_item().id, 1, 5) == "level") then
+      local level = string.gsub(menu:get_indexed_item().id, "level", "")
+      stop_menu()
+      change_global_game_state(1)
+      start_game(level,"story",0)
     end
   end
 end
