@@ -3,7 +3,7 @@ require("../tool_box/character_object")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
-local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu"
+local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu" OR "gameover_menu"
 local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
@@ -14,6 +14,7 @@ local backgroundImage = nil
 local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 local current_character = 1
+local player_name = ""
 
 local squirrel1 = nil
 local squirrel2 = nil
@@ -39,6 +40,7 @@ function stop_menu()
 function add_menu_items()
   if menuState == "start_menu" or menuState == "pause_menu" then
     menu:add_button("start_new",imageDir.."menuImg/start.png")
+    menu:add_button("select_level", imageDir.."menuImg/select_level.png")
     if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
       menu:add_button("high_score",imageDir.."menuImg/highScore.png")
       menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
@@ -47,12 +49,41 @@ function add_menu_items()
     end
     menu:add_button("settings",imageDir.."menuImg/settings.png")
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
+    
+  elseif menuState == "new_name_menu" then
+    menu:add_button("name_a", imageDir.."font/A.png")
+    menu:add_button("name_b", imageDir.."font/B.png")
+    menu:add_button("name_c", imageDir.."font/C.png")
+    menu:add_button("back", imageDir.."font/Z.png")
+    
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
+  elseif menuState == "level_menu" then
+    menu:add_button("zero",imageDir.."numbers/zero.png")
+    menu:add_button("one",imageDir.."numbers/one.png")
+    menu:add_button("two",imageDir.."numbers/two.png")
+    menu:add_button("three",imageDir.."numbers/three.png")
+    menu:add_button("four",imageDir.."numbers/four.png")
+    menu:add_button("five",imageDir.."numbers/five.png")
+    menu:add_button("six",imageDir.."numbers/six.png")
+    menu:add_button("seven",imageDir.."numbers/seven.png")
+    menu:add_button("eight",imageDir.."numbers/eight.png")
+    menu:add_button("nine",imageDir.."numbers/nine.png")
+    menu:add_button("ten",imageDir.."numbers/zero.png")
+    menu:add_button("eleven",imageDir.."numbers/one.png")
+    menu:add_button("twelve",imageDir.."numbers/two.png")
+    menu:add_button("thirteen",imageDir.."numbers/three.png")
+    menu:add_button("fourteen",imageDir.."numbers/four.png") 
   end
 end
 
 function configure_menu_height()
+  menuState = get_menu_state()
+  if menuState == "level_menu" then
+    local box_height = (screen:get_height()-2*screen:get_height()/100-20*menu:get_item_amount())/menu:get_item_amount()
+    menu:set_button_size(nil, box_height)
+  end
+  
   local menuHeight= 20+(menu:get_button_size().height+15)*(menu:get_item_amount()) 
   menu:set_size(nil,menuHeight)
 end
@@ -60,7 +91,7 @@ end
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
-  if menuState == "start_menu" or menuState == "pause_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
+  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" or menuState == "new_name_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
@@ -72,9 +103,9 @@ function add_menu_bling()
   
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
   backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
-  if menuState == "start_menu" or menuState == "pause_menu" then
+  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" then
     backdrop:fill({r=0,g=0,b=0,a=200})
-  elseif menuState == "levelwin_menu" then
+  elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     backdrop:fill({r=0,g=0,b=0,a=100})
   end
   screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
@@ -115,11 +146,23 @@ function draw_menu()
   if addBling==true then
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
+  if menuState == "level_menu" then
+    menu_y = screen:get_height()/100 -- MAKES THE LEVEL MENU START 1/100 DOWN FROM THE TOP OF THE SCREEN, BUT FOR OTHER MENU STATES THE ORIGINAL VALUE OF MENU_Y IS KEPT (SEE TOP OF MAIN.LUA)
+  end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   if menuState == "levelwin_menu" or menuState == "gameover_menu" then
+    -- should draw_highscore be moved?
     draw_highscore(1)
     --draw_level() --STILL TO BE IMPLEMENTED
-    call_draw_score()
+    
+    if menuState == "levelwin_menu" then
+      call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
+    end
+  end
+  
+  if menuState == "new_name_menu" then
+    
+  
   end
   menu:destroy()
   gfx.update()
@@ -139,34 +182,61 @@ function menu_navigation(key, state)
       menu:decrease_index()
       update_menu()
   elseif key=="ok" and state=='up' then
-    print("ITEMS: "..menu:get_item_amount())
+    --print("ITEMS: "..menu:get_item_amount())
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
-    if menu:get_indexed_item().id=="start_new" then
-      stop_menu()
-      change_global_game_state(1)
-      start_game(16,"story",0)
-    elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
-      stop_menu()
-      change_global_game_state(1)
-      resume_game()
-    elseif menu:get_indexed_item().id=="tutorial" then
-      stop_menu()
-      change_global_game_state(1)
-      start_game(1,"tutorial",0)
-    elseif menu:get_indexed_item().id=="high_score" then
-      stop_menu()
-      change_global_game_state(1)
-      draw_highscore(1)
-      -- COMMAND TO VIEW HIGH SCORE
-    elseif menu:get_indexed_item().id=="settings" then
-      -- COMMAND TO VIEW SETTINGS
-    elseif menu:get_indexed_item().id=="exit" then
-      sys.stop() -- COMMAND TO EXIT
-    elseif menu:get_indexed_item().id=="continue" then
-      stop_menu()
-      start_menu("start_menu")
+    if menuState == "new_name_menu" then
+      if menu:get_indexed_item().id=="name_a" then
+        player_name = player_name .. "A"
+        print(player_name)
+      
+      elseif menu:get_indexed_item().id=="name_b" then
+        player_name = player_name .. "B"
+        print(player_name)
+
+      elseif menu:get_indexed_item().id=="name_c" then
+        player_name = player_name .. "C"
+        print(player_name)
+
+      elseif menu:get_indexed_item().id=="back" then
+        stop_menu()
+        start_menu("start_menu")
+      end
+
+    else 
+      if menu:get_indexed_item().id=="start_new" then
+        stop_menu()
+        change_global_game_state(1)
+        start_game(16,"story",0)
+      elseif menu:get_indexed_item().id=="select_level" then --STARTS THE LEVEL SELECTION MENU
+        stop_menu()
+        start_menu("level_menu")
+      elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
+        stop_menu()
+        change_global_game_state(1)
+        resume_game()
+      elseif menu:get_indexed_item().id=="tutorial" then
+        stop_menu()
+        change_global_game_state(1)
+        start_game(1,"tutorial",0)
+      elseif menu:get_indexed_item().id=="high_score" then
+        stop_menu()
+        change_global_game_state(1)
+        draw_highscore(1)
+        -- COMMAND TO VIEW HIGH SCORE
+      elseif menu:get_indexed_item().id=="settings" then
+        -- COMMAND TO VIEW SETTINGS
+        stop_menu()
+        start_menu("new_name_menu")
+      elseif menu:get_indexed_item().id=="exit" then
+        sys.stop() -- COMMAND TO EXIT
+      elseif menu:get_indexed_item().id=="continue" then
+        stop_menu()
+        start_menu("start_menu")
+      end
     end
   end
 end
 
-
+function get_player_name()
+  return player_name
+end

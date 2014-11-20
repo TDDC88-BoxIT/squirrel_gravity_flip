@@ -170,6 +170,8 @@ end
 -- ACTIVATES A POWERUP DEPENDING ON pu-type
 
 function activate_power_up(pu_name)
+  player_name = get_player_name()
+  print("playername == " .. player_name)
   if(pu_name=="powerup1") then -- Score tile
     game_score = game_score + 100
   elseif(pu_name=="powerup2") then -- Speed tile
@@ -180,7 +182,7 @@ function activate_power_up(pu_name)
     activate_invulnerability(10000)
   elseif(pu_name == "win") then -- Win tile!
     -- the 1 represent the current level bein played, should be made generic as soon as possible
-    score_page("BozzzRasmus", game_score, 1)
+    score_page(player_name, game_score, 1)
     levelwin()
   elseif((pu_name == "obstacle1" or pu_name == "obstacle2" or pu_name == "obstacle3" or pu_name == "obstacle4") and not get_invulnerability_state()) then -- Obstacles
     get_killed() -- This NEEDS to be changed to the actual fail screen when that has been implemented
@@ -279,9 +281,10 @@ This should be called at some point during update before the screen:copyfrom fun
 function move_flame(flame)
   -- The flame and player x comparison currently doesn't work properly, I'll take a look at why ASAP. For now, the flame starts moving as soon as the game starts though the idea is that
   -- it should start moving just before entering the screen.
-  --if(flame.x > player.cur_x) then
+  local distanceToEdge = 1080;
+  if(flame.x - gameCounter < player.cur_x + distanceToEdge) then
     flame.x = flame.x - 25    
-  --end
+  end
 end
 
 --[[
@@ -308,7 +311,7 @@ else
 end
 end
 function decrease_life()
-  print(lives)
+  --print(lives)
   lives = lives-1
 end
 
@@ -335,7 +338,7 @@ function game_navigation(key, state)
     change_global_game_state(0)
     start_menu("pause_menu")
   elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
-    levelwin()
+    activate_power_up("win")
   end
 
   if current_game_type=="tutorial" and state=='up' then

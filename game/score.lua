@@ -1,6 +1,7 @@
 nr_of_scores_saved = 5
 
 function read_from_file()
+  print("read_from_file")
   score_board={} 
   -- text file where score is saved is opened
   file = io.open("game/score_table.txt", "r")
@@ -40,6 +41,7 @@ end
 
 
 function score_page(player,score,level)
+  print("TROLLLL")
   local unlocked_levels = read_from_file()
   if score_board[tostring(level)] == nil then
     score_board[tostring(level)] = {}
@@ -67,6 +69,7 @@ end
 
 
 function save_to_file(score_board, file, unlocked_levels)
+  print("save_to_file")
   -- if the file does not exist it is created
   file = io.open("game/score_table.txt","w+")
   io.output(file)
@@ -130,7 +133,6 @@ function draw_number(number, position, x_coordinate, y_coordinate)
   else
     number = string.upper(number)
     
-    print(number)
     if number == "A" then
       score = gfx.loadpng("images/font/A.png")
     elseif number == "B" then
@@ -201,7 +203,6 @@ function draw_highscore(level)
   index = 1
   i=1
   while score_board[tostring(level)][tostring(i)] ~= nil and index<=5  do
-    print("in loop")
     y_coordinate = 300+60*(i-1)
     position = 1
     draw_score(score_board[tostring(level)][tostring(i)][1], 380, y_coordinate)
@@ -214,3 +215,4 @@ function draw_highscore(level)
     i = i +1
   end  
 end
+
