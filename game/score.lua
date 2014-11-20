@@ -41,7 +41,6 @@ end
 
 
 function score_page(player,score,level)
-  print("TROLLLL")
   local unlocked_levels = read_from_file()
   if score_board[tostring(level)] == nil then
     score_board[tostring(level)] = {}
