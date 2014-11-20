@@ -65,9 +65,9 @@ end
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
   if (menuState == "start_menu" or menuState == "pause_menu") and backgroundImage == nil then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
-    backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
+    backgroundImage = gfx.loadjpeg(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" and backgroundImage == nil then
-    backgroundImage = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
+    backgroundImage = gfx.loadjpeg(imageDir.."/menuImg/levelwin.jpg")
   elseif menuState == "gameover_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gameover.png")
   end
