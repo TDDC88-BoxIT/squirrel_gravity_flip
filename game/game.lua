@@ -242,15 +242,26 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
+  -- Measure the game speed of each function in millisecond.
+  -- Remove the -- to trace and optimize.
+
+  --local t = sys.time()
   draw_background()
+  --print(string.format("Background %d", ((sys.time() - t)) * 1000))
   draw_tiles()
+  --print(string.format("Draw_tiles %d", ((sys.time() - t)) * 1000))
   move_character()
+  --print(string.format("Move_character %d", ((sys.time() - t)) * 1000))
   draw_character()
+  --print(string.format("Draw_character %d", ((sys.time() - t)) * 1000))
   draw_score(game_score)
+  --print(string.format("Draw_score %d", ((sys.time() - t)) * 1000))
   draw_lives()
+  --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
   
   if current_game_type=="tutorial" then
     draw_tutorial_helper()
+    --print(string.format("Draw_tutorial_helper %d", ((sys.time() - t)) * 1000))
   end
   gfx.update()
 end
