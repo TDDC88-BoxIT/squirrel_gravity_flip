@@ -98,7 +98,10 @@ function draw_score(game_score, x_coordinate, y_coordinate )
   -- loops through the score that is stored as a string
   while position <= string.len(string_score) do
     -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
+    local symbol = string.sub(string_score,position,position)
+    if symbol ~= " " then
+      draw_number(symbol,position, x_coordinate, y_coordinate)
+    end
     position = position + 1
   end
 end
