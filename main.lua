@@ -98,7 +98,7 @@ function love.keypressed(key, isrepeat)
   end
   
   if key_translation[key] ~= nil and type(onKey) == "function" then
-   -- print("Keybord key: " .. key .. ", STB key: " .. key_translation[key] .. ", state: " .. state )
+    print("Keybord key: " .. key .. ", STB key: " .. key_translation[key] .. ", state: " .. state )
     onKey(key_translation[key], state)
   elseif key == "escape" then
     print("Memory usage: " .. string.format("%.0f",gfx.get_memory_use()) .. " of " .. string.format("%.0f",gfx.get_memory_limit()) .. " bytes or " .. string.format("%.2f", gfx.get_memory_use() * 100 / gfx.get_memory_limit()) .. " %")
@@ -107,7 +107,7 @@ end
 
 function love.keyreleased(key)
   if key_translation[key] ~= nil and type(onKey) == "function" then
-    --print("Keybord key: " .. key .. ", STB key: " .. key_translation[key] .. ", state: up")
+    print("Keybord key: " .. key .. ", STB key: " .. key_translation[key] .. ", state: up")
     onKey(key_translation[key], "up")
   end
 end

@@ -111,85 +111,12 @@ end
 
 function draw_number(number, position, x_coordinate, y_coordinate)
 -- loads the picture corresponding to the correct digit or letter. Feel free to refactor 
-  if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
-  elseif number == "1" then 
-    score = gfx.loadpng("images/numbers/one.png")
-  elseif number == "2" then 
-    score = gfx.loadpng("images/numbers/two.png")
-  elseif number == "3" then 
-    score = gfx.loadpng("images/numbers/three.png")
-  elseif number == "4" then 
-    score = gfx.loadpng("images/numbers/four.png")
-  elseif number == "5" then 
-    score = gfx.loadpng("images/numbers/five.png")
-  elseif number == "6" then 
-    score = gfx.loadpng("images/numbers/six.png")
-  elseif number == "7" then 
-    score = gfx.loadpng("images/numbers/seven.png")
-  elseif number == "8" then 
-    score = gfx.loadpng("images/numbers/eight.png") 
-  elseif number == "9" then 
-    score = gfx.loadpng("images/numbers/nine.png") 
-  else
-    number = string.upper(number)
-    
-    if number == "A" then
-      score = gfx.loadpng("images/font/A.png")
-    elseif number == "B" then
-      score = gfx.loadpng("images/font/B.png")
-    elseif number == "C" then
-      score = gfx.loadpng("images/font/C.png")
-    elseif number == "D" then
-      score = gfx.loadpng("images/font/D.png")
-    elseif number == "E" then
-      score = gfx.loadpng("images/font/E.png")
-    elseif number == "F" then
-      score = gfx.loadpng("images/font/F.png")
-    elseif number == "G" then
-      score = gfx.loadpng("images/font/G.png")
-    elseif number == "H" then
-      score = gfx.loadpng("images/font/H.png")
-    elseif number == "I" then
-      score = gfx.loadpng("images/font/I.png")
-    elseif number == "J" then
-      score = gfx.loadpng("images/font/J.png")
-    elseif number == "K" then
-      score = gfx.loadpng("images/font/K.png")
-    elseif number == "L" then
-      score = gfx.loadpng("images/font/L.png")
-    elseif number == "M" then
-      score = gfx.loadpng("images/font/M.png")
-    elseif number == "N" then
-      score = gfx.loadpng("images/font/N.png")
-    elseif number == "O" then
-      score = gfx.loadpng("images/font/O.png")
-    elseif number == "P" then
-      score = gfx.loadpng("images/font/P.png")
-    elseif number == "Q" then
-      score = gfx.loadpng("images/font/Q.png")
-    elseif number == "R" then
-      score = gfx.loadpng("images/font/R.png")
-    elseif number == "S" then
-      score = gfx.loadpng("images/font/S.png")
-    elseif number == "T" then
-      score = gfx.loadpng("images/font/T.png")
-    elseif number == "U" then
-      score = gfx.loadpng("images/font/U.png")
-    elseif number == "V" then
-      score = gfx.loadpng("images/font/V.png")
-    elseif number == "W" then
-      score = gfx.loadpng("images/font/W.png")
-    elseif number == "X" then
-      score = gfx.loadpng("images/font/X.png")
-    elseif number == "Y" then
-      score = gfx.loadpng("images/font/Y.png")
-    elseif number == "Z" then
-      score = gfx.loadpng("images/font/Z.png")
-    else 
-      score = gfx.loadpng("images/font/Z.png")
-    end
-    -- prints the loaded picture
+  if number == nil then
+    number = "Z"
   end
+  number = string.upper(number)
+  score = gfx.loadpng("images/font/"..number..".png")
+  -- prints the loaded picture
   screen:copyfrom(score,nil ,{x=x_coordinate+position*30, y = y_coordinate, height = 50, width = 30}, true)
   score:destroy()
 end
