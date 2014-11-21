@@ -21,6 +21,7 @@ local squirrel2 = nil
 
 function start_menu(state)
   menuState=state
+  
   if(menu==nil) then
     menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   else 
@@ -81,7 +82,7 @@ function add_menu_bling()
   elseif menuState == "levelwin_menu" then
     backdrop:fill({r=0,g=0,b=0,a=100})
   end
-  screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
+ -- screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
   thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
@@ -141,7 +142,6 @@ function menu_navigation(key, state)
       menu:decrease_index()
       update_menu()
   elseif key=="ok" and state=='up' and was_pressed_from_menu == true then
-    print("ITEMS: "..menu:get_item_amount())
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then
       stop_menu()
@@ -163,7 +163,8 @@ function menu_navigation(key, state)
       sys.stop() -- COMMAND TO EXIT
     elseif menu:get_indexed_item().id=="continue" then
       stop_menu()
-      start_menu("start_menu")
+      change_global_game_state(1)
+      start_game("next","tutorial",0)
     end
   elseif key=="ok" and state=="down" and was_pressed_from_menu == false then
     was_pressed_from_menu = true

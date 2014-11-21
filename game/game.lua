@@ -14,6 +14,7 @@ require ("game/fail_and_success_handler")
 require ("tool_box/character_object")
 require ("game/score")
 require ("game/power_up")
+require("game/tutorial/tutorial_handler")
 
 local imageDir = "images/"
 local mapDir = "map/"
@@ -30,21 +31,28 @@ local current_game_type=nil
 local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 
--- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
-function start_game(level_number,game_type,life) 
+-- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
+function start_game(level,game_type,life) 
   game_score = 10000
-  current_level = level_number --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
   current_game_type=game_type
-  Level.load_level(level_number,current_game_type)
+
+  if level=="next" then
+    current_level = current_level+1
+  else
+    current_level = level --TO BE PLACED SOMEWHERE ELSE
+  end
+  
+  Level.load_level(current_level,current_game_type)
+
+  prepare_fail_success_handler()
   load_level_atttributes()
 
   create_game_character()
   background = gfx.loadpng("images/level_sky.png")
 
   if current_game_type=="tutorial" then
-    require("game/tutorial/tutorial_handler")
-    create_tutorial_helper(level_number)
+    create_tutorial_helper(current_level)
   end
   
   set_character_start_position()
@@ -242,17 +250,17 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
-  draw_background()
-  draw_tiles()
   move_character()
-  draw_character()
-  draw_score(game_score)
-  draw_lives()
-  
-  if current_game_type=="tutorial" then
-    draw_tutorial_helper()
+  if not islevelWon() then
+    draw_background()
+    draw_tiles()
+    draw_character()
+    draw_score(game_score)
+    if current_game_type=="tutorial" then
+      draw_tutorial_helper()
+    end
+    gfx.update()
   end
-  gfx.update()
 end
 
 function draw_background()
@@ -316,9 +324,6 @@ end
 DRAWS THE GAME CHARACTER ON SCREEN
 ]]
 function draw_character()
-  if get_menu_state() == "gameover_menu" or get_menu_state() == "levelwin_menu" then -- Do not draw the character on menues. Not sure why start and pause menues aren't needed here.
-    return
-  end
   screen:copyfrom(character:get_surface(), nil,{x=player.cur_x,y=player.cur_y},true)
 end
 

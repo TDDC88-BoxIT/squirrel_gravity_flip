@@ -6,9 +6,12 @@
  <tileset firstgid="2" name="win" tilewidth="32" tileheight="32">
   <image source="../images/winTile.png" width="32" height="32"/>
  </tileset>
+ <tileset firstgid="3" name="powerup1" tilewidth="32" tileheight="32">
+  <image source="../images/powerup1.png" width="32" height="32"/>
+ </tileset>
  <layer name="Tile Layer 1" width="50" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BwAMZBhocyYILSo/4YHGC4+mOg8+hIz+foAAAXNwBi
+   eJxjYKAuYCQTDzaAz03MZOgZKDCU/EFuGsHnD0owvQE17WSigZnEglF/YILh6g9K89hgwMMJAACb3wB1
   </data>
  </layer>
 </map>
