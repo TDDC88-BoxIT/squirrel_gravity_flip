@@ -141,8 +141,31 @@ end
 function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
+  local falling=0
     player.new_x=player.cur_x+1
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
+      
+      ---------------------------------Hanxiao's test-----------------------------------
+      --[[
+      if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)=="FallingCheck" then
+        if direction_flag == "down" then 
+          player.test_y=player.cur_y+gameSpeed
+        else
+          player.test_y=player.cur_y-gameSpeed
+        end
+      
+        for k, v in pairs(Level.tiles) do
+        --if CheckCollision(player.cur_x,player.test_y, character.width, character.height, v.x-gameCounter, v.y, v.width, v.height)~=nil then
+          local A,B,C,D=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+          if A~=nil then
+          FF=1 
+        --print("set FF to "..FF)
+          end -- A~=nil
+        end -- for
+      end
+      ]]
+      ---------------------------the end------------------------------------
+      
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
       if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
         get_killed()
@@ -163,7 +186,7 @@ function move_character()
         get_killed()
         break;
       end
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
         player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
       else
         break
