@@ -8,16 +8,16 @@ local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
-local squirrelImg1 = imageDir.."character/bigSquirrel1.png" 
-local squirrelImg2 = imageDir.."character/bigSquirrel2.png"
+--local squirrelImg1 = imageDir.."character/bigSquirrel1.png" 
+--local squirrelImg2 = imageDir.."character/bigSquirrel2.png"
 local backgroundImage = nil
 local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 local current_character = 1
 local was_pressed_from_menu = false
 
-local squirrel1 = nil
-local squirrel2 = nil
+--local squirrel1 = nil
+--local squirrel2 = nil
 
 function start_menu(state)
   menuState=state
@@ -77,7 +77,7 @@ function add_menu_bling()
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
   backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
   if menuState == "start_menu" or menuState == "pause_menu" then
-    backdrop:fill({r=0,g=0,b=0,a=200})
+    backdrop:fill({r=0,g=0,b=0,a=60})
   elseif menuState == "levelwin_menu" then
     backdrop:fill({r=0,g=0,b=0,a=100})
   end
@@ -93,21 +93,21 @@ function add_menu_bling()
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   
-  -- ADD TWO A RUNNING SQUIRRELS
-  if squirrel1 == nil and squirrel2 == nil then
+  -- Adds two munching squirrel pictures. Disabled for now.
+  --[[-if squirrel1 == nil and squirrel2 == nil then
     squirrel1=character_object(117,140,squirrelImg2)
     squirrel2=character_object(117,140,squirrelImg1)
   end
   squirrel1:update()
   squirrel2:update()
   screen:copyfrom(squirrel1:get_surface(), nil,{x=200,y=250,width=squirrel1:get_size().width,height=squirrel1:get_size().height},true)
-  screen:copyfrom(squirrel2:get_surface(), nil,{x=(screen:get_width()-(squirrel2:get_size().width+200)),y=250,width=squirrel2:get_size().width,height=squirrel2:get_size().height},true)
+  screen:copyfrom(squirrel2:get_surface(), nil,{x=(screen:get_width()-(squirrel2:get_size().width+200)),y=250,width=squirrel2:get_size().width,height=squirrel2:get_size().height},true)]]
   
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
   thunderAcorn.img:destroy()
   backdrop:destroy()
-  squirrel1:destroy()
-  squirrel2:destroy()
+  --squirrel1:destroy()
+  --squirrel2:destroy()
 end
 
 function get_menu_state()

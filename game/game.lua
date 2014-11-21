@@ -36,7 +36,7 @@ function start_game(level_number,game_type,life)
   current_level = level_number --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
   current_game_type=game_type
-  Level.load_level(level_number,current_game_type)
+  Level.load_level(4,current_game_type)
   load_level_atttributes()
 
   create_game_character()
