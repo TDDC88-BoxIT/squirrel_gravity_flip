@@ -25,21 +25,20 @@ function start_menu(state)
   menuState=state
   print(menuState)
   print(menu)
-  if(menu==nil) then
-    print("i first if")
-    menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
-  else 
-    menu:reset()
-  end
   if menuState == "new_name_menu" then
-    print("i if")
     menu = menu_object(128,92)
     menu2 = menu_object(128,92)
     menu3 = menu_object(128,92)
+    menu4 = menu_object(53,42)
     menu2:set_background(imageDir.."menuImg/menuBackground.png")
     menu3:set_background(imageDir.."menuImg/menuBackground.png")
-    menu2:set_button_size(nil, 10)
-    menu3:set_button_size(nil, 10)
+    menu4:set_background(imageDir.."menuImg/menuBackground.png")
+  else
+    if(menu==nil) then
+      menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
+    else 
+      menu:reset()
+    end
   end
   add_menu_items()
   configure_menu_height()
@@ -72,11 +71,11 @@ function add_menu_items()
     menu2:add_button("name_2", imageDir.."font/2but.png")
     menu2:add_button("name_5", imageDir.."font/5but.png")
     menu2:add_button("name_8", imageDir.."font/8but.png")
-    menu2:add_button("accept_letter", imageDir.."font/Y.png")
-    menu2:add_button("back", imageDir.."font/Z.png")
     menu3:add_button("name_3", imageDir.."font/3but.png")
     menu3:add_button("name_6", imageDir.."font/6but.png")
     menu3:add_button("name_9", imageDir.."font/9but.png")
+    menu4:add_button("accept_letter", imageDir.."font/Y.png")
+    menu4:add_button("back", imageDir.."font/Z.png")
     
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
@@ -108,6 +107,17 @@ function configure_menu_height()
   
   local menuHeight= 20+(menu:get_button_size().height+15)*(menu:get_item_amount()) 
   menu:set_size(nil,menuHeight)
+  if menuState == "new_name_menu" then
+    menu:set_button_size(nil, 92)
+    menu2:set_button_size(nil, 92)
+    menu3:set_button_size(nil, 92)
+    menu4:set_button_size(nil, 42)
+    menu:set_size(nil,384)
+    menu2:set_size(nil,384)
+    menu3:set_size(nil,384)
+    menu4:set_size(nil,384)
+
+  end
 end
 
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
@@ -175,15 +185,18 @@ function draw_menu()
   end
 
   if menuState == "new_name_menu" then
-    menu_x = 20
-    menu_y = 20
+    menu_x = 400
+    menu_y = 200
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu_x = 150
-    menu_y = 20
+    menu_x = 550
+    menu_y = 200
     screen:copyfrom(menu2:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu_x = 280
-    menu_y = 20
+    menu_x = 700
+    menu_y = 200
     screen:copyfrom(menu3:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    menu_x = 850
+    menu_y = 200
+    screen:copyfrom(menu4:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   end
   
 
@@ -212,231 +225,227 @@ function menu_navigation(key, state)
   print(nr_buttons_pressed)
  
   if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
+    if menuState ~= "new_name_menu" then
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
       update_menu()   
+    end
   elseif key=="up" and state=='down' then
+    if menuState ~= "new_name_menu" then
       menu:decrease_index()
       update_menu()
+    end
+  elseif key=="1"  and state=="down" then 
+
+    if text_button_pressed[1] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "A"
+      else
+        player_name = "A"
+      end
+      text_button_pressed[1] = text_button_pressed[1]+1
+    elseif text_button_pressed[1] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "B"
+      else
+      player_name = "B"
+      end
+      text_button_pressed[1] = text_button_pressed[1]+1
+    elseif text_button_pressed[1] == 2 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "C"
+      else
+        player_name = "C"
+      end
+      text_button_pressed[1] = 0
+    end 
+  elseif key=="2"  and state=="down" then 
+    if text_button_pressed[2] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "D"
+      else
+        player_name = "D"
+      end
+      text_button_pressed[2] = text_button_pressed[2]+1
+    elseif text_button_pressed[2] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "E"
+      else
+        player_name = "E"
+      end
+      text_button_pressed[2] = text_button_pressed[2]+1
+    elseif text_button_pressed[2] == 2 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "F"
+      else
+        player_name = "F"
+      end
+      text_button_pressed[2] = 0
+    end 
+  elseif key=="3" and state=="down" then 
+    if text_button_pressed[3] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "G"
+      else
+        player_name = "G"
+      end
+      text_button_pressed[3] = text_button_pressed[3]+1
+    elseif text_button_pressed[3] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "H"
+      else
+        player_name = "H"
+      end
+      text_button_pressed[3] = text_button_pressed[3]+1
+    elseif text_button_pressed[3] == 2 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "I"
+      else
+        player_name = "I"
+      end
+      text_button_pressed[3] = 0
+    end 
+  elseif key=="4" and state=="down" then   
+    if text_button_pressed[4] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "J"
+      else
+        player_name = "J"
+      end
+      text_button_pressed[4] = text_button_pressed[4]+1
+    elseif text_button_pressed[4] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "K"
+      else
+        player_name = "K"
+      end
+      text_button_pressed[4] = text_button_pressed[4]+1
+    elseif text_button_pressed[4] == 2 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "L"
+      else
+        player_name = "L"
+      end
+      text_button_pressed[4] = 0
+    end
+  elseif key=="5" and state=="down" then 
+    if text_button_pressed[5] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "M"
+      else
+        player_name = "M"
+      end
+      text_button_pressed[5] = text_button_pressed[5]+1
+    elseif text_button_pressed[5] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "N"
+      else
+        player_name = "N"
+      end
+      text_button_pressed[5] = text_button_pressed[5]+1
+    elseif text_button_pressed[5] == 2 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "O"
+      else
+        player_name = "O"
+      end
+      text_button_pressed[5] = 0
+    end
+  elseif key=="6" and state=="down" then
+    if text_button_pressed[6] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "P"
+      else
+        player_name = "P"
+      end
+      text_button_pressed[6] = text_button_pressed[6]+1
+    elseif text_button_pressed[6] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "Q"
+      else
+        player_name = "Q"
+      end
+      text_button_pressed[6] = text_button_pressed[6]+1
+    elseif text_button_pressed[6] == 2 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "R"
+      else
+        player_name = "R"
+      end
+      text_button_pressed[6] = 0
+    end 
+  elseif key=="7" and state=="down" then
+    if text_button_pressed[7] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "S"
+      else
+        player_name = "S"
+      end
+      text_button_pressed[7] = text_button_pressed[7]+1
+    elseif text_button_pressed[7] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "T"
+      else
+        player_name = "T"
+      end
+      text_button_pressed[7] = text_button_pressed[7]+1
+    elseif text_button_pressed[7] == 2 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "U"
+      else
+        player_name = "U"
+      end
+      text_button_pressed[7] = 0
+    end     
+  elseif key=="8" and state=="down" then
+    if text_button_pressed[8] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "V"
+      else
+        player_name = "V"
+      end
+      text_button_pressed[8] = text_button_pressed[8]+1
+    elseif text_button_pressed[8] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "W"
+      else
+        player_name = "W"
+      end
+      text_button_pressed[8] = text_button_pressed[8]+1
+    elseif text_button_pressed[8] == 2 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "X"
+      else
+        player_name = "X"
+      end
+      text_button_pressed[8] = 0
+    end 
+  elseif key=="9" and state=="down" then  
+    print("you pressed 9")
+    if text_button_pressed[9] == 0 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "Y"
+      else
+        player_name = "Y"
+      end
+      text_button_pressed[9] = text_button_pressed[9]+1
+    elseif text_button_pressed[9] == 1 then
+      if nr_buttons_pressed >= 1 then
+        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "Z"
+      else
+        player_name = "Z"
+      end
+      text_button_pressed[9] = 0
+    end 
+  elseif key=="green" and state=="down" then  
+    text_button_pressed = {0,0,0,0,0,0,0,0,0}
+    nr_buttons_pressed = nr_buttons_pressed +1
+
+  elseif key=="red" and state=="down" then  
+    stop_menu()
+    start_menu("start_menu")
   elseif key=="ok" and state=='up' then
     --print("ITEMS: "..menu:get_item_amount())
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
-    
-    if menuState == "new_name_menu" then
-      if menu:get_indexed_item().id=="name_1" then
-        if text_button_pressed[1] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "A"
-          else
-            player_name = "A"
-          end
-          text_button_pressed[1] = text_button_pressed[1]+1
-        elseif text_button_pressed[1] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "B"
-          else
-            player_name = "B"
-          end
-          text_button_pressed[1] = text_button_pressed[1]+1
-        elseif text_button_pressed[1] == 2 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "C"
-          else
-            player_name = "C"
-          end
-          text_button_pressed[1] = 0
-        end 
-      elseif menu:get_indexed_item().id=="name_2" then
-        if text_button_pressed[2] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "D"
-          else
-            player_name = "D"
-          end
-          text_button_pressed[2] = text_button_pressed[2]+1
-        elseif text_button_pressed[2] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "E"
-          else
-            player_name = "E"
-          end
-          text_button_pressed[2] = text_button_pressed[2]+1
-        elseif text_button_pressed[2] == 2 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "F"
-          else
-            player_name = "F"
-          end
-          text_button_pressed[2] = 0
-        end 
-
-      elseif menu:get_indexed_item().id=="name_3" then
-        if text_button_pressed[3] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "G"
-          else
-            player_name = "G"
-          end
-          text_button_pressed[3] = text_button_pressed[3]+1
-        elseif text_button_pressed[3] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "H"
-          else
-            player_name = "H"
-          end
-          text_button_pressed[3] = text_button_pressed[3]+1
-        elseif text_button_pressed[3] == 2 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "I"
-          else
-            player_name = "I"
-          end
-          text_button_pressed[3] = 0
-        end 
-      elseif menu:get_indexed_item().id=="name_4" then
-        if text_button_pressed[4] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "J"
-          else
-            player_name = "J"
-          end
-          text_button_pressed[4] = text_button_pressed[4]+1
-        elseif text_button_pressed[4] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "K"
-          else
-            player_name = "K"
-          end
-          text_button_pressed[4] = text_button_pressed[4]+1
-        elseif text_button_pressed[4] == 2 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "L"
-          else
-            player_name = "L"
-          end
-          text_button_pressed[4] = 0
-        end 
-
-      elseif menu:get_indexed_item().id=="name_5" then
-        if text_button_pressed[5] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "M"
-          else
-            player_name = "M"
-          end
-          text_button_pressed[5] = text_button_pressed[5]+1
-        elseif text_button_pressed[5] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "N"
-          else
-            player_name = "N"
-          end
-          text_button_pressed[5] = text_button_pressed[5]+1
-        elseif text_button_pressed[5] == 2 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "O"
-          else
-            player_name = "O"
-          end
-          text_button_pressed[5] = 0
-        end 
-
-      elseif menu:get_indexed_item().id=="name_6" then
-        if text_button_pressed[6] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "P"
-          else
-            player_name = "P"
-          end
-          text_button_pressed[6] = text_button_pressed[6]+1
-        elseif text_button_pressed[6] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "Q"
-          else
-            player_name = "Q"
-          end
-          text_button_pressed[6] = text_button_pressed[6]+1
-        elseif text_button_pressed[6] == 2 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "R"
-          else
-            player_name = "R"
-          end
-          text_button_pressed[6] = 0
-        end 
-        
-      elseif menu:get_indexed_item().id=="name_7" then
-        if text_button_pressed[7] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "S"
-          else
-            player_name = "S"
-          end
-          text_button_pressed[7] = text_button_pressed[7]+1
-        elseif text_button_pressed[7] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "T"
-          else
-            player_name = "T"
-          end
-          text_button_pressed[7] = text_button_pressed[7]+1
-        elseif text_button_pressed[7] == 2 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "U"
-          else
-            player_name = "U"
-          end
-          text_button_pressed[7] = 0
-        end 
-      elseif menu:get_indexed_item().id=="name_8" then
-        if text_button_pressed[8] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "V"
-          else
-            player_name = "V"
-          end
-          text_button_pressed[8] = text_button_pressed[8]+1
-        elseif text_button_pressed[8] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "W"
-          else
-            player_name = "W"
-          end
-          text_button_pressed[8] = text_button_pressed[8]+1
-        elseif text_button_pressed[8] == 2 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "X"
-          else
-            player_name = "X"
-          end
-          text_button_pressed[8] = 0
-        end 
-        text_button_pressed[8] = text_button_pressed[8]+1
-      elseif menu:get_indexed_item().id=="name_9" then
-        if text_button_pressed[9] == 0 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "Y"
-          else
-            player_name = "Y"
-          end
-          text_button_pressed[9] = text_button_pressed[9]+1
-        elseif text_button_pressed[9] == 1 then
-          if nr_buttons_pressed >= 1 then
-            player_name = player_name .. "Z"
-          else
-            player_name = "Z"
-          end
-          text_button_pressed[9] = 0
-        end
-        text_button_pressed[9] = text_button_pressed[9]+1
-      elseif menu:get_indexed_item().id=="accept_letter" then
-        text_button_pressed = {0,0,0,0,0,0,0,0,0}
-        nr_buttons_pressed = nr_buttons_pressed +1
-      elseif menu:get_indexed_item().id=="back" then
-        stop_menu()
-        start_menu("start_menu")
-      end
-
-    else 
       if menu:get_indexed_item().id=="start_new" then
         stop_menu()
         change_global_game_state(1)
@@ -467,7 +476,7 @@ function menu_navigation(key, state)
         stop_menu()
         start_menu("start_menu")
       end
-    end
+    
   end
 end
 
