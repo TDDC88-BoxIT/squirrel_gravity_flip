@@ -90,7 +90,7 @@ function stop_game()
     timer:stop()
     timer = nil
   end
-  background:destroy()
+  --background:destroy()
   if change_character_timer~=nil then
     change_character_timer:stop()
     change_character_timer=nil 
@@ -149,13 +149,36 @@ end
 function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
+  local falling=0
     player.new_x=player.cur_x+1
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
+      
+      ---------------------------------Hanxiao's test-----------------------------------
+      --[[
+      if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)=="FallingCheck" then
+        if direction_flag == "down" then 
+          player.test_y=player.cur_y+gameSpeed
+        else
+          player.test_y=player.cur_y-gameSpeed
+        end
+      
+        for k, v in pairs(Level.tiles) do
+        --if CheckCollision(player.cur_x,player.test_y, character.width, character.height, v.x-gameCounter, v.y, v.width, v.height)~=nil then
+          local A,B,C,D=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+          if A~=nil then
+          FF=1 
+        --print("set FF to "..FF)
+          end -- A~=nil
+        end -- for
+      end
+      ]]
+      ---------------------------the end------------------------------------
+      
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
       if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
         get_killed()
       end
-      return
+      --return
     elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
     end
@@ -171,7 +194,7 @@ function move_character()
         get_killed()
         break;
       end
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
         player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
       else
         break
@@ -256,10 +279,12 @@ function draw_screen()
     draw_tiles()
     draw_character()
     draw_score(game_score)
+    draw_lives()
     if current_game_type=="tutorial" then
       draw_tutorial_helper()
     end
     gfx.update()
+
   end
 end
 
@@ -372,6 +397,14 @@ function game_navigation(key, state)
     start_menu("pause_menu")
   elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
     levelwin()
+  elseif key=="star" and state=="up" then -- Testing purposes (S on keyboard). Should probably be commented out at some point.
+    game_score = game_score + 1000
+  elseif key=="multi" and state=="up" then -- Testing purposes (A on keyboard). Should probably be commented out at some point.
+    if game_score - 1000 >= 0 then
+      game_score = game_score - 1000
+    else
+      game_score = 0
+    end
   end
 
   if current_game_type=="tutorial" and state=='up' then

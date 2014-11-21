@@ -3,6 +3,16 @@
 @params: pu_name - The name (as defined in level files) of the object to activate.
 ]]
 function activate_power_up(pu_name)
+  
+  --[[
+  This prevents additional powerup events from being fired if the game is over (if you die).
+  Previously, hitting two or more obstacles at the same time (easily done on level4) would cause the game to try
+  and destroy the surface twice, throwing a runtime exception.
+  ]]
+  if(global_game_state == 0) then
+    return
+  end
+  
 	if(pu_name=="powerup1") then -- Score tile
     game_score = game_score + 100
 	elseif(pu_name=="powerup2") then -- Speed tile
