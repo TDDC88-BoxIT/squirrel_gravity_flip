@@ -150,6 +150,7 @@ end
 local function make_bakground(self)
    local img_surface=nil
     img_surface = gfx.loadpng(self.menu_background)
+    img_surface:premultiply()
     self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height},true)
     img_surface:destroy()
 end
@@ -174,6 +175,7 @@ local function make_buttons(self)
     -- SETS THE BUTTON IMAGE
     local img_surface=nil
     img_surface = gfx.loadpng(self.menu_items[i].img)
+    img_surface:premultiply()
 
     -- PUTS THE CREATED BUTTON IMAGE ON THE MENU SURFACE
     self.menu_surface:copyfrom(img_surface,nil,{x=self.button_x,y=(self.button_y+(self.button_height*(i-1)+i*10)

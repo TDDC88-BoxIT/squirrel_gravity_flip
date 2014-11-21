@@ -40,6 +40,7 @@ function start_game(level_number,game_type,life)
   load_level_atttributes()
 
   create_game_character()
+  background = gfx.loadpng("images/level_sky.png")
 
   if current_game_type=="tutorial" then
     require("game/tutorial/tutorial_handler")
@@ -81,6 +82,7 @@ function stop_game()
     timer:stop()
     timer = nil
   end
+  background:destroy()
   if change_character_timer~=nil then
     change_character_timer:stop()
     change_character_timer=nil 
@@ -139,13 +141,36 @@ end
 function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
+  local falling=0
     player.new_x=player.cur_x+1
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
+      
+      ---------------------------------Hanxiao's test-----------------------------------
+      --[[
+      if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)=="FallingCheck" then
+        if direction_flag == "down" then 
+          player.test_y=player.cur_y+gameSpeed
+        else
+          player.test_y=player.cur_y-gameSpeed
+        end
+      
+        for k, v in pairs(Level.tiles) do
+        --if CheckCollision(player.cur_x,player.test_y, character.width, character.height, v.x-gameCounter, v.y, v.width, v.height)~=nil then
+          local A,B,C,D=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+          if A~=nil then
+          FF=1 
+        --print("set FF to "..FF)
+          end -- A~=nil
+        end -- for
+      end
+      ]]
+      ---------------------------the end------------------------------------
+      
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
       if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
         get_killed()
       end
-      return
+      --return
     elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
     end
@@ -161,7 +186,7 @@ function move_character()
         get_killed()
         break;
       end
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
         player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
       else
         break
@@ -240,23 +265,32 @@ function draw_number(number, position, xplace, yplace)
 end
 
 function draw_screen()
- --draw_background()
+  -- Measure the game speed of each function in millisecond.
+  -- Remove the -- to trace and optimize.
+
+  --local t = sys.time()
+  draw_background()
+  --print(string.format("Background %d", ((sys.time() - t)) * 1000))
   draw_tiles()
+  --print(string.format("Draw_tiles %d", ((sys.time() - t)) * 1000))
   move_character()
+  --print(string.format("Move_character %d", ((sys.time() - t)) * 1000))
   draw_character()
+  --print(string.format("Draw_character %d", ((sys.time() - t)) * 1000))
   draw_score(game_score)
+  --print(string.format("Draw_score %d", ((sys.time() - t)) * 1000))
   draw_lives()
+  --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
   
   if current_game_type=="tutorial" then
     draw_tutorial_helper()
+    --print(string.format("Draw_tutorial_helper %d", ((sys.time() - t)) * 1000))
   end
   gfx.update()
 end
 
 function draw_background()
-  --background = gfx.loadpng("images/level_sky.png")
   screen:copyfrom(background,nil,nil)
-  --background:destroy()
 end
 
 --[[ 
@@ -267,7 +301,9 @@ THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
 function draw_tiles()
   local sf = nil
     for k,v in pairs(Level.tiles) do
-      if v.x-gameCounter+v.width>0 and v.visibility==true then
+      -- This code can't run properly on the box because the difference 
+      -- of screen:copyfrom function . Wait for further improvement
+      if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter+v.width<screen:get_width() + v.width then
         if v.gid == 9 then
           move_cloud(v)
         elseif v.gid == 10 then

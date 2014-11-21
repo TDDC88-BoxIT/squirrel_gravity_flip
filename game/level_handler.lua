@@ -80,24 +80,34 @@ end
 function load_images(tile_name)
   if tile_name == "floor" then
     floorimg = gfx.loadpng("images/floor1.png")
+    floorimg:premultiply()
   elseif tile_name == "powerup1" then
     powerup1Img = gfx.loadpng("images/powerup1.png") 
+    powerup1Img:premultiply()
   elseif tile_name == "powerup2" then
     powerup2Img = gfx.loadpng("images/powerup2.png")
+    powerup2Img:premultiply()
   elseif tile_name == "powerup3" then
     powerup3Img = gfx.loadpng("images/powerup3.png")
+    powerup3Img:premultiply()
   elseif tile_name == "powerup4" then
     powerup4Img = gfx.loadpng("images/powerup4.png")
+    powerup4Img:premultiply()
   elseif tile_name == "obstacle1" then
     obstacleGroundSpikeImg = gfx.loadpng("images/obstacleGroundSpike.png")
+    obstacleGroundSpikeImg:premultiply()
   elseif tile_name == "obstacle2" then
     obstacleCeilingSpikeImg = gfx.loadpng("images/obstacleCeilingSpike.png")
+    obstacleCeilingSpikeImg:premultiply()
   elseif tile_name == "obstacle3" then
     obstacle3Img = gfx.loadpng("images/obstacle3.png")
+    obstacle3Img:premultiply()
   elseif tile_name == "obstacle4" then
     flame1Img = gfx.loadpng("images/flame1.png")
+    flame1Img:premultiply()
   elseif tile_name == "win" then
     winImg = gfx.loadpng("images/winTile.png")
+    winImg:premultiply()
   end 
 end
 
