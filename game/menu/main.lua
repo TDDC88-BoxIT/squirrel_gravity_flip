@@ -3,6 +3,15 @@ require("../tool_box/character_object")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
+local name_menu1_x = 400
+local name_menu1_y = 200
+local name_menu2_x = 550
+local name_menu2_y = 200
+local name_menu3_x = 700
+local name_menu3_y = 200
+local name_menu4_x = 850
+local name_menu4_y = 200
+local level_menu_y = screen:get_height()/100
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu" OR "gameover_menu"
 local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
@@ -34,11 +43,11 @@ function start_menu(state)
     menu3:set_background(imageDir.."menuImg/menuBackground.png")
     menu4:set_background(imageDir.."menuImg/menuBackground.png")
   else
-    if(menu==nil) then
+    --if(menu==nil) then
       menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
-    else 
+    --else 
       menu:reset()
-    end
+    --end
   end
   add_menu_items()
   configure_menu_height()
@@ -180,23 +189,14 @@ function draw_menu()
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   end
   if menuState == "level_menu" then
-    menu_y = screen:get_height()/100 -- MAKES THE LEVEL MENU START 1/100 DOWN FROM THE TOP OF THE SCREEN, BUT FOR OTHER MENU STATES THE ORIGINAL VALUE OF MENU_Y IS KEPT (SEE TOP OF MAIN.LUA)
-    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=levelmenu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   end
 
   if menuState == "new_name_menu" then
-    menu_x = 400
-    menu_y = 200
-    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu_x = 550
-    menu_y = 200
-    screen:copyfrom(menu2:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu_x = 700
-    menu_y = 200
-    screen:copyfrom(menu3:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu_x = 850
-    menu_y = 200
-    screen:copyfrom(menu4:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    screen:copyfrom(menu4:get_surface(), nil,{x=name_menu4_x,y=name_menu4_x,width=menu:get_size().width,height=menu:get_size().height},true)
   end
   
 
@@ -463,7 +463,7 @@ function menu_navigation(key, state)
         start_game(1,"tutorial",0)
       elseif menu:get_indexed_item().id=="high_score" then
         stop_menu()
-        change_global_game_state(1)
+--        change_global_game_state(1)
         draw_highscore(1)
         -- COMMAND TO VIEW HIGH SCORE
       elseif menu:get_indexed_item().id=="settings" then

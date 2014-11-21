@@ -100,6 +100,7 @@ end
 function menu_object:reset()
   self.menu_items={}
   self.indexed_item=1
+  
 end
 
 -- RETURNS THE AMOUNT OF ITEMS WHICH HAVE BEEN ADDED TO THE MENU
