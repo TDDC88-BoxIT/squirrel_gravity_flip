@@ -38,9 +38,9 @@ function start_game(level_number,game_type,life)
   current_game_type=game_type
   Level.load_level(3,current_game_type)
   load_level_atttributes()
+  load_background_if_needed()
 
   create_game_character()
-  background = gfx.loadpng("images/level_sky.png")
 
   if current_game_type=="tutorial" then
     require("game/tutorial/tutorial_handler")
@@ -65,7 +65,14 @@ function load_level_atttributes()
   end
 end
 
-function resume_game()   
+function load_background_if_needed()
+  if (background == nil) then
+    background = gfx.loadpng("images/level_sky.png")
+  end
+end
+
+function resume_game()
+  load_background_if_needed()
   timer = sys.new_timer(20, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
@@ -82,7 +89,8 @@ function stop_game()
     timer:stop()
     timer = nil
   end
-  --background:destroy()
+  background:destroy()
+  background = nil
   if change_character_timer~=nil then
     change_character_timer:stop()
     change_character_timer=nil 
