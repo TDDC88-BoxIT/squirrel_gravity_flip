@@ -35,10 +35,10 @@ function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
     end
     table.sort(X, comp)
     table.sort(Y,comp)
-    if (X[3][2]-X[2][2])<(Y[3][2]-Y[2][2]) then
-      return "FallingCheck"
-    end
-    return X[2][1], X[3][1], Y[2][1], Y[3][1]
+    W=X[3][2]-X[2][2]
+    H=Y[3][2]-Y[2][2]
+    return W,H
+    --return X[2][1], X[3][1], Y[2][1], Y[3][1]
 
 
     --return "hit"
