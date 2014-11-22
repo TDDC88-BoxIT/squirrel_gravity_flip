@@ -22,7 +22,7 @@ local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local gameCounter=0
-local gameSpeed = 10 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
+local gameSpeed = 3 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local current_level
 local image1 = nil
 local image2 = nil
@@ -36,7 +36,7 @@ function start_game(level_number,game_type,life)
   current_level = level_number --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
   current_game_type=game_type
-  Level.load_level(4,current_game_type)
+  Level.load_level(3,current_game_type)
   load_level_atttributes()
 
   create_game_character()
@@ -143,29 +143,7 @@ function move_character()
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
   local falling=0
     player.new_x=player.cur_x+1
-    if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then
-      
-      ---------------------------------Hanxiao's test-----------------------------------
-      --[[
-      if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)=="FallingCheck" then
-        if direction_flag == "down" then 
-          player.test_y=player.cur_y+gameSpeed
-        else
-          player.test_y=player.cur_y-gameSpeed
-        end
-      
-        for k, v in pairs(Level.tiles) do
-        --if CheckCollision(player.cur_x,player.test_y, character.width, character.height, v.x-gameCounter, v.y, v.width, v.height)~=nil then
-          local A,B,C,D=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
-          if A~=nil then
-          FF=1 
-        --print("set FF to "..FF)
-          end -- A~=nil
-        end -- for
-      end
-      ]]
-      ---------------------------the end------------------------------------
-      
+    if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then  
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
       if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
         get_killed()
@@ -195,6 +173,47 @@ function move_character()
 end
 
 --the function that draws the score and the level
+
+function move_character_V2()
+  -- MOVE CHARACTER ON THE X-AXIS
+  -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
+  local falling=0
+  player.new_x=player.cur_x+1
+  local W,H=hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)
+  if W~=nil then
+    player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
+    --This part is checking if the hero hit the tail by right side 
+    if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height)==nil) or 
+    (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height)==nil)then  
+      falling=1
+    end        
+    if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+      get_killed()
+    end
+  elseif player.cur_x<player.start_xpos then
+      player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
+  end
+
+  -- MOVE CHARACTER ON THE Y-AXIS
+    for i=0, gameSpeed, 1 do
+      if direction_flag == "down" then 
+        player.new_y=player.cur_y+i
+      else
+        player.new_y=player.cur_y-i
+      end
+      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+        get_killed()
+        break;
+      end
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
+        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+      else
+        break
+      end
+    end  
+end
+
+
 function draw_score()
   --DRAWS SCORE
   if get_menu_state() == "gameover_menu" then -- Don't draw score on gameover menu
@@ -273,7 +292,7 @@ function draw_screen()
   --print(string.format("Background %d", ((sys.time() - t)) * 1000))
   draw_tiles()
   --print(string.format("Draw_tiles %d", ((sys.time() - t)) * 1000))
-  move_character()
+  move_character_V2()
   --print(string.format("Move_character %d", ((sys.time() - t)) * 1000))
   draw_character()
   --print(string.format("Draw_character %d", ((sys.time() - t)) * 1000))
