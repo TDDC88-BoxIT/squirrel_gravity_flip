@@ -22,13 +22,15 @@ local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local gameCounter=0
-local gameSpeed = 3 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
+local gameSpeed = 5 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local current_level
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
 local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
+local G=1;     --gravity
+local Tcount=1
 
 -- STARTS GAME LEVEL level_number IN EITHER tutorial OR story MODE
 function start_game(level_number,game_type,life) 
@@ -36,7 +38,7 @@ function start_game(level_number,game_type,life)
   current_level = level_number --TO BE PLACED SOMEWHERE ELSE
   gameCounter=0
   current_game_type=game_type
-  Level.load_level(3,current_game_type)
+  Level.load_level(1,current_game_type)
   load_level_atttributes()
   load_background_if_needed()
 
@@ -183,42 +185,50 @@ end
 --the function that draws the score and the level
 
 function move_character_V2()
+  local falling=0
+  
+  --Character get killed 
+  if (player.cur_x<-1) or (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then 
+      get_killed()
+  end
+  
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
-  local falling=0
-  player.new_x=player.cur_x+1
-  local W,H=hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)
-  if W~=nil then
+  if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height)~=nil then
     player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
     --This part is checking if the hero hit the tail by right side 
     if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height)==nil) or 
     (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height)==nil)then  
       falling=1
     end        
-    if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
-      get_killed()
-    end
   elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
   end
 
-  -- MOVE CHARACTER ON THE Y-AXIS
-    for i=0, gameSpeed, 1 do
-      if direction_flag == "down" then 
-        player.new_y=player.cur_y+i
-      else
-        player.new_y=player.cur_y-i
-      end
-      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
-        get_killed()
-        break;
-      end
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
-        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-      else
-        break
-      end
-    end  
+  --[[ MOVE CHARACTER ON THE Y-AXIS
+    S=(G*t^2)/2 
+    There has a rule that, F(t)=t^2, F(t)-F(t-1)=2t-1 
+    We can get S(t)-S(t-1)=(G*(2t-1))/2
+    ]]
+  
+  if direction_flag == "down" then 
+    player.new_y=player.cur_y+0.5*G*(2*Tcount+1)
+  else       
+    player.new_y=player.cur_y-0.5*G*(2*Tcount+1)
+  end
+  local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+  if W==nil or falling==1 then
+    Tcount=Tcount+1  
+    player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+  else
+    if direction_flag == "down" then 
+      player.cur_y=B_T-32
+      Tcount=1
+    else
+      player.cur_y=B_B
+      Tcount=1
+    end
+  end     
 end
 
 
