@@ -186,12 +186,6 @@ end
 
 function move_character_V2()
   local falling=0
-  
-  --Character get killed 
-  if (player.cur_x<-1) or (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then 
-      get_killed()
-  end
-  
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
   if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height)~=nil then
@@ -200,16 +194,42 @@ function move_character_V2()
     if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height)==nil) or 
     (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height)==nil)then  
       falling=1
-    end        
+    end
+    if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+        get_killed()
+    end
   elseif player.cur_x<player.start_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
   end
+
+-- MOVE CHARACTER ON THE Y-AXIS
+  --[[S=(G*t^2)/2 
+    There has a rule that, F(t)=t^2, F(t)-F(t-1)=2t-1 
+    We can get S(t)-S(t-1)=(G*(2t-1))/2]]
+    for i=0, gameSpeed, 1 do
+      if direction_flag == "down" then 
+        player.new_y=player.cur_y+0.5*G*(2*i+1)
+      else
+        player.new_y=player.cur_y-0.5*G*(2*i+1)
+      end
+      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+        get_killed()
+        break;
+      end
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
+        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+      else
+        break
+      end
+    end
+  end
+
 
   --[[ MOVE CHARACTER ON THE Y-AXIS
     S=(G*t^2)/2 
     There has a rule that, F(t)=t^2, F(t)-F(t-1)=2t-1 
     We can get S(t)-S(t-1)=(G*(2t-1))/2
-    ]]
+    
   
   if direction_flag == "down" then 
     player.new_y=player.cur_y+0.5*G*(2*Tcount+1)
@@ -230,8 +250,7 @@ function move_character_V2()
     end
   end     
 end
-
-
+]]
 function draw_score()
   --DRAWS SCORE
   if get_menu_state() == "gameover_menu" then -- Don't draw score on gameover menu
