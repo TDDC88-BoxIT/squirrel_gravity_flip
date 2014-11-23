@@ -15,7 +15,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = gfx.loadpng("images/floor1.png"),
+      image = "images/floor1.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
@@ -32,7 +32,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = gfx.loadpng("images/powerup1.png"),
+      image = "images/powerup1.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
@@ -49,7 +49,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = gfx.loadpng("images/powerup2.png"),
+      image = "images/powerup2.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
@@ -66,7 +66,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = gfx.loadpng("images/powerup3.png"),
+      image = "images/powerup3.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
@@ -83,7 +83,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = gfx.loadpng("images/powerup4.png"),
+      image = "images/powerup4.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {

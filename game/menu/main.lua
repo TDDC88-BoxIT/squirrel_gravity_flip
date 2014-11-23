@@ -17,8 +17,8 @@ local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
-local squirrelImg1 = imageDir.."character/squirrel1.png" 
-local squirrelImg2 = imageDir.."character/squirrel2.png"
+--local squirrelImg1 = imageDir.."character/bigSquirrel1.png" 
+--local squirrelImg2 = imageDir.."character/bigSquirrel2.png"
 local backgroundImage = nil
 local dash = nil
 local green_dash = nil
@@ -29,12 +29,15 @@ local player_name = ""
 text_button_pressed = {0,0,0,0,0,0,0,0,0}
 nr_buttons_pressed = 0
 local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
+local was_pressed_from_menu = false
 
-local squirrel1 = nil
-local squirrel2 = nil
+
+--local squirrel1 = nil
+--local squirrel2 = nil
 
 function start_menu(state)
   menuState=state
+
   unlocked_level = read_unlocked_level()
   if menuState == "new_name_menu" then
     menu = menu_object(128,92)
@@ -46,8 +49,11 @@ function start_menu(state)
     menu2:set_indexed_item(nil)
     menu3:set_indexed_item(nil)
   else
-      menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
+    menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
+    print("menu")
+    print(menu)
   end
+  was_pressed_from_menu = false -- This dumps the last keypress event so you can't get instantly transferred from gameover to main menu.
   add_menu_items()
   configure_menu_height()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
@@ -55,6 +61,8 @@ function start_menu(state)
 end 
 
 function stop_menu()
+  backgroundImage:destroy()
+  backgroundImage = nil
   screen:clear() 
  end
 
@@ -62,19 +70,22 @@ function stop_menu()
 
 -- ADDS THE MENU ITEMS
 function add_menu_items()
-  if menuState == "start_menu" or menuState == "pause_menu" then
+  if menuState == "start_menu" then
     menu:add_button("start_new",imageDir.."menuImg/start.png")
     menu:add_button("select_level", imageDir.."menuImg/select_level.png")
-    if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
-      menu:add_button("high_score",imageDir.."menuImg/highScore.png")
-      menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
-    elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
-      menu:add_button("resume",imageDir.."menuImg/resume.png")
-    end
+    menu:add_button("high_score",imageDir.."menuImg/highScore.png")
     menu:add_button("settings",imageDir.."menuImg/settings.png")
+    menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
-    
-  elseif menuState == "new_name_menu" then
+  else 
+    if menuState == "pause_menu" then
+      menu:add_button("resume",imageDir.."menuImg/resume.png")
+      menu:add_button()
+    elseif menuState == "levelwin_menu" then
+      menu:add_button("continue", imageDir.."menuImg/continue.png")
+    elseif menuState == "gameover_menu" then
+      menu:add_button("restart", imageDir.."menuImg/restart.png")
+    elseif menuState == "new_name_menu" then
     menu:add_button("name_1", imageDir.."font/1but.png")
     menu:add_button("name_4", imageDir.."font/4but.png")
     menu:add_button("name_7", imageDir.."font/7but.png")
@@ -85,10 +96,14 @@ function add_menu_items()
     menu3:add_button("name_6", imageDir.."font/6but.png")
     menu3:add_button("name_9", imageDir.."font/9but.png")
     
-  elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
-    menu:add_button("continue", imageDir.."menuImg/continue.png")
-  elseif menuState == "level_menu" or menuState== "highscore_menu" then
-    add_level_menu_buttons()
+    elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
+      menu:add_button("continue", imageDir.."menuImg/continue.png")
+    elseif menuState == "level_menu" or menuState== "highscore_menu" then
+      add_level_menu_buttons()
+    end
+      if menuState ~= "new_name_menu" then
+        menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
+      end
   end
 end
 
@@ -123,8 +138,6 @@ function add_level_menu_buttons()
     else
       menu:add_button(level_lable, dir .. "level" .. level_number .. ".png")
     end
-
-    
   end
 
   if(end_page_level ~= no_level_menu_items) then
@@ -156,11 +169,11 @@ end
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
-  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" or menuState == "highscore_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
+  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" or menuState == "highscore_menu" and backgroundImage == nil then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
-  elseif menuState == "levelwin_menu" then
+  elseif menuState == "levelwin_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
-  elseif menuState == "new_name_menu" then
+  elseif menuState == "new_name_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
     dash = gfx.loadpng(imageDir.."font/dash.png")
     green_dash = gfx.loadpng(imageDir.."font/green_dash.png")
@@ -170,17 +183,28 @@ function add_menu_bling()
 
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
   
+
+  -- Can this be removed?
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
+--[[<<<<<<< HEAD
   backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
   if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" and menuState == "highscore_menu" then
     backdrop:fill({r=0,g=0,b=0,a=200})
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
+=======]]--
+  --[[backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
+  if menuState == "start_menu" or menuState == "pause_menu" then
+    backdrop:fill({r=0,g=0,b=0,a=60})
+  elseif menuState == "levelwin_menu" then
+>>>>>>> development
     backdrop:fill({r=0,g=0,b=0,a=100})
   end
-  screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
+  ]]
+ -- screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
   thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
+  thunderAcorn.img:premultiply()
   thunderAcorn.height=139
   thunderAcorn.width=101
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
@@ -188,22 +212,28 @@ function add_menu_bling()
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   
+
+  -- Can this be removed?
+--[[<<<<<<< HEAD
   -- ADD TWO RUNNING SQUIRRELS
   if squirrel1 == nil and squirrel2 == nil then
+=======]]--
+  -- Adds two munching squirrel pictures. Disabled for now.
+  --[[-if squirrel1 == nil and squirrel2 == nil then
+>>>>>>> development
     squirrel1=character_object(117,140,squirrelImg2)
     squirrel2=character_object(117,140,squirrelImg1)
   end
   squirrel1:update()
   squirrel2:update()
   screen:copyfrom(squirrel1:get_surface(), nil,{x=200,y=250,width=squirrel1:get_size().width,height=squirrel1:get_size().height},true)
-  screen:copyfrom(squirrel2:get_surface(), nil,{x=(screen:get_width()-(squirrel2:get_size().width+200)),y=250,width=squirrel2:get_size().width,height=squirrel2:get_size().height},true)
+  screen:copyfrom(squirrel2:get_surface(), nil,{x=(screen:get_width()-(squirrel2:get_size().width+200)),y=250,width=squirrel2:get_size().width,height=squirrel2:get_size().height},true)]]
   
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
-  backgroundImage:destroy()
   thunderAcorn.img:destroy()
-  backdrop:destroy()
-  squirrel1:destroy()
-  squirrel2:destroy()
+  --backdrop:destroy()
+  --squirrel1:destroy()
+  --squirrel2:destroy()
 end
 
 function get_menu_state()
@@ -506,33 +536,24 @@ function menu_navigation(key, state)
   -- let's you go back to the start menu
     stop_menu()
     start_menu("start_menu")
-  elseif key=="ok" and state=='up' then
-    --print("ITEMS: "..menu:get_item_amount())
+  elseif key=="ok" and state=='up' and was_pressed_from_menu == true then
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
     if menu:get_indexed_item().id=="start_new" then
       stop_menu()
       change_global_game_state(1)
-      start_game(16,"story",0)
+      --start_game(16,"story",0)
+      start_game("first","story",0)
     elseif menu:get_indexed_item().id=="select_level" then
       stop_menu()
       start_menu("level_menu")
-      local unlocked_level = read_unlocked_level()
-      local max_no_levels = 15
-      local i = nil
-      --for i=1,unlocked_level do 
-        --print("level " .. i .. ": unlocked") 
-      --end
-      --for i=(unlocked_level+1), max_no_levels do 
-        --print("level " .. i .. ": locked") 
-      --end
-    elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
+     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
       resume_game()
     elseif menu:get_indexed_item().id=="tutorial" then
       stop_menu()
       change_global_game_state(1)
-      start_game(1,"tutorial",0)
+      start_game("first","tutorial",0)
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
       print("inne i highscore")
@@ -546,6 +567,13 @@ function menu_navigation(key, state)
       sys.stop() -- COMMAND TO EXIT
     elseif menu:get_indexed_item().id=="continue" then
       stop_menu()
+      change_global_game_state(1)
+      start_game("next","current",0)
+    elseif menu:get_indexed_item().id=="restart" then
+      stop_menu()
+      change_global_game_state(1)
+      start_game("restart","current",0)
+    elseif menu:get_indexed_item().id=="main_menu" then
       start_menu("start_menu")
     elseif menu:get_indexed_item().id=="previouspage" then
       current_page = current_page - 1
@@ -571,9 +599,13 @@ function menu_navigation(key, state)
         end
       end
     end
+  elseif key=="ok" and state=="down" and was_pressed_from_menu == false then
+    was_pressed_from_menu = true
   end
 end
+
 
 function get_player_name()
   return player_name
 end
+

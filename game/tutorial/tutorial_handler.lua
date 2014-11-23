@@ -13,10 +13,11 @@ function create_tutorial_helper(level_number)
   	if tutorial_helper==nil and tutorial_level==1 then
     	tutorial_helper = character_object(236,219,imageDir.."tutorialImg/okButtonDown.png")
     	tutorial_helper:add_image(imageDir.."tutorialImg/okButtonUp.png")
+    	tutorial_helper_timer = sys.new_timer(500, "update_tutorial_helper")
   	else
-    	tutorial_helper:reset()
+    	--tutorial_helper:reset()
+    	--tutorial_helper_timer = sys.new_timer(500, "update_tutorial_helper")
   	end
-  	tutorial_helper_timer = sys.new_timer(500, "update_tutorial_helper")
 end
 
 function update_tutorial_helper()
@@ -34,7 +35,7 @@ end
 DRAWS TUTORIAL SPACE BAR ON SCREEN
 ]]
 function draw_tutorial_helper()
-	if tutorial_goal_fulfilled == false then
+	if tutorial_goal_fulfilled == false and tutorial_level==1  then
 		screen:copyfrom(tutorial_helper:get_surface(), nil,{x=(screen:get_width()/2)-150,y=400},true)
 	end
 end

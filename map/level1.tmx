@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="500" height="14" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="floor1" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="character_start_pos_x" value="0"/>
+  <property name="character_start_pos_y" value="12"/>
+ </properties>
+ <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32">
   <image source="../images/floor1.png" width="32" height="32"/>
  </tileset>
  <tileset firstgid="2" name="powerup1" tilewidth="32" tileheight="32">
@@ -15,7 +19,7 @@
  <tileset firstgid="5" name="powerup4" tilewidth="32" tileheight="32">
   <image source="../images/powerup4.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="6" name="winTile" tilewidth="32" tileheight="32">
+ <tileset firstgid="6" name="win" tilewidth="32" tileheight="32">
   <image source="../images/winTile.png" width="32" height="32"/>
  </tileset>
  <tileset firstgid="7" name="obstacle1" tilewidth="32" tileheight="32">
@@ -32,7 +36,7 @@
  </tileset>
  <layer name="Tile Layer 1" width="500" height="14">
   <data encoding="base64" compression="zlib">
-   eJzt3MsOwiAQhWG8V9//gV24MqFWhmFmYP4vYdO0FtDkcLE9lVJOC5SI/q2nVrslfeP9vVHWKfcCILPNuwKGbp3XZ+orzIc8B+Zz9q6AwNHcIouXdwWwLPIcWNelcuxhdO/suQ1YI8+BuRzNzaV7b9pqa9O18UUkLX3Uc14UvfsPiIU8B4CPKFk7ctzlPc7DOOQ5MI8Z980jOcqqKPm1V48o9UNM5DmALLby+z/qUfKSPIcEeQ7MQTI3vyrd+1k5Jl2v7VnnHb1G3HKtVt/WWOX5yDbAHnkOzE3jPRQZ532a44gRdWs5vncuv4NcyHMgPo19c96F8i1ydrHeDgnyHEBGkbORPIcEeQ7E1jM3X/X5Yo19X+tsbHn23irPo78PAG3Ic8CX1v63Z5G0pbcvNPpxJK0+1fxMytqFPAd8vQF5WANJ
+   eJztnNluxCAMRTNbm/b/P7gajSKh1OwGTDhH8guYhNDUFzCT27ZttwuYRVL7qfXcJWMz+u+GXc8AYE320R3oyKuy/UpjlUtsbO4Rm3Fsa3TUbbc7FvLfI/ZV0A8AGMt9dAcKYE3x4Xd0B0AVDT1P9f+O+KDnANflIZTFYoIWq+v2SoTW3Tnvm9S29ppvHolWQujdPjTYV5er52ff87wePQeYi9ja3ErOTdo7LI2ZvcgZoxo/K9TmHw4s5YlH3k+rzvXx4c5vDtBzAIAPVmJhy3lX73neMa97CebztYi2ZqfquVQv7Vm8Qc8B5mHGvLklYlplJRaG1oKzkqLn1ontv/j8a/Xc9QnlNtBzAFiF2PrPSiycVc9DeW2fnvvaaJ7ziJ2tP+9bhxil5z33VACgLSVr86fSvX+EstLYopWrbBHPctpqja1ELz3XeoZS3am1Hn2Rru+7X6gvOXWlsD4HmJuWsfHKaGpEi77llPt8LbwH0u+kpfqQv6W8uqTnu1B+1KHnAOCikTe3FBMtYDnu9VqfQz45/0cxPffNA0pBzwFgRSzHPfT8GvTe/0LPAWxTszaf8QxxChp5395xL+e39730XPt7ALEzbO63W57b/++5SGW597CEpp6nPDd6DjAW7fM7I6zkWWrHQmMcW6I1pprXxNYwABjDH/skBlQ=
   </data>
  </layer>
 </map>

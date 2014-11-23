@@ -5,9 +5,14 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
     if temp1 ~= nil then
       if v.name=="floor1" then -- gid==1 IS A FLOOR TILE
         return temp1,temp2,temp3,temp4   
-    elseif v.visibility == true then
-      activate_power_up(v.name)
-      v.visibility = false
+      elseif string.sub(v.name,1,3)=="pow" and v.visibility == true then
+        activate_power_up(v.name)
+        v.visibility = false
+      elseif string.sub(v.name,1,3)=="obs" then
+        print("Death caused by hitting obstacle")
+        get_killed()
+      elseif v.name=="win" then
+        levelwin()
       end
     end
   end
@@ -28,18 +33,22 @@ end
 function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
   local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
   if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
-    --[[
     local X={{"ALeft",ax1},{"ARight",ax2},{"BLeft",bx1},{"BRight",bx2}}
-    local Y={{"ABottom",ay1},{"ATop",ay2},{"BBottom",by1},{"BTop",by2}}
+    local Y={{"ATop",ay1},{"ABottom",ay2},{"BTop",by1},{"BBottom",by2}}
+    local B_T=Y[3][2]
+    local B_B=Y[4][2]
     local comp = function(a,b)
       return a[2] < b[2] 
     end
     table.sort(X, comp)
     table.sort(Y,comp)
-    return X[2][1], X[3][1], Y[2][1], Y[3][1]
-    ]]
+    local W=X[3][2]-X[2][2]
+    local H=Y[3][2]-Y[2][2]
+    return W,H,B_T,B_B
+    --return X[2][1], X[3][1], Y[2][1], Y[3][1]
 
-    return "hit"
+
+    --return "hit"
   end
   return nil
 end

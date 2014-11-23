@@ -1,10 +1,12 @@
 level1
 AAA
 10270
+AAA
+10270
 Squirrel killer
 10070
-Squirrel killer
-10040
+AAA
+9930
 AAA
 9910
 level2
@@ -14,7 +16,7 @@ Bob the builder
 9991
 Bob the builder
 9991
-Bob the builder
-9991
-Squirrel killer
-9950
+level3
+level4
+level5
+level6

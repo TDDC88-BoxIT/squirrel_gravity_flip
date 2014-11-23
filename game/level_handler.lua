@@ -38,6 +38,8 @@ function Level.load_level (level_number,game_type)
   Level.attributes = loaded_level.attributes
   -- Get all the tiles and saves them into the Level.tiles table
   Level.tiles = get_tiles()
+  Level.character_start_pos_x = loaded_level.properties["character_start_pos_x"] * 32  -- Sets the characters start position on the x-axis
+  Level.character_start_pos_y = loaded_level.properties["character_start_pos_y"] * 32  -- Sets the characters start position on the y-axis
   --return Level
 end
 
@@ -51,14 +53,17 @@ function get_tiles()
   -- Saves the tilesets data into an array with the firstgid index, this is the same number as in the tile_layer_data
   for k,v in pairs(Level.raw_level.tilesets) do 
     tilesets[v.firstgid] = v
-    load_images(v.name)
+    if string.sub(v.image,1,3)=="../" then 
+      load_images(v.name, string.sub(v.image,4,string.len(v.image))) -- LOADS IMAGE PATH WITHOUT UNWANTED FIRST CHARACTERS
+    else
+      load_images(v.name, v.image)
+    end
   end   
   -- Loops all the numbers in the level file, 
   for k,gid in pairs(tile_layer_data) do
     -- Only if there actually is a tile on the current position
     if gid ~= 0 then
       -- Get the information about the current tile from it's tileset 
-      
       tile = {
         name = tilesets[gid].name,
         gid = tilesets[gid].firstgid,
@@ -77,27 +82,44 @@ function get_tiles()
   return tiles
 end
 
-function load_images(tile_name)
-  if tile_name == "floor1" then
-    floorimg = gfx.loadpng("images/floor1.png")
+
+function load_images(tile_name, img_path)
+  if tile_name == "floor" then
+    floorimg = gfx.loadpng(img_path)
+    floorimg:premultiply()
   elseif tile_name == "powerup1" then
-    powerup1Img = gfx.loadpng("images/powerup1.png") 
+    powerup1Img = gfx.loadpng(img_path) 
+    powerup1Img:premultiply()
   elseif tile_name == "powerup2" then
-    powerup2Img = gfx.loadpng("images/powerup2.png")
+    powerup2Img = gfx.loadpng(img_path)
+    powerup2Img:premultiply()
   elseif tile_name == "powerup3" then
-    powerup3Img = gfx.loadpng("images/powerup3.png")
+    powerup3Img = gfx.loadpng(img_path)
+    powerup3Img:premultiply()
   elseif tile_name == "powerup4" then
-    powerup4Img = gfx.loadpng("images/powerup4.png")
+    powerup4Img = gfx.loadpng(img_path)
+    powerup4Img:premultiply()
   elseif tile_name == "obstacle1" then
-    obstacleGroundSpikeImg = gfx.loadpng("images/obstacleGroundSpike.png")
+    obstacleGroundSpikeImg = gfx.loadpng(img_path)
+    obstacleGroundSpikeImg:premultiply()
   elseif tile_name == "obstacle2" then
-    obstacleCeilingSpikeImg = gfx.loadpng("images/obstacleCeilingSpike.png")
+    obstacleCeilingSpikeImg = gfx.loadpng(img_path)
+    obstacleCeilingSpikeImg:premultiply()
   elseif tile_name == "obstacle3" then
-    obstacle3Img = gfx.loadpng("images/obstacle3.png")
+    obstacle3Img = gfx.loadpng(img_path)
+    obstacle3Img:premultiply()
   elseif tile_name == "obstacle4" then
-    flame1Img = gfx.loadpng("images/flame1.png")
-  elseif tile_name == "winTile" then
-    winImg = gfx.loadpng("images/winTile.png")
+    flame1Img = gfx.loadpng(img_path)
+    flame1Img:premultiply()
+  elseif tile_name == "obstacle5" then
+    obstacleLeftSpikeImg = gfx.loadpng(img_path)
+    obstacleLeftSpikeImg:premultiply()
+  elseif tile_name == "obstacle6" then
+    obstacleRightSpikeImg = gfx.loadpng(img_path)
+    obstacleRightSpikeImg:premultiply()
+  elseif tile_name == "win" then
+    winImg = gfx.loadpng(img_path)
+    winImg:premultiply()
   end 
 end
 
@@ -120,6 +142,10 @@ function get_image(tile_name)
     return obstacle3Img
   elseif tile_name == "obstacle4" then
     return flame1Img
+  elseif tile_name == "obstacle5" then
+    return obstacleLeftSpikeImg
+  elseif tile_name == "obstacle6" then
+    return obstacleRightSpikeImg
   elseif tile_name == "win" then
     return winImg
   else

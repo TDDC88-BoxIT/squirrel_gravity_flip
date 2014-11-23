@@ -153,11 +153,20 @@ function menu_object:set_background(path)
 end
 
 -- CREATES THE MENU BACKGROUND AND ADDS IT TO THE MENU
+--<<<<<<< HEAD
 local function make_background(self)
   local img_surface=nil
   img_surface = gfx.loadpng(self.menu_background)
   self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height-(20+2*screen:get_height()/100)},true)
   img_surface:destroy()
+--[[=======
+local function make_bakground(self)
+   local img_surface=nil
+    img_surface = gfx.loadpng(self.menu_background)
+    img_surface:premultiply()
+    self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height},true)
+    img_surface:destroy()
+>>>>>>> development]]--
 end
 
 -- CREATES THE MENU INDICATOR AND ADDS IT TO THE MENU. THE Y-VALUE MARKS WHERE THE INDICATOR IS TO BE PUT
@@ -181,6 +190,7 @@ local function make_buttons(self)
     -- SETS THE BUTTON IMAGE
     local img_surface=nil
     img_surface = gfx.loadpng(self.menu_items[i].img)
+    img_surface:premultiply()
 
     -- PUTS THE CREATED BUTTON IMAGE ON THE MENU SURFACE  
       self.menu_surface:copyfrom(img_surface,nil,{x=self.button_x,y=(self.button_y+(self.button_height*(i-1)+i*10)),width=self.button_width,height=self.button_height},true)
