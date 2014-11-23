@@ -42,6 +42,9 @@ function start_menu(state)
     menu2:set_background(imageDir.."menuImg/menuBackground.png")
     menu3:set_background(imageDir.."menuImg/menuBackground.png")
     menu4:set_background(imageDir.."menuImg/menuBackground.png")
+    menu:set_indexed_item(nil) --REMOVES THE ITEM INDICATOR ON THE MENU BUTTONS
+    menu2:set_indexed_item(nil)
+    menu3:set_indexed_item(nil)
   else
     --if(menu==nil) then
       menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
@@ -191,21 +194,17 @@ end
 function draw_menu()
   screen:clear()
   if addBling==true then
-    add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
-    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-  end
-  if menuState == "level_menu" then
-    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=levelmenu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+      add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
 
-  if menuState == "new_name_menu" then
+  if menuState == "level_menu" then
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=levelmenu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  else if menuState == "new_name_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu4:get_surface(), nil,{x=name_menu4_x,y=name_menu4_x,width=menu:get_size().width,height=menu:get_size().height},true)
     draw_score("Your name ", 300,600)
-    print("draw menu")
-    print(nr_buttons_pressed)
     if nr_buttons_pressed> 0 and nr_buttons_pressed<= 3 then 
       for i=1,nr_buttons_pressed do
         screen:copyfrom(green_dash, nil,{x=600+i*30,y=656,width=30,height=6},true)
@@ -215,6 +214,7 @@ function draw_menu()
       screen:copyfrom(dash, nil,{x=600+(i+1)*30,y=656,width=30,height=6},true)
     end
   end
+end
   
 
   if menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
@@ -240,11 +240,6 @@ end
 
 --HANDLES MENU NAVIGATION AND COMMANDS 
 function menu_navigation(key, state)
-  print("player_name")
-  print(player_name)
-  --print("nr_buttons_pressed")
-  --print(nr_buttons_pressed)
-
   if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
     if menuState ~= "new_name_menu" then
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 

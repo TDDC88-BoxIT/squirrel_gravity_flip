@@ -113,6 +113,10 @@ function menu_object:get_indexed_item()
   return self.menu_items[self.indexed_item]
 end 
 
+function menu_object:set_indexed_item(indexed_item)
+  self.indexed_item=indexed_item
+end
+
 -- SETS THE MENU INDICATOR COLOR
 function menu_object:set_indicator_color(color)
   self.indicator_color=color;
