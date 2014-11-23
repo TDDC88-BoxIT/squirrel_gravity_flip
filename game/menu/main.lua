@@ -11,6 +11,7 @@ local name_menu2_y = 200
 local name_menu3_x = 700
 local name_menu3_y = 200
 local level_menu_y = screen:get_height()/100
+local level_menu_x = screen:get_width()/100
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu" OR "gameover_menu"
 local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
@@ -215,8 +216,10 @@ function draw_menu()
       add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
 
-  if menuState == "level_menu" or menuState == "highscore_menu" then
-    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  if menuState == "level_menu" then
+    screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  elseif menuState == "highscore_menu" then
+    screen:copyfrom(menu:get_surface(), nil,{x=level_menu_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   elseif menuState == "new_name_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
@@ -559,14 +562,12 @@ function menu_navigation(key, state)
         change_global_game_state(1)
         start_game(level,"story",0)
       end  
-    elseif menuState == "highscore_menu" then  
-      print("yay")
-
+    elseif menuState == "highscore_menu" then 
       unlocked_level = read_unlocked_level()
       print(unlocked_level)
       for i=1,unlocked_level do
         if menu:get_indexed_item().id == "highscore" .. i then 
-          draw_highscore(i)
+          draw_highscore(i,350)
         end
       end
     end

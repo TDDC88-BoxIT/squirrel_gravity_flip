@@ -135,11 +135,10 @@ end
 
 
 --@desc: Draws the high score for a level on the screen
---@params: the level that the highscore should be shown for
+--@params: the level that the highscore should be shown for, x-coordinate
 --@author: Amanda Persson
-function draw_highscore(level) 
+function draw_highscore(level, x_coordinate) 
   local position
-  local x_coordinate = 620
   local y_coordinate
   read_from_file()
   index = 1
@@ -147,7 +146,7 @@ function draw_highscore(level)
   while score_board[tostring(level)][tostring(i)] ~= nil and index<=5  do
     y_coordinate = 300+60*(i-1)
     position = 1
-    draw_score(score_board[tostring(level)][tostring(i)][1], 380, y_coordinate)
+    draw_score(score_board[tostring(level)][tostring(i)][1], x_coordinate + 200, y_coordinate)
     string_score= score_board[tostring(level)][tostring(i)][2] 
     while position <= string.len(string_score) do
       draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
