@@ -9,8 +9,6 @@ local name_menu2_x = 550
 local name_menu2_y = 200
 local name_menu3_x = 700
 local name_menu3_y = 200
-local name_menu4_x = 850
-local name_menu4_y = 200
 local level_menu_y = screen:get_height()/100
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu" OR "gameover_menu"
 local menu = nil  -- THE MENU SURFACE VARIABLE
@@ -38,20 +36,20 @@ function start_menu(state)
     menu = menu_object(128,92)
     menu2 = menu_object(128,92)
     menu3 = menu_object(128,92)
-    menu4 = menu_object(53,42)
     menu2:set_background(imageDir.."menuImg/menuBackground.png")
     menu3:set_background(imageDir.."menuImg/menuBackground.png")
-    menu4:set_background(imageDir.."menuImg/menuBackground.png")
     menu:set_indexed_item(nil) --REMOVES THE ITEM INDICATOR ON THE MENU BUTTONS
     menu2:set_indexed_item(nil)
     menu3:set_indexed_item(nil)
   else
-    --if(menu==nil) then
+    if(menu==nil) then
       menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
-    --else 
+    else 
       menu:reset()
-    --end
+    end
   end
+  print("menu should here")
+  print(menu)
   add_menu_items()
   configure_menu_height()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
@@ -86,10 +84,6 @@ function add_menu_items()
     menu3:add_button("name_3", imageDir.."font/3but.png")
     menu3:add_button("name_6", imageDir.."font/6but.png")
     menu3:add_button("name_9", imageDir.."font/9but.png")
-    menu4:add_button("back_space", imageDir.."font/X.png")
-    menu4:add_button("accept_letter", imageDir.."font/Y.png")
-    menu4:add_button("back", imageDir.."font/Z.png")
-
     
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
@@ -125,12 +119,9 @@ function configure_menu_height()
     menu:set_button_size(nil, 92)
     menu2:set_button_size(nil, 92)
     menu3:set_button_size(nil, 92)
-    menu4:set_button_size(nil, 42)
     menu:set_size(nil,384)
     menu2:set_size(nil,384)
     menu3:set_size(nil,384)
-    menu4:set_size(nil,384)
-
   end
 end
 
@@ -199,11 +190,11 @@ function draw_menu()
 
   if menuState == "level_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=levelmenu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-  else if menuState == "new_name_menu" then
+  elseif menuState == "new_name_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    screen:copyfrom(menu4:get_surface(), nil,{x=name_menu4_x,y=name_menu4_x,width=menu:get_size().width,height=menu:get_size().height},true)
+  
     draw_score("Your name ", 300,600)
     if nr_buttons_pressed> 0 and nr_buttons_pressed<= 3 then 
       for i=1,nr_buttons_pressed do
@@ -213,20 +204,23 @@ function draw_menu()
     for i=nr_buttons_pressed,2 do
       screen:copyfrom(dash, nil,{x=600+(i+1)*30,y=656,width=30,height=6},true)
     end
-  end
-end
-  
-
-  if menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
+  elseif menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
     --draw_level() --STILL TO BE IMPLEMENTED
     
     if menuState == "levelwin_menu" then
       call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
     end
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  else
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   end
-  
-  menu:destroy()
+  if menuState == "new_name_menu" then 
+    menu:destroy()
+    menu2:destroy()
+    menu3:destroy()
+  else
+    menu:destroy()
+  end
   gfx.update()
 end
 
@@ -234,9 +228,6 @@ function update_menu()
   draw_menu()
 end
 
-function pulsating_dash()
-  screen:copyfrom(dash, nil,{x=600+nr_buttons_pressed*30,y=600,width=30,height=6},true)
-end
 
 --HANDLES MENU NAVIGATION AND COMMANDS 
 function menu_navigation(key, state)
