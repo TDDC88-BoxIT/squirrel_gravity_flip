@@ -23,7 +23,7 @@ local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local gameCounter=0
-local gameSpeed = 10 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
+local gameSpeed = 5 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local current_level
 local image1 = nil
 local image2 = nil
@@ -33,14 +33,17 @@ local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 
 -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
 function start_game(level,game_type,life) 
-  game_score = 10000
+  game_score = 10000000
   gameCounter=0
-  current_game_type=game_type
 
-  if level=="next" then
+  if game_type ~= "current" then
+    current_game_type=game_type
+  end
+
+  if level=="first" then
+    current_level = 1
+  elseif level=="next" then
     current_level = current_level+1
-  else
-    current_level = level --TO BE PLACED SOMEWHERE ELSE
   end
   
   Level.load_level(current_level,current_game_type)
@@ -78,17 +81,13 @@ function resume_game()
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
 
-function restart_game()
-  gameCounter=0
-  set_character_start_position()
-  change_character_timer = sys.new_timer(200, "update_game_character")
-  pos_change = 0
-  end
-
 function stop_game()
   if timer~=nil then
     timer:stop()
     timer = nil
+  end
+  if speed_timer ~= nil then
+    reset_game_speed()
   end
   --background:destroy()
   if change_character_timer~=nil then
@@ -118,10 +117,9 @@ function update_game_character()
 end
 
 function set_character_start_position()
-  player.start_xpos=200 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
-  player.start_ypos=40 -- WHARE WE WANT THE CHARACTER TO BE ON THE Y-AXIS WHEN HE STARTS
-  player.cur_x = 50
-  player.cur_y = player.start_ypos
+  player.work_xpos= 200 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
+  player.cur_x = Level.character_start_pos_x 
+  player.cur_y = Level.character_start_pos_y
   player.new_x = player.cur_x -- INITIALLY NEW X-POS IS THE SAME AS CURRENT POSITION
   player.new_y = player.cur_y -- INITIALLY NEW Y-POS IS THE SAME AS CURRENT POSITION
 end
@@ -136,8 +134,9 @@ function update_game()
   if game_score > 0 then
     game_score = game_score -10
   else
-    -- GAME IS LOST
-    end
+    get_killed()
+    return
+  end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
 
@@ -177,10 +176,10 @@ function move_character()
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
       if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
         get_killed()
+        return
       end
-      --return
-    elseif player.cur_x<player.start_xpos then
-      player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.start_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
+    elseif player.cur_x<player.work_xpos then
+      player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
     end
 
   -- MOVE CHARACTER ON THE Y-AXIS
@@ -192,7 +191,7 @@ function move_character()
       end
       if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
         get_killed()
-        break;
+        return;
       end
       if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
         player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
@@ -205,7 +204,7 @@ end
 --the function that draws the score and the level
 function draw_score()
   --DRAWS SCORE
-  if get_menu_state() == "gameover_menu" then -- Don't draw score on gameover menu
+  if global_game_state==0 and get_menu_state() == "gameover_menu" then -- Don't draw score on gameover menu
     return
   end
   if global_game_state == 1 then --game situation, place score in the upper left corner of the screen
@@ -213,7 +212,7 @@ function draw_score()
     yplace = 10
   elseif global_game_state == 0 then --menu situation, place score in the center of the screen
     xplace = 550
-    yplace = 370
+    yplace = 440
   end
   local string_score = tostring(game_score)
   position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
@@ -230,7 +229,7 @@ function draw_score()
     yplace = 10
   elseif global_game_state == 0 then --menu situation, place level in the center of the screen
     xplace = 550
-    yplace = 300
+    yplace = 370
   end
   local string_levelCounter = tostring(current_level)
   position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
@@ -274,7 +273,7 @@ end
 
 function draw_screen()
   move_character()
-  if not islevelWon() then
+  if timer~=nil then
     draw_background()
     draw_tiles()
     draw_character()
@@ -284,7 +283,6 @@ function draw_screen()
       draw_tutorial_helper()
     end
     gfx.update()
-
   end
 end
 
@@ -447,6 +445,6 @@ function end_invulnerability()
 end
 
 function reset_game_speed()
-  gameSpeed = 10
+  gameSpeed = 5
   speed_timer:stop()
   end

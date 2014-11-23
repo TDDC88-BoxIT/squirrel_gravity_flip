@@ -42,18 +42,20 @@ function stop_menu()
 
 -- ADDS THE MENU ITEMS
 function add_menu_items()
-  if menuState == "start_menu" or menuState == "pause_menu" then
+  if menuState == "start_menu" then
     menu:add_button("start_new",imageDir.."menuImg/start.png")
-    if menuState == "start_menu" then -- THE START MENU HAS THE HIGH SCORE BUTTON
-      menu:add_button("high_score",imageDir.."menuImg/highScore.png")
-      menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
-    elseif menuState == "pause_menu" then -- THE PAUSE MENU HAS THE RESUME BUTTON
-      menu:add_button("resume",imageDir.."menuImg/resume.png")
-    end
-    menu:add_button("settings",imageDir.."menuImg/settings.png")
+    menu:add_button("high_score",imageDir.."menuImg/highScore.png")
+    menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
-  elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
-    menu:add_button("continue", imageDir.."menuImg/continue.png")
+  else 
+    if menuState == "pause_menu" then
+      menu:add_button("resume",imageDir.."menuImg/resume.png")
+    elseif menuState == "levelwin_menu" then
+      menu:add_button("continue", imageDir.."menuImg/continue.png")
+    elseif menuState == "gameover_menu" then
+      menu:add_button("restart", imageDir.."menuImg/restart.png")
+    end
+    menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
   end
 end
 
@@ -76,12 +78,13 @@ function add_menu_bling()
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
   
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
-  backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
+  --[[backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
   if menuState == "start_menu" or menuState == "pause_menu" then
     backdrop:fill({r=0,g=0,b=0,a=60})
   elseif menuState == "levelwin_menu" then
     backdrop:fill({r=0,g=0,b=0,a=100})
   end
+  ]]
  -- screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
@@ -106,7 +109,7 @@ function add_menu_bling()
   
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
   thunderAcorn.img:destroy()
-  backdrop:destroy()
+  --backdrop:destroy()
   --squirrel1:destroy()
   --squirrel2:destroy()
 end
@@ -147,7 +150,7 @@ function menu_navigation(key, state)
     if menu:get_indexed_item().id=="start_new" then
       stop_menu()
       change_global_game_state(1)
-      start_game(1,"story",0)
+      start_game("first","story",0)
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
@@ -155,7 +158,7 @@ function menu_navigation(key, state)
     elseif menu:get_indexed_item().id=="tutorial" then
       stop_menu()
       change_global_game_state(1)
-      start_game(1,"tutorial",0)
+      start_game("first","tutorial",0)
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
     elseif menu:get_indexed_item().id=="settings" then
@@ -165,7 +168,13 @@ function menu_navigation(key, state)
     elseif menu:get_indexed_item().id=="continue" then
       stop_menu()
       change_global_game_state(1)
-      start_game("next","tutorial",0)
+      start_game("next","current",0)
+    elseif menu:get_indexed_item().id=="restart" then
+      stop_menu()
+      change_global_game_state(1)
+      start_game("restart","current",0)
+    elseif menu:get_indexed_item().id=="main_menu" then
+      start_menu("start_menu")
     end
   elseif key=="ok" and state=="down" and was_pressed_from_menu == false then
     was_pressed_from_menu = true

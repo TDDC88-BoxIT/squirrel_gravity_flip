@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="10" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="character_start_pos_x" value="0"/>
+  <property name="character_start_pos_y" value="7"/>
+ </properties>
  <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32">
   <image source="../images/floor1.png" width="32" height="32"/>
  </tileset>
@@ -8,7 +12,7 @@
  </tileset>
  <layer name="Tile Layer 1" width="50" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BwAMZBhocyYILSo/4YHGC4+mOg8+hIz+foAAAXNwBi
+   eJxjYBgFo4D6gHEY4KEMmKD0qD8GBxiu/hjoPDrS8zk6AABdFwBv
   </data>
  </layer>
 </map>
