@@ -107,12 +107,23 @@ function add_level_menu_buttons()
     menu:add_button("previouspage", dir.."previouspage.png")
   end
 
-  for level_number = start_page_level, end_page_level do  
-    level_lable = "level" .. level_number
+  for level_number = start_page_level, end_page_level do
+    if menuState == "level_menu" then  
+      level_lable = "level" .. level_number
+    else
+      level_lable = "highscore" .. level_number
+    end
     if (level_number > unlocked_level) then
       level_lable = level_lable .. "locked"
     end
-    menu:add_button(level_lable, dir .. level_lable .. ".png")
+
+    if menuState == "level_menu" then  
+      menu:add_button(level_lable, dir .. level_lable .. ".png")
+    else
+      menu:add_button(level_lable, dir .. "level" .. level_number .. ".png")
+    end
+
+    
   end
 
   if(end_page_level ~= no_level_menu_items) then
@@ -521,6 +532,7 @@ function menu_navigation(key, state)
       start_game(1,"tutorial",0)
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
+      print("inne i highscore")
       stop_menu()
       start_menu("highscore_menu")
     elseif menu:get_indexed_item().id=="settings" then
@@ -548,10 +560,12 @@ function menu_navigation(key, state)
         start_game(level,"story",0)
       end  
     elseif menuState == "highscore_menu" then  
+      print("yay")
+
       unlocked_level = read_unlocked_level()
       print(unlocked_level)
       for i=1,unlocked_level do
-        if menu:get_indexed_item().id == "level" .. i then 
+        if menu:get_indexed_item().id == "highscore" .. i then 
           draw_highscore(i)
         end
       end

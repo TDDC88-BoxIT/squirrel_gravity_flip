@@ -254,6 +254,10 @@ function draw_tiles()
         elseif v.gid == 10 then
           move_flame(v)
         end
+        if v.image == nil then
+          print("super wrong")
+          v.image = gfx.loadpng("images/font/Z.png")
+        end
         screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
       end
     end
