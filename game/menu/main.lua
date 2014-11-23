@@ -1,5 +1,6 @@
 require("../tool_box/menu_object")
 require("../tool_box/character_object")
+require("game/level_config")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
@@ -26,6 +27,7 @@ local current_character = 1
 local player_name = ""
 text_button_pressed = {0,0,0,0,0,0,0,0,0}
 nr_buttons_pressed = 0
+local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
 
 local squirrel1 = nil
 local squirrel2 = nil
@@ -42,11 +44,7 @@ function start_menu(state)
     menu2:set_indexed_item(nil)
     menu3:set_indexed_item(nil)
   else
-    if(menu==nil) then
       menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
-    else 
-      menu:reset()
-    end
   end
   print("menu should here")
   print(menu)
@@ -88,22 +86,39 @@ function add_menu_items()
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
   elseif menuState == "level_menu" then
-    menu:add_button("zero",imageDir.."font/0.png")
-    menu:add_button("one",imageDir.."font/1.png")
-    menu:add_button("two",imageDir.."font/2.png")
-    menu:add_button("three",imageDir.."font/3.png")
-    menu:add_button("four",imageDir.."font/4.png")
-    menu:add_button("five",imageDir.."font/5.png")
-    menu:add_button("six",imageDir.."font/6.png")
-    menu:add_button("seven",imageDir.."font/7.png")
-    menu:add_button("eight",imageDir.."font/8.png")
-    menu:add_button("nine",imageDir.."font/9.png")
-    menu:add_button("ten",imageDir.."font/0.png")
-    menu:add_button("eleven",imageDir.."font/1.png")
-    menu:add_button("twelve",imageDir.."font/2.png")
-    menu:add_button("thirteen",imageDir.."font/3.png")
-    menu:add_button("fourteen",imageDir.."font/4.png") 
+    add_level_menu_buttons()
   end
+end
+
+-- ADDS A PAGE WITH LEVEL MENU BUTTONS. NUMBER OF LEVELS DISPLAYED PER PAGE AS WELL AS THE MAXIMUM NUMBER OF LEVEL MENU ITEMS CAN BE CONFIGURED
+function add_level_menu_buttons()
+  local levels_per_page = 7 
+  local no_level_menu_items = 10
+  local start_page_level = levels_per_page * (current_page - 1) + 1
+  local end_page_level = nil
+  local dir = imageDir .. "menuImg/level_menu/"
+  local level_lable = nil
+  local unlocked_level = read_unlocked_level()
+
+  end_page_level = math.min((start_page_level + levels_per_page - 1), no_level_menu_items)
+
+  if (current_page > 1) then
+    menu:add_button("previouspage", dir.."previouspage.png")
+  end
+
+  for level_number = start_page_level, end_page_level do  
+    level_lable = "level" .. level_number
+    if (level_number > unlocked_level) then
+      level_lable = level_lable .. "locked"
+    end
+    menu:add_button(level_lable, dir .. level_lable .. ".png")
+  end
+
+  if(end_page_level ~= no_level_menu_items) then
+    menu:add_button("nextpage", dir .. "nextpage.png")
+  end
+
+  menu:add_button("continue", imageDir .. "menuImg/continue.png")
 end
 
 function configure_menu_height()
@@ -113,7 +128,7 @@ function configure_menu_height()
     menu:set_button_size(nil, box_height)
   end
   
-  local menuHeight= 20+(menu:get_button_size().height+15)*(menu:get_item_amount()) 
+  local menuHeight= 60+(menu:get_button_size().height+15)*(menu:get_item_amount()) 
   menu:set_size(nil,menuHeight)
   if menuState == "new_name_menu" then
     menu:set_button_size(nil, 92)
@@ -160,7 +175,7 @@ function add_menu_bling()
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   
-  -- ADD TWO A RUNNING SQUIRRELS
+  -- ADD TWO RUNNING SQUIRRELS
   if squirrel1 == nil and squirrel2 == nil then
     squirrel1=character_object(117,140,squirrelImg2)
     squirrel2=character_object(117,140,squirrelImg1)
@@ -479,37 +494,57 @@ function menu_navigation(key, state)
   elseif key=="ok" and state=='up' then
     --print("ITEMS: "..menu:get_item_amount())
     -- ACTIONS WHEN menu BUTTONS ARE PRESSED
-      if menu:get_indexed_item().id=="start_new" then
+    if menu:get_indexed_item().id=="start_new" then
+      stop_menu()
+      change_global_game_state(1)
+      start_game(16,"story",0)
+    elseif menu:get_indexed_item().id=="select_level" then
+      stop_menu()
+      start_menu("level_menu")
+      local unlocked_level = read_unlocked_level()
+      local max_no_levels = 15
+      local i = nil
+      --for i=1,unlocked_level do 
+        --print("level " .. i .. ": unlocked") 
+      --end
+      --for i=(unlocked_level+1), max_no_levels do 
+        --print("level " .. i .. ": locked") 
+      --end
+    elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
+      stop_menu()
+      change_global_game_state(1)
+      resume_game()
+    elseif menu:get_indexed_item().id=="tutorial" then
+      stop_menu()
+      change_global_game_state(1)
+      start_game(1,"tutorial",0)
+    elseif menu:get_indexed_item().id=="high_score" then
+      -- COMMAND TO VIEW HIGH SCORE
+    elseif menu:get_indexed_item().id=="settings" then
+      -- COMMAND TO VIEW SETTINGS
+      stop_menu()
+      start_menu("new_name_menu")
+    elseif menu:get_indexed_item().id=="exit" then
+      sys.stop() -- COMMAND TO EXIT
+    elseif menu:get_indexed_item().id=="continue" then
+      stop_menu()
+      start_menu("start_menu")
+    elseif menu:get_indexed_item().id=="previouspage" then
+      current_page = current_page - 1
+      stop_menu()
+      start_menu("level_menu")
+    elseif menu:get_indexed_item().id=="nextpage" then
+      current_page = current_page + 1
+      stop_menu()
+      start_menu("level_menu")
+    elseif (string.sub(menu:get_indexed_item().id, 1, 5) == "level") then
+      if (string.find(menu:get_indexed_item().id, "locked") == nil) then
+        local level = string.sub(menu:get_indexed_item().id, 6, 6)
         stop_menu()
         change_global_game_state(1)
-        start_game(16,"story",0)
-      elseif menu:get_indexed_item().id=="select_level" then --STARTS THE LEVEL SELECTION MENU
-        stop_menu()
-        start_menu("level_menu")
-      elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
-        stop_menu()
-        change_global_game_state(1)
-        resume_game()
-      elseif menu:get_indexed_item().id=="tutorial" then
-        stop_menu()
-        change_global_game_state(1)
-        start_game(1,"tutorial",0)
-      elseif menu:get_indexed_item().id=="high_score" then
-        stop_menu()
---        change_global_game_state(1)
-        draw_highscore(1)
-        -- COMMAND TO VIEW HIGH SCORE
-      elseif menu:get_indexed_item().id=="settings" then
-        -- COMMAND TO VIEW SETTINGS
-        stop_menu()
-        start_menu("new_name_menu")
-      elseif menu:get_indexed_item().id=="exit" then
-        sys.stop() -- COMMAND TO EXIT
-      elseif menu:get_indexed_item().id=="continue" then
-        stop_menu()
-        start_menu("start_menu")
-      end
-    
+        start_game(level,"story",0)
+      end  
+    end
   end
 end
 

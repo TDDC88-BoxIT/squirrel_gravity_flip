@@ -186,6 +186,7 @@ function activate_power_up(pu_name)
       player_name= "AAA"
     end
     score_page(player_name, game_score, 1)
+    draw_highscore(1)
     levelwin()
   elseif((pu_name == "obstacle1" or pu_name == "obstacle2" or pu_name == "obstacle3" or pu_name == "obstacle4") and not get_invulnerability_state()) then -- Obstacles
     get_killed() -- This NEEDS to be changed to the actual fail screen when that has been implemented
