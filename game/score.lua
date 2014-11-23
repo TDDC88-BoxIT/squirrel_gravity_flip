@@ -90,7 +90,7 @@ function table_length(T)
   return count
 end
 
-
+--[[
 function draw_number(number, position)
 -- loads the picture corresponding to the correct digit
   if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
@@ -117,7 +117,7 @@ function draw_number(number, position)
   screen:copyfrom(score,nil ,{x=10+position*30, y = 10, height = 50, width = 30}, true)
   score:destroy()
 end
-
+]]
 
 --the function that draws the score in the top left score 
 function draw_score(game_score)
