@@ -23,7 +23,7 @@ Bob the builder
 level3
 level4
 Squirrel killer
-9998490
+9998900
 Squirrel killer
 9998490
 Squirrel killer
@@ -31,4 +31,4 @@ Squirrel killer
 Squirrel killer
 9998490
 Squirrel killer
-9988220
+9998490
