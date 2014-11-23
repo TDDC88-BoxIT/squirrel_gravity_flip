@@ -54,7 +54,7 @@ function start_game(level,game_type,life)
   prepare_fail_success_handler()
 
   load_level_atttributes()
-  load_background_if_needed()
+  load_image_if_needed()
 
   create_game_character()
 
@@ -80,14 +80,28 @@ function load_level_atttributes()
   end
 end
 
-function load_background_if_needed()
+function load_image_if_needed()
   if (gameBackground == nil) then
     gameBackground = gfx.loadpng("images/level_sky.png")
+  end
+  if life == nil then
+    life = gfx.loadpng("images/Game-hearts-icon.png")
+  end
+end
+
+function destroy_image()
+  if gameBackground ~= nil then
+    gameBackground:destroy()
+    gameBackground = nil
+  end
+  if life ~= nil then
+    life:destroy()
+    life = nil
   end
 end
 
 function resume_game()
-  load_background_if_needed()
+  load_image_if_needed()
   timer = sys.new_timer(20, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
@@ -100,10 +114,7 @@ function stop_game()
   if speed_timer ~= nil then
     reset_game_speed()
   end
-  if gameBackground ~= nil then
-    gameBackground:destroy()
-    gameBackground = nil
-  end
+  destroy_image()
   if change_character_timer~=nil then
     change_character_timer:stop()
     change_character_timer=nil 
@@ -407,11 +418,9 @@ end
 
 
 function draw_lives()
-  life = gfx.loadpng("images/Game-hearts-icon.png")
   for i=0, lives-1, 1 do
-  screen:copyfrom(life,nil,{x=200+30*i,y=20},true)
+    screen:copyfrom(life,nil,{x=200+30*i,y=20},true)
   end
-  life:destroy()
 end
 
 function check_alive()
