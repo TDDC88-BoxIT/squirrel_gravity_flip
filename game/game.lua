@@ -26,6 +26,7 @@ local gameCounter=0
 local gameSpeed = 10 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local current_level
 local gameBackground=nil
+local number_image={}
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
@@ -87,6 +88,19 @@ function load_image_if_needed()
   if life == nil then
     life = gfx.loadpng("images/Game-hearts-icon.png")
   end
+
+  if number_image["0"] == nil then
+    number_image["0"] = gfx.loadpng("images/numbers/zero.png")
+    number_image["1"] = gfx.loadpng("images/numbers/one.png")
+    number_image["2"] = gfx.loadpng("images/numbers/two.png")
+    number_image["3"] = gfx.loadpng("images/numbers/three.png")
+    number_image["4"] = gfx.loadpng("images/numbers/four.png")
+    number_image["5"] = gfx.loadpng("images/numbers/five.png")
+    number_image["6"] = gfx.loadpng("images/numbers/six.png")
+    number_image["7"] = gfx.loadpng("images/numbers/seven.png")
+    number_image["8"] = gfx.loadpng("images/numbers/eight.png")
+    number_image["9"] = gfx.loadpng("images/numbers/nine.png")
+  end
 end
 
 function destroy_image()
@@ -98,6 +112,8 @@ function destroy_image()
     life:destroy()
     life = nil
   end
+  -- Should destroy number_image here.
+  -- But level_win -> draw_menu will use the varables.
 end
 
 function resume_game()
@@ -300,30 +316,7 @@ end
 --isn't this a copy of the function in score.lua?
 function draw_number(number, position, xplace, yplace)
 -- loads the picture corresponding to the correct digit
-  if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
-  elseif number == "1" then 
-    score = gfx.loadpng("images/numbers/one.png")
-  elseif number == "2" then 
-    score = gfx.loadpng("images/numbers/two.png")
-  elseif number == "3" then 
-    score = gfx.loadpng("images/numbers/three.png")
-  elseif number == "4" then 
-    score = gfx.loadpng("images/numbers/four.png")
-  elseif number == "5" then 
-    score = gfx.loadpng("images/numbers/five.png")
-  elseif number == "6" then 
-    score = gfx.loadpng("images/numbers/six.png")
-  elseif number == "7" then 
-    score = gfx.loadpng("images/numbers/seven.png")
-  elseif number == "8" then 
-    score = gfx.loadpng("images/numbers/eight.png") 
-  elseif number == "9" then 
-    score = gfx.loadpng("images/numbers/nine.png")
-  end
-  -- prints the loaded picture
-  screen:copyfrom(score,nil ,{x=xplace+position*30, y = yplace, height = 50, width = 30}, true)
-  score:destroy()
-
+  screen:copyfrom(number_image[number],nil ,{x=xplace+position*30, y = yplace, height = 50, width = 30}, true)
 end
 
 function draw_screen()
