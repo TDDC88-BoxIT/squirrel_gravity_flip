@@ -100,6 +100,16 @@ function load_image_if_needed()
     number_image["7"] = gfx.loadpng("images/numbers/seven.png")
     number_image["8"] = gfx.loadpng("images/numbers/eight.png")
     number_image["9"] = gfx.loadpng("images/numbers/nine.png")
+    number_image["0"]:premultiply()
+    number_image["1"]:premultiply()
+    number_image["2"]:premultiply()
+    number_image["3"]:premultiply()
+    number_image["4"]:premultiply()
+    number_image["5"]:premultiply()
+    number_image["6"]:premultiply()
+    number_image["7"]:premultiply()
+    number_image["8"]:premultiply()
+    number_image["9"]:premultiply()
   end
 end
 
