@@ -25,18 +25,18 @@ local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local gameCounter=0
 local gameSpeed = 10 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local current_level
-local background
+local gameBackground=nil
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
 local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
-local G=1;     --gravity
+local G=2;     --gravity
 local Tcount=1
 
 -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
 function start_game(level,game_type,life) 
-  game_score = 10000000
+  game_score = 10000
   gameCounter=0
 
   if game_type ~= "current" then
@@ -81,8 +81,8 @@ function load_level_atttributes()
 end
 
 function load_background_if_needed()
-  if (background == nil) then
-    background = gfx.loadpng("images/level_sky.png")
+  if (gameBackground == nil) then
+    gameBackground = gfx.loadpng("images/level_sky.png")
   end
 end
 
@@ -100,8 +100,10 @@ function stop_game()
   if speed_timer ~= nil then
     reset_game_speed()
   end
-  background:destroy()
-  background = nil
+  if gameBackground ~= nil then
+    gameBackground:destroy()
+    gameBackground = nil
+  end
   if change_character_timer~=nil then
     change_character_timer:stop()
     change_character_timer=nil 
@@ -146,6 +148,7 @@ function update_game()
   if game_score > 0 then
     game_score = game_score -10
   else
+    print("Death caused by score == 0")
     get_killed()
     return
   end
@@ -165,6 +168,7 @@ function move_character()
     if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then  
       player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
       if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+        print("Death caused by getting squeezed")
         get_killed()
         return
       end
@@ -180,6 +184,7 @@ function move_character()
         player.new_y=player.cur_y-i
       end
       if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+        print("Death caused by falling off grid")
         get_killed()
         return;
       end
@@ -205,7 +210,8 @@ function move_character_V2()
       falling=1
     end
     if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
-        get_killed()
+      print("Death caused by getting squeezed") 
+      get_killed()
     end
   elseif player.cur_x<player.work_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
@@ -222,6 +228,7 @@ function move_character_V2()
     player.new_y=player.cur_y-0.5*G*(Tcount+0.5+gameSpeed)
   end
   if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+    print("Death caused by falling off grid")
     get_killed()   
   end
   local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
@@ -315,10 +322,9 @@ function draw_screen()
   if timer~=nil then
     --local t = sys.time()
     draw_background()
-    --print(string.format("Background %d", ((sys.time() - t)) * 1000))
+    --print(string.format("gameBackground %d", ((sys.time() - t)) * 1000))
     draw_tiles()
     --print(string.format("Draw_tiles %d", ((sys.time() - t)) * 1000))
-    
     --print(string.format("Move_character %d", ((sys.time() - t)) * 1000))
     draw_character()
     --print(string.format("Draw_character %d", ((sys.time() - t)) * 1000))
@@ -336,7 +342,7 @@ function draw_screen()
 end
 
 function draw_background()
-  screen:copyfrom(background,nil,nil)
+  screen:copyfrom(gameBackground,nil,nil)
 end
 
 --[[ 

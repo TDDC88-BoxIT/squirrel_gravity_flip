@@ -9,6 +9,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
         activate_power_up(v.name)
         v.visibility = false
       elseif string.sub(v.name,1,3)=="obs" then
+        print("Death caused by hitting obstacle")
         get_killed()
       elseif v.name=="win" then
         levelwin()
