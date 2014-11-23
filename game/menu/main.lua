@@ -34,6 +34,7 @@ local squirrel2 = nil
 
 function start_menu(state)
   menuState=state
+  unlocked_level = read_unlocked_level()
   if menuState == "new_name_menu" then
     menu = menu_object(128,92)
     menu2 = menu_object(128,92)
@@ -46,8 +47,6 @@ function start_menu(state)
   else
       menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
   end
-  print("menu should here")
-  print(menu)
   add_menu_items()
   configure_menu_height()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
@@ -57,6 +56,8 @@ end
 function stop_menu()
   screen:clear() 
  end
+
+
 
 -- ADDS THE MENU ITEMS
 function add_menu_items()
@@ -85,7 +86,7 @@ function add_menu_items()
     
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
-  elseif menuState == "level_menu" then
+  elseif menuState == "level_menu" or menuState== "highscore_menu" then
     add_level_menu_buttons()
   end
 end
@@ -98,7 +99,7 @@ function add_level_menu_buttons()
   local end_page_level = nil
   local dir = imageDir .. "menuImg/level_menu/"
   local level_lable = nil
-  local unlocked_level = read_unlocked_level()
+  unlocked_level = read_unlocked_level()
 
   end_page_level = math.min((start_page_level + levels_per_page - 1), no_level_menu_items)
 
@@ -123,7 +124,7 @@ end
 
 function configure_menu_height()
   menuState = get_menu_state()
-  if menuState == "level_menu" then
+  if menuState == "level_menu" and menuState == "highscore_menu" then
     local box_height = (screen:get_height()-2*screen:get_height()/100-20*menu:get_item_amount())/menu:get_item_amount()
     menu:set_button_size(nil, box_height)
   end
@@ -143,7 +144,7 @@ end
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
-  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
+  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" or menuState == "highscore_menu" then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
@@ -159,7 +160,7 @@ function add_menu_bling()
   
   -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
   backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
-  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" then
+  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" and menuState == "highscore_menu" then
     backdrop:fill({r=0,g=0,b=0,a=200})
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     backdrop:fill({r=0,g=0,b=0,a=100})
@@ -203,8 +204,8 @@ function draw_menu()
       add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
 
-  if menuState == "level_menu" then
-    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=levelmenu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  if menuState == "level_menu" or menuState == "highscore_menu" then
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   elseif menuState == "new_name_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
@@ -520,6 +521,8 @@ function menu_navigation(key, state)
       start_game(1,"tutorial",0)
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
+      stop_menu()
+      start_menu("highscore_menu")
     elseif menu:get_indexed_item().id=="settings" then
       -- COMMAND TO VIEW SETTINGS
       stop_menu()
@@ -544,6 +547,14 @@ function menu_navigation(key, state)
         change_global_game_state(1)
         start_game(level,"story",0)
       end  
+    elseif menuState == "highscore_menu" then  
+      unlocked_level = read_unlocked_level()
+      print(unlocked_level)
+      for i=1,unlocked_level do
+        if menu:get_indexed_item().id == "level" .. i then 
+          draw_highscore(i)
+        end
+      end
     end
   end
 end
