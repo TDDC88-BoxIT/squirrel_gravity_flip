@@ -60,10 +60,12 @@ end
 -- ADDS A PAGE WITH LEVEL MENU BUTTONS. NUMBER OF LEVELS DISPLAYED PER AGE AS WELL AS THE MAXIMUM NUMBER OF LEVEL MENU ITEMS CAN BE CONFIGURED
 function add_level_menu_buttons()
   local levels_per_page = 3 
-  local no_level_menu_items = 10
+  local no_level_menu_items = 4
   local start_page_level = levels_per_page * (current_page - 1) + 1
   local end_page_level = nil
   local dir = imageDir .. "menuImg/level_menu/"
+  local level_lable = nil
+  local unlocked_level = read_unlocked_level()
 
   end_page_level = math.min((start_page_level + levels_per_page - 1), no_level_menu_items)
 
@@ -71,8 +73,12 @@ function add_level_menu_buttons()
     menu:add_button("previouspage", dir.."previouspage.png")
   end
 
-  for i = start_page_level, end_page_level do  
-    menu:add_button("level" .. i, dir .. "level" .. i .. ".png")
+  for level_number = start_page_level, end_page_level do  
+    level_lable = "level" .. level_number
+    if (level_number > unlocked_level) then
+      level_lable = level_lable .. "locked"
+    end
+    menu:add_button(level_lable, dir .. level_lable .. ".png")
   end
 
   if(end_page_level ~= no_level_menu_items) then
@@ -169,7 +175,6 @@ end
 
 --HANDLES MENU NAVIGATION AND COMMANDS 
 function menu_navigation(key, state)
- 
   if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
       update_menu()   
@@ -189,12 +194,12 @@ function menu_navigation(key, state)
       local unlocked_level = read_unlocked_level()
       local max_no_levels = 15
       local i = nil
-      for i=1,unlocked_level do 
-        print("level " .. i .. ": unlocked") 
-      end
-      for i=(unlocked_level+1), max_no_levels do 
-        print("level " .. i .. ": locked") 
-      end
+      --for i=1,unlocked_level do 
+        --print("level " .. i .. ": unlocked") 
+      --end
+      --for i=(unlocked_level+1), max_no_levels do 
+        --print("level " .. i .. ": locked") 
+      --end
     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
       stop_menu()
       change_global_game_state(1)
@@ -221,10 +226,12 @@ function menu_navigation(key, state)
       stop_menu()
       start_menu("level_menu")
     elseif (string.sub(menu:get_indexed_item().id, 1, 5) == "level") then
-      local level = string.gsub(menu:get_indexed_item().id, "level", "")
-      stop_menu()
-      change_global_game_state(1)
-      start_game(level,"story",0)
+      if (string.find(menu:get_indexed_item().id, "locked") == nil) then
+        local level = string.sub(menu:get_indexed_item().id, 6, 6)
+        stop_menu()
+        change_global_game_state(1)
+        start_game(level,"story",0)
+      end  
     end
   end
 end

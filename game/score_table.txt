@@ -5,30 +5,18 @@ Amanda
 99999999
 Amanda
 99999999
-Bob the builder
-9971
-Bob the builder
-9951
+Squirrel killer
+10070
+Squirrel killer
+10040
 level2
 Bob the builder
 9991
 Bob the builder
 9991
 Bob the builder
-9971
+9991
 Bob the builder
-9951
-Bob the builder
-9901
-level3
-level4
+9991
 Squirrel killer
-10170
-Squirrel killer
-10170
-Squirrel killer
-10170
-Squirrel killer
-10110
-Squirrel killer
-10070
+9950
