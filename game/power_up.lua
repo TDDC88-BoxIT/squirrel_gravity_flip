@@ -1,4 +1,4 @@
---[[
+-[[
 @desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
 @params: pu_name - The name (as defined in level files) of the object to activate.
 ]]

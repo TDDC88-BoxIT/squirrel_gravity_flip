@@ -1,5 +1,10 @@
 nr_of_scores_saved = 5
 
+
+--@desc: reads all the high scores saved in score_table.txt and saves them in a table
+--@params: none
+--@return: the number of levels that have been read (nr of unlocked lvs) 
+--@author: Amanda Persson
 function read_from_file()
   score_board={} 
   -- text file where score is saved is opened
@@ -38,7 +43,9 @@ function read_from_file()
   end
 end  
 
-
+--@desc: Saves the new score if it is good enough, scores are added in its correct position size-wise
+--@params: player's name, score , level that has been played
+--@author: Gustav Beck-Norén
 function score_page(player,score,level)
   local unlocked_levels = read_from_file()
   if score_board[tostring(level)] == nil then
@@ -58,15 +65,14 @@ function score_page(player,score,level)
       break
     end
   end
-  save_to_file(score_board, file, unlocked_levels)
+  save_to_file(score_board, unlocked_levels)
 end 
 
-function insert_score(index)
 
-end
-
-
-function save_to_file(score_board, file, unlocked_levels)
+--@desc: Saves the entire table with score in score_table.txt , replaces earlier text
+--@param: table with scores, and the number of levels that has been unlocked by the player
+--@author: Amanda Persson
+function save_to_file(score_board, unlocked_levels)
   -- if the file does not exist it is created
   file = io.open("game/score_table.txt","w+")
   io.output(file)
@@ -83,54 +89,71 @@ function save_to_file(score_board, file, unlocked_levels)
   io.close(file)
 end
 
-
+--@desc: Finds length of a table
+--@params: a table
+--@return: length of table
+--@author: Amanda Persson
 function table_length(T)
   local count = 0
   for _ in pairs(T) do count = count + 1 end
   return count
 end
 
---[[
-function draw_number(number, position)
--- loads the picture corresponding to the correct digit
-  if number == "0"  then score = gfx.loadpng("images/numbers/zero.png")
-  elseif number == "1" then 
-    score = gfx.loadpng("images/numbers/one.png")
-  elseif number == "2" then 
-    score = gfx.loadpng("images/numbers/two.png")
-  elseif number == "3" then 
-    score = gfx.loadpng("images/numbers/three.png")
-  elseif number == "4" then 
-    score = gfx.loadpng("images/numbers/four.png")
-  elseif number == "5" then 
-    score = gfx.loadpng("images/numbers/five.png")
-  elseif number == "6" then 
-    score = gfx.loadpng("images/numbers/six.png")
-  elseif number == "7" then 
-    score = gfx.loadpng("images/numbers/seven.png")
-  elseif number == "8" then 
-    score = gfx.loadpng("images/numbers/eight.png") 
-  elseif number == "9" then 
-    score = gfx.loadpng("images/numbers/nine.png")
-  end
-  -- prints the loaded picture
-  screen:copyfrom(score,nil ,{x=10+position*30, y = 10, height = 50, width = 30}, true)
-  score:destroy()
-end
-]]
 
---the function that draws the score in the top left score 
-function draw_score(game_score)
+--@desc: Draws a string in a pretty font on the screen
+--@params: a string, coordinates where the text/numbers should be drawn
+--@author: Amanda Persson
+function draw_score(game_score, x_coordinate, y_coordinate )
   local string_score = tostring(game_score)
   position = 1
   -- loops through the score that is stored as a string
   while position <= string.len(string_score) do
     -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_score,position,position),position)
+    local symbol = string.sub(string_score,position,position)
+    if symbol ~= " " then
+      draw_number(symbol,position, x_coordinate, y_coordinate)
+    end
     position = position + 1
   end
 end
 
-function Nothingdone()
-  print("hej")
+
+--@desc: Draws one character that is part of a string
+--@params: a character, it's index in a string, coordinates
+--@author: Amanda Persson
+function draw_number(number, position, x_coordinate, y_coordinate)
+-- loads the picture corresponding to the correct digit or letter. Feel free to refactor 
+  if number == nil then
+    number = "Z"
   end
+  number = string.upper(number)
+  score = gfx.loadpng("images/font/"..number..".png")
+  -- prints the loaded picture
+  screen:copyfrom(score,nil ,{x=x_coordinate+position*30, y = y_coordinate, height = 50, width = 30}, true)
+  score:destroy()
+end
+
+
+--@desc: Draws the high score for a level on the screen
+--@params: the level that the highscore should be shown for, x-coordinate
+--@author: Amanda Persson
+function draw_highscore(level, x_coordinate) 
+  local position
+  local y_coordinate
+  read_from_file()
+  index = 1
+  i=1
+  while score_board[tostring(level)][tostring(i)] ~= nil and index<=5  do
+    y_coordinate = 300+60*(i-1)
+    position = 1
+    draw_score(score_board[tostring(level)][tostring(i)][1], x_coordinate + 200, y_coordinate)
+    string_score= score_board[tostring(level)][tostring(i)][2] 
+    while position <= string.len(string_score) do
+      draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
+      position = position + 1
+    end
+    index = index +1
+    i = i +1
+  end  
+end
+

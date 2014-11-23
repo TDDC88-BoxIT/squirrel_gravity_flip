@@ -10,7 +10,7 @@ function spikeAndBomb(hero_hp,gameCounter,tileSet, herox, heroy, hero_width, her
     --git==3 is bomb, 4 is spikes, when it is spikes,check the hero whether above/under obstacles
     if git==3 or (gid==4 and temp1==herox and temp2==(herox+hero_width)) then
       --hero_hp--
-      hero_hp==0
+      hero_hp=0
       return hero_hp
     end
   end

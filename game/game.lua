@@ -13,7 +13,6 @@ require ("game/collision_handler")
 require ("game/fail_and_success_handler")
 require ("tool_box/character_object")
 require ("game/score")
-require ("game/power_up")
 require("game/tutorial/tutorial_handler")
 
 local imageDir = "images/"
@@ -90,16 +89,16 @@ function load_image_if_needed()
   end
 
   if number_image["0"] == nil then
-    number_image["0"] = gfx.loadpng("images/numbers/zero.png")
-    number_image["1"] = gfx.loadpng("images/numbers/one.png")
-    number_image["2"] = gfx.loadpng("images/numbers/two.png")
-    number_image["3"] = gfx.loadpng("images/numbers/three.png")
-    number_image["4"] = gfx.loadpng("images/numbers/four.png")
-    number_image["5"] = gfx.loadpng("images/numbers/five.png")
-    number_image["6"] = gfx.loadpng("images/numbers/six.png")
-    number_image["7"] = gfx.loadpng("images/numbers/seven.png")
-    number_image["8"] = gfx.loadpng("images/numbers/eight.png")
-    number_image["9"] = gfx.loadpng("images/numbers/nine.png")
+    number_image["0"] = gfx.loadpng("images/font/0.png")
+    number_image["1"] = gfx.loadpng("images/font/1.png")
+    number_image["2"] = gfx.loadpng("images/font/2.png")
+    number_image["3"] = gfx.loadpng("images/font/3.png")
+    number_image["4"] = gfx.loadpng("images/font/4.png")
+    number_image["5"] = gfx.loadpng("images/font/5.png")
+    number_image["6"] = gfx.loadpng("images/font/6.png")
+    number_image["7"] = gfx.loadpng("images/font/7.png")
+    number_image["8"] = gfx.loadpng("images/font/8.png")
+    number_image["9"] = gfx.loadpng("images/font/9.png")
     number_image["0"]:premultiply()
     number_image["1"]:premultiply()
     number_image["2"]:premultiply()
@@ -145,8 +144,6 @@ function stop_game()
     change_character_timer:stop()
     change_character_timer=nil 
   end  
-  -- the 1 represent the current level bein played, should be made generic as soon as possible
-  score_page("Squirrel killer", game_score, 4)
 end
 
 function create_game_character()
@@ -233,7 +230,40 @@ function move_character()
     end  
 end
 
---the function that draws the score and the level
+
+--[[
+@desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
+@params: pu_name - The name (as defined in level files) of the object to activate.
+]]
+function activate_power_up(pu_name)
+  --[[
+  This prevents additional powerup events from being fired if the game is over (if you die).
+  Previously, hitting two or more obstacles at the same time (easily done on level4) would cause the game to try
+  and destroy the surface twice, throwing a runtime exception.
+  ]]
+  player_name = get_player_name()
+  print("playername == " .. player_name)
+  if(pu_name=="powerup1") then -- Score tile
+    game_score = game_score + 100
+  elseif(pu_name=="powerup2") then -- Speed tile
+    change_game_speed(15,1000)
+  elseif(pu_name=="powerup3") then -- Freeze tile
+    change_game_speed(1,1000)    
+  elseif(pu_name=="powerup4") then -- Invulnerability tile
+    activate_invulnerability(10000)
+  elseif(pu_name == "win") then -- Win tile!
+    -- the 1 represent the current level bein played, should be made generic as soon as possible
+    if player_name == "" then
+      player_name= "AAA"
+    end
+    score_page(player_name, game_score, 1)
+    draw_highscore(1,620)
+    levelwin()
+  elseif((pu_name == "obstacle1" or pu_name == "obstacle2" or pu_name == "obstacle3" or pu_name == "obstacle4") and not get_invulnerability_state()) then -- Obstacles
+    get_killed() -- This NEEDS to be changed to the actual fail screen when that has been implemented
+  end
+end
+
 
 function move_character_V2()
   local falling=0
@@ -283,7 +313,10 @@ function move_character_V2()
   end     
 end
 
-function draw_score()
+
+--the function that draws the score and the level
+
+function call_draw_score()
   --DRAWS SCORE
   if global_game_state==0 and get_menu_state() == "gameover_menu" then -- Don't draw score on gameover menu
     return
@@ -292,42 +325,23 @@ function draw_score()
     xplace = 10
     yplace = 10
   elseif global_game_state == 0 then --menu situation, place score in the center of the screen
-    xplace = 550
-    yplace = 440
+    xplace = 200
+    yplace = 10
   end
-  local string_score = tostring(game_score)
-  position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
-  -- loops through the score that is stored as a string
-  while position <= string.len(string_score) do
-    -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_score,position,position),position, xplace, yplace)
-    position = position + 1
-  end
+  draw_score(tostring(game_score), xplace,yplace)
   
   --DRAWS LEVEL
   if global_game_state == 1 then --game situation, place level in the upper right corner of the screen
     xplace = 1000
     yplace = 10
   elseif global_game_state == 0 then --menu situation, place level in the center of the screen
-    xplace = 550
-    yplace = 370
+    xplace = 100
+    yplace = 10
   end
-  local string_levelCounter = tostring(current_level)
-  position = 1 -- Position of the digit (position 1 = 1, 2 = 10,3 = 100, ...)
-  -- loops through the levelCounter that is stored as a string
-  while position <= string.len(string_levelCounter) do
-    -- calls on the print function for the digit, sends the number as a string
-    draw_number(string.sub(string_levelCounter,position,position),position, xplace, yplace)
-    position = position + 1
-  end
-  
+  draw_score(tostring(current_level), xplace,yplace)
 end
 
---isn't this a copy of the function in score.lua?
-function draw_number(number, position, xplace, yplace)
--- loads the picture corresponding to the correct digit
-  screen:copyfrom(number_image[number],nil ,{x=xplace+position*30, y = yplace, height = 50, width = 30}, true)
-end
+
 
 function draw_screen()
   -- Measure the game speed of each function in millisecond.
@@ -342,7 +356,7 @@ function draw_screen()
     --print(string.format("Move_character %d", ((sys.time() - t)) * 1000))
     draw_character()
     --print(string.format("Draw_character %d", ((sys.time() - t)) * 1000))
-    draw_score(game_score)
+    call_draw_score()
     --print(string.format("Draw_score %d", ((sys.time() - t)) * 1000))
     draw_lives()
     --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
@@ -374,6 +388,10 @@ function draw_tiles()
           move_cloud(v)
         elseif v.gid == 10 then
           move_flame(v)
+        end
+        if v.image == nil then
+          print("super wrong")
+          v.image = gfx.loadpng("images/font/Z.png")
         end
         screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
       end
@@ -434,7 +452,7 @@ else
 end
 end
 function decrease_life()
-  print(lives)
+  --print(lives)
   lives = lives-1
 end
 
@@ -461,6 +479,7 @@ function game_navigation(key, state)
     change_global_game_state(0)
     start_menu("pause_menu")
   elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
+    activate_power_up("win")
     levelwin()
   elseif key=="star" and state=="up" then -- Testing purposes (S on keyboard). Should probably be commented out at some point.
     game_score = game_score + 1000

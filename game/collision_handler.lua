@@ -3,7 +3,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   for k,v in pairs(tileSet) do
     local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
     if temp1 ~= nil then
-      if v.name=="floor" then -- gid==1 IS A FLOOR TILE
+      if v.name=="floor1" then -- gid==1 IS A FLOOR TILE
         return temp1,temp2,temp3,temp4   
       elseif string.sub(v.name,1,3)=="pow" and v.visibility == true then
         activate_power_up(v.name)

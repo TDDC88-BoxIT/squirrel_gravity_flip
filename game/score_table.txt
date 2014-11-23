@@ -1,34 +1,22 @@
 level1
-Amanda
-99999999
-Amanda
-99999999
-Amanda
-99999999
-Bob the builder
-9971
-Bob the builder
-9951
+AAA
+10270
+AAA
+10270
+Squirrel killer
+10070
+AAA
+9930
+AAA
+9910
 level2
 Bob the builder
 9991
 Bob the builder
 9991
 Bob the builder
-9971
-Bob the builder
-9951
-Bob the builder
-9901
+9991
 level3
 level4
-Squirrel killer
-10001460
-Squirrel killer
-10001360
-Squirrel killer
-9999780
-Squirrel killer
-9999780
-Squirrel killer
-9999780
+level5
+level6

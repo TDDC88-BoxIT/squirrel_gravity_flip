@@ -82,6 +82,7 @@ function get_tiles()
   return tiles
 end
 
+
 function load_images(tile_name, img_path)
   if tile_name == "floor" then
     floorimg = gfx.loadpng(img_path)
@@ -123,7 +124,7 @@ function load_images(tile_name, img_path)
 end
 
 function get_image(tile_name)
-  if tile_name == "floor" then
+  if tile_name == "floor1" then
     return floorimg
   elseif tile_name == "powerup1" then
     return powerup1Img
@@ -148,6 +149,6 @@ function get_image(tile_name)
   elseif tile_name == "win" then
     return winImg
   else
-    return nil
+    return winImg
   end 
 end
