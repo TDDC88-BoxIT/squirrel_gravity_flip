@@ -188,20 +188,21 @@ end
 function draw_menu()
   screen:clear()
   if addBling==true then
-    add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
-    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-  end
-  if menuState == "level_menu" then
-    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=levelmenu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+      add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
 
-  if menuState == "new_name_menu" then
+  if menuState == "level_menu" then
+    screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=levelmenu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+  else if menuState == "new_name_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu4:get_surface(), nil,{x=name_menu4_x,y=name_menu4_x,width=menu:get_size().width,height=menu:get_size().height},true)
     draw_score("Your name ", 300,600)
+  else
+      screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   end
+end
   
 
   if menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
