@@ -32,8 +32,6 @@ local squirrel2 = nil
 
 function start_menu(state)
   menuState=state
-  print(menuState)
-  print(menu)
   if menuState == "new_name_menu" then
     menu = menu_object(128,92)
     menu2 = menu_object(128,92)
@@ -83,8 +81,10 @@ function add_menu_items()
     menu3:add_button("name_3", imageDir.."font/3but.png")
     menu3:add_button("name_6", imageDir.."font/6but.png")
     menu3:add_button("name_9", imageDir.."font/9but.png")
+    menu4:add_button("back_space", imageDir.."font/X.png")
     menu4:add_button("accept_letter", imageDir.."font/Y.png")
     menu4:add_button("back", imageDir.."font/Z.png")
+
     
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
@@ -197,6 +197,7 @@ function draw_menu()
     screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu4:get_surface(), nil,{x=name_menu4_x,y=name_menu4_x,width=menu:get_size().width,height=menu:get_size().height},true)
+    draw_score("Your name ", 300,600)
   end
   
 
@@ -223,7 +224,7 @@ function menu_navigation(key, state)
   print(player_name)
   print("nr_buttons_pressed")
   print(nr_buttons_pressed)
- 
+
   if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
     if menuState ~= "new_name_menu" then
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
@@ -258,6 +259,8 @@ function menu_navigation(key, state)
       end
       text_button_pressed[1] = 0
     end 
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="2"  and state=="down" then 
     if text_button_pressed[2] == 0 then
       if nr_buttons_pressed >= 1 then
@@ -281,6 +284,8 @@ function menu_navigation(key, state)
       end
       text_button_pressed[2] = 0
     end 
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="3" and state=="down" then 
     if text_button_pressed[3] == 0 then
       if nr_buttons_pressed >= 1 then
@@ -304,6 +309,8 @@ function menu_navigation(key, state)
       end
       text_button_pressed[3] = 0
     end 
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="4" and state=="down" then   
     if text_button_pressed[4] == 0 then
       if nr_buttons_pressed >= 1 then
@@ -327,6 +334,8 @@ function menu_navigation(key, state)
       end
       text_button_pressed[4] = 0
     end
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="5" and state=="down" then 
     if text_button_pressed[5] == 0 then
       if nr_buttons_pressed >= 1 then
@@ -350,6 +359,8 @@ function menu_navigation(key, state)
       end
       text_button_pressed[5] = 0
     end
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="6" and state=="down" then
     if text_button_pressed[6] == 0 then
       if nr_buttons_pressed >= 1 then
@@ -373,6 +384,8 @@ function menu_navigation(key, state)
       end
       text_button_pressed[6] = 0
     end 
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="7" and state=="down" then
     if text_button_pressed[7] == 0 then
       if nr_buttons_pressed >= 1 then
@@ -395,7 +408,9 @@ function menu_navigation(key, state)
         player_name = "U"
       end
       text_button_pressed[7] = 0
-    end     
+    end
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="8" and state=="down" then
     if text_button_pressed[8] == 0 then
       if nr_buttons_pressed >= 1 then
@@ -419,6 +434,8 @@ function menu_navigation(key, state)
       end
       text_button_pressed[8] = 0
     end 
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="9" and state=="down" then  
     print("you pressed 9")
     if text_button_pressed[9] == 0 then
@@ -436,11 +453,21 @@ function menu_navigation(key, state)
       end
       text_button_pressed[9] = 0
     end 
-  elseif key=="green" and state=="down" then  
+    update_menu()
+    draw_score(player_name, 600,600)
+  elseif key=="green" and state=="down" then 
+  --Accepts a letter, allows you to write the next one 
     text_button_pressed = {0,0,0,0,0,0,0,0,0}
     nr_buttons_pressed = nr_buttons_pressed +1
 
+  elseif key=="yellow" and state=="down" then  
+  --The button backspace, removes a letter
+    player_name =""
+    nr_buttons_pressed = 0
+    update_menu()
+    draw_score(player_name, 600,600)
   elseif key=="red" and state=="down" then  
+  -- let's you go back to the start menu
     stop_menu()
     start_menu("start_menu")
   elseif key=="ok" and state=='up' then

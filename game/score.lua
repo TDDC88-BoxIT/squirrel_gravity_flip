@@ -1,7 +1,11 @@
 nr_of_scores_saved = 5
 
+
+--@desc: reads all the high scores saved in score_table.txt and saves them in a table
+--@params: none
+--@return: the number of levels that have been read (nr of unlocked lvs) 
+--@author: Amanda Persson
 function read_from_file()
-  print("read_from_file")
   score_board={} 
   -- text file where score is saved is opened
   file = io.open("game/score_table.txt", "r")
@@ -39,7 +43,9 @@ function read_from_file()
   end
 end  
 
-
+--@desc: Saves the new score if it is good enough, scores are added in its correct position size-wise
+--@params: player's name, score , level that has been played
+--@author: Gustav Beck-Norén
 function score_page(player,score,level)
   local unlocked_levels = read_from_file()
   if score_board[tostring(level)] == nil then
@@ -59,16 +65,14 @@ function score_page(player,score,level)
       break
     end
   end
-  save_to_file(score_board, file, unlocked_levels)
+  save_to_file(score_board, unlocked_levels)
 end 
 
-function insert_score(index)
 
-end
-
-
-function save_to_file(score_board, file, unlocked_levels)
-  print("save_to_file")
+--@desc: Saves the entire table with score in score_table.txt , replaces earlier text
+--@param: table with scores, and the number of levels that has been unlocked by the player
+--@author: Amanda Persson
+function save_to_file(score_board, unlocked_levels)
   -- if the file does not exist it is created
   file = io.open("game/score_table.txt","w+")
   io.output(file)
@@ -85,7 +89,10 @@ function save_to_file(score_board, file, unlocked_levels)
   io.close(file)
 end
 
-
+--@desc: Finds length of a table
+--@params: a table
+--@return: length of table
+--@author: Amanda Persson
 function table_length(T)
   local count = 0
   for _ in pairs(T) do count = count + 1 end
@@ -93,7 +100,9 @@ function table_length(T)
 end
 
 
---the function that draws the score in the top left score 
+--@desc: Draws a string in a pretty font on the screen
+--@params: a string, coordinates where the text/numbers should be drawn
+--@author: Amanda Persson
 function draw_score(game_score, x_coordinate, y_coordinate )
   local string_score = tostring(game_score)
   position = 1
@@ -108,6 +117,10 @@ function draw_score(game_score, x_coordinate, y_coordinate )
   end
 end
 
+
+--@desc: Draws one character that is part of a string
+--@params: a character, it's index in a string, coordinates
+--@author: Amanda Persson
 function draw_number(number, position, x_coordinate, y_coordinate)
 -- loads the picture corresponding to the correct digit or letter. Feel free to refactor 
   if number == nil then
@@ -121,6 +134,9 @@ function draw_number(number, position, x_coordinate, y_coordinate)
 end
 
 
+--@desc: Draws the high score for a level on the screen
+--@params: the level that the highscore should be shown for
+--@author: Amanda Persson
 function draw_highscore(level) 
   local position
   local x_coordinate = 620
