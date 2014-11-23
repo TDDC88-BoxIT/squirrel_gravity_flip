@@ -40,6 +40,9 @@ function start_menu(state)
     menu2:set_background(imageDir.."menuImg/menuBackground.png")
     menu3:set_background(imageDir.."menuImg/menuBackground.png")
     menu4:set_background(imageDir.."menuImg/menuBackground.png")
+    menu:set_indexed_item(nil) --REMOVES THE ITEM INDICATOR ON THE MENU BUTTONS
+    menu2:set_indexed_item(nil)
+    menu3:set_indexed_item(nil)
   else
     --if(menu==nil) then
       menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
