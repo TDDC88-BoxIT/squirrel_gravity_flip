@@ -128,7 +128,7 @@ function menu_object:increase_index()
   end
 end
 
--- DE CREASES THE INDEX FOR CURRENTLY SELECTED MENU ITEM
+-- DECREASES THE INDEX FOR CURRENTLY SELECTED MENU ITEM
 function menu_object:decrease_index()
   if self.indexed_item>1 then
     self.indexed_item=self.indexed_item-1
