@@ -15,7 +15,7 @@ local backgroundImage = nil
 local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 local current_character = 1
-local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR IN EXAMPLE IN THE CASE OF LEVEL MENU
+local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
 
 local squirrel1 = nil
 local squirrel2 = nil
@@ -57,7 +57,7 @@ function add_menu_items()
   end
 end
 
--- ADDS A PAGE WITH LEVEL MENU BUTTONS. NUMBER OF LEVELS DISPLAYED PER AGE AS WELL AS THE MAXIMUM NUMBER OF LEVEL MENU ITEMS CAN BE CONFIGURED
+-- ADDS A PAGE WITH LEVEL MENU BUTTONS. NUMBER OF LEVELS DISPLAYED PER PAGE AS WELL AS THE MAXIMUM NUMBER OF LEVEL MENU ITEMS CAN BE CONFIGURED
 function add_level_menu_buttons()
   local levels_per_page = 3 
   local no_level_menu_items = 10
@@ -83,12 +83,6 @@ function add_level_menu_buttons()
 end
 
 function configure_menu_height()
-  menuState = get_menu_state()
-  --if menuState == "level_menu" then
-    --local box_height = (screen:get_height()-2*screen:get_height()/100-20*menu:get_item_amount())/menu:get_item_amount()
-    --menu:set_button_size(nil, box_height)
-  --end
-
   local menuHeight= 20+(menu:get_button_size().height+15)*(menu:get_item_amount()) 
   menu:set_size(nil,menuHeight)
 end
@@ -124,7 +118,7 @@ function add_menu_bling()
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   
-  -- ADD TWO A RUNNING SQUIRRELS
+  -- ADD TWO RUNNING SQUIRRELS
   if squirrel1 == nil and squirrel2 == nil then
     squirrel1=character_object(117,140,squirrelImg2)
     squirrel2=character_object(117,140,squirrelImg1)
@@ -151,13 +145,9 @@ function draw_menu()
   if addBling==true then
     add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
-  --if menuState == "level_menu" then
-    --menu_y = screen:get_height()/100 -- MAKES THE LEVEL MENU START 1/100 DOWN FROM THE TOP OF THE SCREEN, BUT FOR OTHER MENU STATES THE ORIGINAL VALUE OF MENU_Y IS KEPT (SEE TOP OF MAIN.LUA)
-  --end
   screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   if menuState == "levelwin_menu" or menuState == "gameover_menu" then
-    --draw_level() --STILL TO BE IMPLEMENTED
-    draw_score()
+    draw_score() --DRAWS SCORE AND LEVEL NUMBER
   end
   menu:destroy()
   gfx.update()
@@ -170,8 +160,8 @@ end
 --HANDLES MENU NAVIGATION AND COMMANDS 
 function menu_navigation(key, state)
  
-  if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
-      menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
+  if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEM IS NOT LAST OF MENU
+      menu:increase_index()
       update_menu()   
   elseif key=="up" and state=='down' then
       menu:decrease_index()
