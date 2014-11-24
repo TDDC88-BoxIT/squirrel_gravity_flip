@@ -1,5 +1,4 @@
 require("../tool_box/menu_object")
-require("../tool_box/character_object")
 require("game/level_config")
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
@@ -63,8 +62,6 @@ function stop_menu()
   backgroundImage = nil
   screen:clear() 
  end
-
-
 
 -- ADDS THE MENU ITEMS
 function add_menu_items()
@@ -181,24 +178,6 @@ function add_menu_bling()
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
   
 
-  -- Can this be removed?
-  -- SETS A BLACK SEMI-TRANSPARENT BACKGROUND ON SCREEN OVER THE BACKGROUND IMAGE
---[[<<<<<<< HEAD
-  backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
-  if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" and menuState == "highscore_menu" then
-    backdrop:fill({r=0,g=0,b=0,a=200})
-  elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
-=======]]--
-  --[[backdrop = gfx.new_surface(screen:get_width(),screen:get_height())
-  if menuState == "start_menu" or menuState == "pause_menu" then
-    backdrop:fill({r=0,g=0,b=0,a=60})
-  elseif menuState == "levelwin_menu" then
->>>>>>> development
-    backdrop:fill({r=0,g=0,b=0,a=100})
-  end
-  ]]
- -- screen:copyfrom(backdrop, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()},true)
-
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
   thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
   thunderAcorn.img:premultiply()
@@ -209,28 +188,9 @@ function add_menu_bling()
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   
-
-  -- Can this be removed?
---[[<<<<<<< HEAD
-  -- ADD TWO RUNNING SQUIRRELS
-  if squirrel1 == nil and squirrel2 == nil then
-=======]]--
-  -- Adds two munching squirrel pictures. Disabled for now.
-  --[[-if squirrel1 == nil and squirrel2 == nil then
->>>>>>> development
-    squirrel1=character_object(117,140,squirrelImg2)
-    squirrel2=character_object(117,140,squirrelImg1)
-  end
-  squirrel1:update()
-  squirrel2:update()
-  screen:copyfrom(squirrel1:get_surface(), nil,{x=200,y=250,width=squirrel1:get_size().width,height=squirrel1:get_size().height},true)
-  screen:copyfrom(squirrel2:get_surface(), nil,{x=(screen:get_width()-(squirrel2:get_size().width+200)),y=250,width=squirrel2:get_size().width,height=squirrel2:get_size().height},true)]]
-  
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
   thunderAcorn.img:destroy()
-  --backdrop:destroy()
-  --squirrel1:destroy()
-  --squirrel2:destroy()
+
 end
 
 function get_menu_state()
@@ -538,7 +498,6 @@ function menu_navigation(key, state)
     if menu:get_indexed_item().id=="start_new" then
       stop_menu()
       change_global_game_state(1)
-      --start_game(16,"story",0)
       start_game(1,"story",0)
     elseif menu:get_indexed_item().id=="select_level" then
       stop_menu()
