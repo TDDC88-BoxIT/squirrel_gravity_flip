@@ -43,32 +43,34 @@ function start_game(level,game_type,life)
     current_game_type=game_type
   end
 
-  if level=="first" then
-    current_level = 1
-  elseif level=="next" then
+  if level=="next" then
     current_level = current_level+1
+  elseif level~="restart" then
+    current_level = level
   end
 
-  Level.load_level(current_level,current_game_type)
+  if Level.load_level(current_level,current_game_type)== "level_loaded" then
+    prepare_fail_success_handler()
 
-  prepare_fail_success_handler()
+    load_level_atttributes()
+    load_image_if_needed()
 
-  load_level_atttributes()
-  load_image_if_needed()
+    create_game_character()
 
-  create_game_character()
-
-  if current_game_type=="tutorial" then
-    create_tutorial_helper(current_level)
+    if current_game_type=="tutorial" then
+      create_tutorial_helper(current_level)
+    end
+    
+    set_character_start_position()
+    timer = sys.new_timer(20, "update_game")
+    pos_change = 0
+    lives = life
+    player.invulnerable = false
+  else
+    stop_game()
+    change_global_game_state(0)
+    start_menu("start_menu")
   end
-  
-  set_character_start_position()
-  timer = sys.new_timer(20, "update_game")
-  pos_change = 0
-  lives = life
-  player.invulnerable = false
-
-
 end
  
 -- LOADS THE LEVEL ATTRIBUTES IF THERE ARE ANY SPECIFIED IN THE LEVEL INPUT FILE
@@ -361,7 +363,7 @@ function draw_screen()
     draw_lives()
     --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
     
-    if current_game_type=="tutorial" then
+    if current_game_type=="tutorial" and tutorial_goal_is_fulfilled==false then
       draw_tutorial_helper()
       --print(string.format("Draw_tutorial_helper %d", ((sys.time() - t)) * 1000))
     end

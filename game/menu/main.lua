@@ -50,8 +50,6 @@ function start_menu(state)
     menu3:set_indexed_item(nil)
   else
     menu = menu_object(menu_width,menu_height) -- CREATES A NEW MENU OBJECT. ATTRIBUTES= {X,Y,WIDTH,HEIGHT}
-    print("menu")
-    print(menu)
   end
   was_pressed_from_menu = false -- This dumps the last keypress event so you can't get instantly transferred from gameover to main menu.
   add_menu_items()
@@ -77,15 +75,16 @@ function add_menu_items()
     menu:add_button("settings",imageDir.."menuImg/settings.png")
     menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
-  else 
-    if menuState == "pause_menu" then
-      menu:add_button("resume",imageDir.."menuImg/resume.png")
-      menu:add_button()
-    elseif menuState == "levelwin_menu" then
-      menu:add_button("continue", imageDir.."menuImg/continue.png")
-    elseif menuState == "gameover_menu" then
-      menu:add_button("restart", imageDir.."menuImg/restart.png")
-    elseif menuState == "new_name_menu" then
+  elseif menuState == "pause_menu" then
+    menu:add_button("resume",imageDir.."menuImg/resume.png")
+    menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
+  elseif menuState == "levelwin_menu" then
+    menu:add_button("continue", imageDir.."menuImg/continue.png")
+    menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
+  elseif menuState == "gameover_menu" then
+    menu:add_button("restart", imageDir.."menuImg/restart.png")
+    menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
+  elseif menuState == "new_name_menu" then
     menu:add_button("name_1", imageDir.."font/1but.png")
     menu:add_button("name_4", imageDir.."font/4but.png")
     menu:add_button("name_7", imageDir.."font/7but.png")
@@ -95,15 +94,12 @@ function add_menu_items()
     menu3:add_button("name_3", imageDir.."font/3but.png")
     menu3:add_button("name_6", imageDir.."font/6but.png")
     menu3:add_button("name_9", imageDir.."font/9but.png")
-    
-    elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
-      menu:add_button("continue", imageDir.."menuImg/continue.png")
-    elseif menuState == "level_menu" or menuState== "highscore_menu" then
-      add_level_menu_buttons()
-    end
-      if menuState ~= "new_name_menu" then
-        menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
-      end
+  
+  elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
+    menu:add_button("continue", imageDir.."menuImg/continue.png")
+    menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
+  elseif menuState == "level_menu" or menuState== "highscore_menu" then
+    add_level_menu_buttons()
   end
 end
 
@@ -143,8 +139,9 @@ function add_level_menu_buttons()
   if(end_page_level ~= no_level_menu_items) then
     menu:add_button("nextpage", dir .. "nextpage.png")
   end
-
-  menu:add_button("continue", imageDir .. "menuImg/continue.png")
+  if current_level ~= nil then
+    menu:add_button("continue", imageDir .. "menuImg/continue.png")
+  end
 end
 
 function configure_menu_height()
@@ -542,7 +539,7 @@ function menu_navigation(key, state)
       stop_menu()
       change_global_game_state(1)
       --start_game(16,"story",0)
-      start_game("first","story",0)
+      start_game(1,"story",0)
     elseif menu:get_indexed_item().id=="select_level" then
       stop_menu()
       start_menu("level_menu")
@@ -553,10 +550,9 @@ function menu_navigation(key, state)
     elseif menu:get_indexed_item().id=="tutorial" then
       stop_menu()
       change_global_game_state(1)
-      start_game("first","tutorial",0)
+      start_game(1,"tutorial",0)
     elseif menu:get_indexed_item().id=="high_score" then
       -- COMMAND TO VIEW HIGH SCORE
-      print("inne i highscore")
       stop_menu()
       start_menu("highscore_menu")
     elseif menu:get_indexed_item().id=="settings" then

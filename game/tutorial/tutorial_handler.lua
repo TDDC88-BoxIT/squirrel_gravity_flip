@@ -14,9 +14,6 @@ function create_tutorial_helper(level_number)
     	tutorial_helper = character_object(236,219,imageDir.."tutorialImg/okButtonDown.png")
     	tutorial_helper:add_image(imageDir.."tutorialImg/okButtonUp.png")
     	tutorial_helper_timer = sys.new_timer(500, "update_tutorial_helper")
-  	else
-    	--tutorial_helper:reset()
-    	--tutorial_helper_timer = sys.new_timer(500, "update_tutorial_helper")
   	end
 end
 
@@ -43,14 +40,17 @@ end
 function update_tutorial_handler(key)
 	if key=='ok' then
 		ok_pressed_times=ok_pressed_times+1
-	end
-	check_tutorial_goal_fulfillment()
-end
-
-function check_tutorial_goal_fulfillment()
-	if tutorial_level==1 then
-		if ok_pressed_times==1 then
-			tutorial_goal_fulfilled=true
+		if tutorial_level==1 then
+			if ok_pressed_times==1 then
+				tutorial_goal_fulfilled=true
+			end
 		end
 	end
+	if tutorial_goal_fulfilled==true and tutorial_helper_timer~=nil then
+		stop_tutorial_helper()
+	end
+end
+
+function tutorial_goal_is_fulfilled()
+	return tutorial_goal_fulfilled
 end
