@@ -252,8 +252,7 @@ end
 --HANDLES MENU NAVIGATION AND COMMANDS 
 function menu_navigation(key, state)
   if menuState == "new_name_menu" then
-    print("new name menu")
-    menu_navigation_new_name(key, state)
+    player_name = menu_navigation_new_name(key, state)
   else
     if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
