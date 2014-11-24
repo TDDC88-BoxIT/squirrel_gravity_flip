@@ -6,7 +6,10 @@ return {
   height = 14,
   tilewidth = 32,
   tileheight = 32,
-  properties = {},
+  properties = {
+    ["character_start_pos_x"] = "5",
+    ["character_start_pos_y"] = "2"
+},
   tilesets = {
     {
       name = "floor1",
@@ -43,13 +46,13 @@ return {
       tiles = {}
     },
     {
-      name = "obstacleGroundSpike",
+      name = "obstacle1",
       firstgid = 3,
       tilewidth = 32,
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "images/obstacleGroundSpike.png",
+      image = "images/obstacle1.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
@@ -60,13 +63,13 @@ return {
       tiles = {}
     },
     {
-      name = "obstacleCeilingSpike",
+      name = "obstacle2",
       firstgid = 5,
       tilewidth = 32,
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "images/obstacleCeilingSpike.png",
+      image = "images/obstacle2.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {

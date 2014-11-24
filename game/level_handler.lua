@@ -53,9 +53,11 @@ function get_tiles()
   -- Saves the tilesets data into an array with the firstgid index, this is the same number as in the tile_layer_data
   for k,v in pairs(Level.raw_level.tilesets) do 
     tilesets[v.firstgid] = v
-    if string.sub(v.image,1,3)=="../" then 
+    if string.sub(v.image,1,3)=="../" then
+      print(string.sub(v.image,4,string.len(v.image))) 
       load_images(v.name, string.sub(v.image,4,string.len(v.image))) -- LOADS IMAGE PATH WITHOUT UNWANTED FIRST CHARACTERS
     else
+      print("v.image")
       load_images(v.name, v.image)
     end
   end   
@@ -84,7 +86,7 @@ end
 
 
 function load_images(tile_name, img_path)
-  if tile_name == "floor" then
+  if tile_name == "floor1" then
     floorimg = gfx.loadpng(img_path)
     floorimg:premultiply()
   elseif tile_name == "powerup1" then

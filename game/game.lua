@@ -48,7 +48,7 @@ function start_game(level,game_type,life)
   elseif level=="next" then
     current_level = current_level+1
   end
-  
+
   Level.load_level(current_level,current_game_type)
 
   prepare_fail_success_handler()

@@ -6,7 +6,10 @@ return {
   height = 14,
   tilewidth = 32,
   tileheight = 32,
-  properties = {},
+  properties = {
+    ["character_start_pos_x"] = "5",
+    ["character_start_pos_y"] = "2"
+},
   tilesets = {
     {
       name = "floor1",

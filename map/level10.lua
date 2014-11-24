@@ -8,7 +8,7 @@ return {
   tileheight = 32,
   properties = {
     ["character_start_pos_x"] = "5",
-    ["character_start_pos_y"] = "10"
+    ["character_start_pos_y"] = "7"
 },
   tilesets = {
     {
