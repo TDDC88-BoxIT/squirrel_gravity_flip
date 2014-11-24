@@ -1,17 +1,19 @@
 require("../tool_box/menu_object")
 require("../tool_box/character_object")
 require("game/level_config")
+require("game/menu/text_input_handler")
+
 local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
 local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
 local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
+local level_menu_y = screen:get_height()/100
+local level_menu_x = screen:get_width()/100
 local name_menu1_x = 400
 local name_menu1_y = 200
 local name_menu2_x = 550
 local name_menu2_y = 200
 local name_menu3_x = 700
 local name_menu3_y = 200
-local level_menu_y = screen:get_height()/100
-local level_menu_x = screen:get_width()/100
 local menuState = "start_menu" -- CAN BE "start_menu" OR "pause_menu" OR "levelwin_menu" OR "gameover_menu"
 local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
@@ -32,8 +34,11 @@ local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE
 local was_pressed_from_menu = false
 
 
+
 --local squirrel1 = nil
 --local squirrel2 = nil
+
+
 
 function start_menu(state)
   menuState=state
@@ -263,24 +268,22 @@ function draw_menu()
     for i=nr_buttons_pressed,2 do
       screen:copyfrom(dash, nil,{x=600+(i+1)*30,y=656,width=30,height=6},true)
     end
+
+    menu:destroy()
+    menu2:destroy()
+    menu3:destroy()
+    gfx.update()
   elseif menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
     --draw_level() --STILL TO BE IMPLEMENTED
-    
     if menuState == "levelwin_menu" then
       call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
     end
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
   else
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-  end
-  if menuState == "new_name_menu" then 
     menu:destroy()
-    menu2:destroy()
-    menu3:destroy()
-  else
-    menu:destroy()
+    gfx.update()
   end
-  gfx.update()
 end
 
 function update_menu()
@@ -290,316 +293,81 @@ end
 
 --HANDLES MENU NAVIGATION AND COMMANDS 
 function menu_navigation(key, state)
-  if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
-    if menuState ~= "new_name_menu" then
+  if menuState == "new_name_menu" then
+    menu_navigation_new_name(key, state)
+  else
+    if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
       update_menu()   
-    end
-  elseif key=="up" and state=='down' then
-    if menuState ~= "new_name_menu" then
-      menu:decrease_index()
-      update_menu()
-    end
-  elseif key=="1"  and state=="down" and nr_buttons_pressed<3 then 
-
-    if text_button_pressed[1] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "A"
-      else
-        player_name = "A"
-      end
-      text_button_pressed[1] = text_button_pressed[1]+1
-    elseif text_button_pressed[1] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "B"
-      else
-      player_name = "B"
-      end
-      text_button_pressed[1] = text_button_pressed[1]+1
-    elseif text_button_pressed[1] == 2 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "C"
-      else
-        player_name = "C"
-      end
-      text_button_pressed[1] = 0
-    end 
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="2"  and state=="down" and nr_buttons_pressed<3 then 
-    if text_button_pressed[2] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "D"
-      else
-        player_name = "D"
-      end
-      text_button_pressed[2] = text_button_pressed[2]+1
-    elseif text_button_pressed[2] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "E"
-      else
-        player_name = "E"
-      end
-      text_button_pressed[2] = text_button_pressed[2]+1
-    elseif text_button_pressed[2] == 2 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "F"
-      else
-        player_name = "F"
-      end
-      text_button_pressed[2] = 0
-    end 
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="3" and state=="down" and nr_buttons_pressed<3 then 
-    if text_button_pressed[3] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "G"
-      else
-        player_name = "G"
-      end
-      text_button_pressed[3] = text_button_pressed[3]+1
-    elseif text_button_pressed[3] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "H"
-      else
-        player_name = "H"
-      end
-      text_button_pressed[3] = text_button_pressed[3]+1
-    elseif text_button_pressed[3] == 2 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "I"
-      else
-        player_name = "I"
-      end
-      text_button_pressed[3] = 0
-    end 
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="4" and state=="down" and nr_buttons_pressed<3 then   
-    if text_button_pressed[4] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "J"
-      else
-        player_name = "J"
-      end
-      text_button_pressed[4] = text_button_pressed[4]+1
-    elseif text_button_pressed[4] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "K"
-      else
-        player_name = "K"
-      end
-      text_button_pressed[4] = text_button_pressed[4]+1
-    elseif text_button_pressed[4] == 2 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "L"
-      else
-        player_name = "L"
-      end
-      text_button_pressed[4] = 0
-    end
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="5" and state=="down" and nr_buttons_pressed<3 then 
-    if text_button_pressed[5] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "M"
-      else
-        player_name = "M"
-      end
-      text_button_pressed[5] = text_button_pressed[5]+1
-    elseif text_button_pressed[5] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "N"
-      else
-        player_name = "N"
-      end
-      text_button_pressed[5] = text_button_pressed[5]+1
-    elseif text_button_pressed[5] == 2 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "O"
-      else
-        player_name = "O"
-      end
-      text_button_pressed[5] = 0
-    end
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="6" and state=="down" and nr_buttons_pressed<3 then
-    if text_button_pressed[6] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "P"
-      else
-        player_name = "P"
-      end
-      text_button_pressed[6] = text_button_pressed[6]+1
-    elseif text_button_pressed[6] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "Q"
-      else
-        player_name = "Q"
-      end
-      text_button_pressed[6] = text_button_pressed[6]+1
-    elseif text_button_pressed[6] == 2 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "R"
-      else
-        player_name = "R"
-      end
-      text_button_pressed[6] = 0
-    end 
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="7" and state=="down" and nr_buttons_pressed<3 then
-    if text_button_pressed[7] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "S"
-      else
-        player_name = "S"
-      end
-      text_button_pressed[7] = text_button_pressed[7]+1
-    elseif text_button_pressed[7] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "T"
-      else
-        player_name = "T"
-      end
-      text_button_pressed[7] = text_button_pressed[7]+1
-    elseif text_button_pressed[7] == 2 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "U"
-      else
-        player_name = "U"
-      end
-      text_button_pressed[7] = 0
-    end
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="8" and state=="down" and nr_buttons_pressed<3 then
-    if text_button_pressed[8] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "V"
-      else
-        player_name = "V"
-      end
-      text_button_pressed[8] = text_button_pressed[8]+1
-    elseif text_button_pressed[8] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "W"
-      else
-        player_name = "W"
-      end
-      text_button_pressed[8] = text_button_pressed[8]+1
-    elseif text_button_pressed[8] == 2 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "X"
-      else
-        player_name = "X"
-      end
-      text_button_pressed[8] = 0
-    end 
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="9" and state=="down" and nr_buttons_pressed<3 then  
-    if text_button_pressed[9] == 0 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "Y"
-      else
-        player_name = "Y"
-      end
-      text_button_pressed[9] = text_button_pressed[9]+1
-    elseif text_button_pressed[9] == 1 then
-      if nr_buttons_pressed >= 1 then
-        player_name = string.sub(player_name, 1,nr_buttons_pressed) .. "Z"
-      else
-        player_name = "Z"
-      end
-      text_button_pressed[9] = 0
-    end 
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="green" and state=="down" and nr_buttons_pressed<3 then 
-  --Accepts a letter, allows you to write the next one 
-    text_button_pressed = {0,0,0,0,0,0,0,0,0}
-    nr_buttons_pressed = nr_buttons_pressed +1
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="yellow" and state=="down" then  
-  --The button backspace, removes a letter
-    player_name =""
-    nr_buttons_pressed = 0
-    update_menu()
-    draw_score(player_name, 600,600)
-  elseif key=="red" and state=="down" then  
-  -- let's you go back to the start menu
-    stop_menu()
-    start_menu("start_menu")
-  elseif key=="ok" and state=='up' and was_pressed_from_menu == true then
-    -- ACTIONS WHEN menu BUTTONS ARE PRESSED
-    if menu:get_indexed_item().id=="start_new" then
-      stop_menu()
-      change_global_game_state(1)
-      --start_game(16,"story",0)
-      start_game("first","story",0)
-    elseif menu:get_indexed_item().id=="select_level" then
-      stop_menu()
-      start_menu("level_menu")
-     elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
-      stop_menu()
-      change_global_game_state(1)
-      resume_game()
-    elseif menu:get_indexed_item().id=="tutorial" then
-      stop_menu()
-      change_global_game_state(1)
-      start_game("first","tutorial",0)
-    elseif menu:get_indexed_item().id=="high_score" then
-      -- COMMAND TO VIEW HIGH SCORE
-      print("inne i highscore")
-      stop_menu()
-      start_menu("highscore_menu")
-    elseif menu:get_indexed_item().id=="settings" then
-      -- COMMAND TO VIEW SETTINGS
-      stop_menu()
-      start_menu("new_name_menu")
-    elseif menu:get_indexed_item().id=="exit" then
-      sys.stop() -- COMMAND TO EXIT
-    elseif menu:get_indexed_item().id=="continue" then
-      stop_menu()
-      change_global_game_state(1)
-      start_game("next","current",0)
-    elseif menu:get_indexed_item().id=="restart" then
-      stop_menu()
-      change_global_game_state(1)
-      start_game("restart","current",0)
-    elseif menu:get_indexed_item().id=="main_menu" then
-      start_menu("start_menu")
-    elseif menu:get_indexed_item().id=="previouspage" then
-      current_page = current_page - 1
-      stop_menu()
-      start_menu("level_menu")
-    elseif menu:get_indexed_item().id=="nextpage" then
-      current_page = current_page + 1
-      stop_menu()
-      start_menu("level_menu")
-    elseif (string.sub(menu:get_indexed_item().id, 1, 5) == "level") then
-      if (string.find(menu:get_indexed_item().id, "locked") == nil) then
-        local level = string.sub(menu:get_indexed_item().id, 6, 6)
+    elseif key=="up" and state=='down' then
+        menu:decrease_index()
+        update_menu()
+    elseif key=="ok" and state=='up' and was_pressed_from_menu == true then
+      -- ACTIONS WHEN menu BUTTONS ARE PRESSED
+      if menu:get_indexed_item().id=="start_new" then
         stop_menu()
         change_global_game_state(1)
-        start_game(level,"story",0)
-      end  
-    elseif menuState == "highscore_menu" then 
-      unlocked_level = read_unlocked_level()
-      print(unlocked_level)
-      for i=1,unlocked_level do
-        if menu:get_indexed_item().id == "highscore" .. i then 
-          draw_highscore(i,350)
+        --start_game(16,"story",0)
+        start_game("first","story",0)
+      elseif menu:get_indexed_item().id=="select_level" then
+        stop_menu()
+        start_menu("level_menu")  
+      elseif menu:get_indexed_item().id=="resume" then -- RESUMES THE GAME
+        stop_menu()
+        change_global_game_state(1)
+        resume_game()
+      elseif menu:get_indexed_item().id=="tutorial" then
+        stop_menu()
+        change_global_game_state(1)
+        start_game("first","tutorial",0)
+      elseif menu:get_indexed_item().id=="high_score" then
+        -- COMMAND TO VIEW HIGH SCORE
+        print("inne i highscore")
+        stop_menu()
+        start_menu("highscore_menu")
+      elseif menu:get_indexed_item().id=="settings" then
+        -- COMMAND TO VIEW SETTINGS
+        stop_menu()
+        start_menu("new_name_menu")
+      elseif menu:get_indexed_item().id=="exit" then
+        sys.stop() -- COMMAND TO EXIT
+      elseif menu:get_indexed_item().id=="continue" then
+        stop_menu()
+        change_global_game_state(1)
+        start_game("next","current",0)
+      elseif menu:get_indexed_item().id=="restart" then
+        stop_menu()
+        change_global_game_state(1)
+        start_game("restart","current",0)
+      elseif menu:get_indexed_item().id=="main_menu" then
+        start_menu("start_menu")
+      elseif menu:get_indexed_item().id=="previouspage" then
+        current_page = current_page - 1
+        stop_menu()
+        start_menu("level_menu")
+      elseif menu:get_indexed_item().id=="nextpage" then
+        current_page = current_page + 1
+        stop_menu()
+        start_menu("level_menu")
+      elseif (string.sub(menu:get_indexed_item().id, 1, 5) == "level") then
+        if (string.find(menu:get_indexed_item().id, "locked") == nil) then
+          local level = string.sub(menu:get_indexed_item().id, 6, 6)
+          stop_menu()
+          change_global_game_state(1)
+          start_game(level,"story",0)
+        end  
+      elseif menuState == "highscore_menu" then 
+        unlocked_level = read_unlocked_level()
+        print(unlocked_level)
+        for i=1,unlocked_level do
+          if menu:get_indexed_item().id == "highscore" .. i then 
+            draw_highscore(i,350)
+          end
         end
       end
+    elseif key=="ok" and state=="down" and was_pressed_from_menu == false then
+      was_pressed_from_menu = true
     end
-  elseif key=="ok" and state=="down" and was_pressed_from_menu == false then
-    was_pressed_from_menu = true
   end
 end
 
@@ -607,4 +375,3 @@ end
 function get_player_name()
   return player_name
 end
-
