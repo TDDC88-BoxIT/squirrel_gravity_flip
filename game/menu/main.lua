@@ -80,7 +80,6 @@ function add_menu_items()
   else 
     if menuState == "pause_menu" then
       menu:add_button("resume",imageDir.."menuImg/resume.png")
-      menu:add_button()
     elseif menuState == "levelwin_menu" then
       menu:add_button("continue", imageDir.."menuImg/continue.png")
     elseif menuState == "gameover_menu" then
