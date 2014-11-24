@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="500" height="14" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="floor1" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32">
   <image source="../images/floor1.png" width="32" height="32"/>
  </tileset>
  <tileset firstgid="2" name="powerup1" tilewidth="32" tileheight="32">
@@ -15,9 +15,12 @@
  <tileset firstgid="5" name="powerup4" tilewidth="32" tileheight="32">
   <image source="../images/powerup4.png" width="32" height="32"/>
  </tileset>
+ <tileset firstgid="6" name="win" tilewidth="32" tileheight="32">
+  <image source="../images/winTile.png" width="32" height="32"/>
+ </tileset>
  <layer name="Tile Layer 1" width="500" height="14">
   <data encoding="base64" compression="zlib">
-   eJzt20sOgzAMBcB+7n/nrip1A6TEhjiZkVghQQCJ55jweHCV5842kr1xjjZWAOId5YCMqMHzAIBxbdVP6isAtrxO7ovQ0yfQXwCAOlozOCOr1QEAVNAy/86eox+5O8/3vBPOCQD0+61fZvl+fXdNBkCef97xkXkQcayrcrQlz7O/71erHQCIM9p8LHp92l15DgC9VlrTHT3PPXtPKt47AGrLyPtZ64VWM18bAKxCngPA2Fr79LPzzx0AX709+ay+/Qp53GqFdRcAFXwA/TQA9Q==
+   eJzt20kOgzAMBVDaSr3/kbssGyCATab3JFZIDEHiOyYsC0957Wwt2bvOlq8bgBhnckAutMvzAIB2bdVP6isAtrwv7otwp0+gvwAA/SjN4IysVgcA0IOS+Xf2HP1I7Tzf80k4JwBw37p+GeX7de2aDIA8Z97xkXkQcayncrQkz7O/79eoHXqrVwBG1dp8LHp9Wq08n8l3mfv+AbLMtKY7ep57dUx6HLso8hygjoy8H7VeKDXyvR2R5wCMYuY8k+cA9KC0Tz+6rX/u5DnAfO725LP69vLob5a1FwCt+wHRfgEf
   </data>
  </layer>
 </map>
