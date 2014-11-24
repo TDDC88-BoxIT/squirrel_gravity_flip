@@ -43,11 +43,17 @@ function start_game(level,game_type,life)
     current_game_type=game_type
   end
 
-  if level=="first" then
-    current_level = 1
-  elseif level=="next" then
+  if level=="next" then
     current_level = current_level+1
+  elseif level~="restart" then
+    current_level = level
   end
+
+  --if level=="first" then
+  --  current_level = 1
+  --elseif level=="next" then
+  --  current_level = current_level+1
+  --end
 
   Level.load_level(current_level,current_game_type)
 

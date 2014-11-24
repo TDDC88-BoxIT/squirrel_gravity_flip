@@ -25,12 +25,23 @@ local obstacleCeilingSpikeImg
 local obstacle3Img
 local flame1Img
 local winImg
+local loaded_level
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
 function Level.load_level (level_number,game_type)
   if game_type=="tutorial" then
-    loaded_level = require("map/tutorialLevel"..level_number)
+    local file = io.open("map/tutorialLevel"..level_number..".lua","r")
+    if file~=nil then -- MAKE SURE LEVEL FILE EXISTS
+      loaded_level = require("map/tutorialLevel"..level_number)
+    else -- IF LEVEL DOESN'T EXIST, THE USER IS SENT BACK TO THE START MENU
+      return
+    end
   else
-    loaded_level = require("map/level"..level_number)
+    local file = io.open("map/level"..level_number..".lua","r")
+    if file ~= nil then -- MAKE SURE LEVEL FILE EXISTS
+      loaded_level = require("map/level"..level_number)
+    else -- IF LEVEL DOESN'T EXIST, THE USER IS SENT BACK TO THE START MENU
+      return
+    end
   end
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
@@ -40,7 +51,7 @@ function Level.load_level (level_number,game_type)
   Level.tiles = get_tiles()
   Level.character_start_pos_x = loaded_level.properties["character_start_pos_x"] * 32  -- Sets the characters start position on the x-axis
   Level.character_start_pos_y = loaded_level.properties["character_start_pos_y"] * 32  -- Sets the characters start position on the y-axis
-  --return Level
+  return "level_loaded"
 end
 
 
@@ -57,7 +68,6 @@ function get_tiles()
       print(string.sub(v.image,4,string.len(v.image))) 
       load_images(v.name, string.sub(v.image,4,string.len(v.image))) -- LOADS IMAGE PATH WITHOUT UNWANTED FIRST CHARACTERS
     else
-      print("v.image")
       load_images(v.name, v.image)
     end
   end   
@@ -86,7 +96,7 @@ end
 
 
 function load_images(tile_name, img_path)
-  if tile_name == "floor1" then
+  if tile_name == "floor" then
     floorimg = gfx.loadpng(img_path)
     floorimg:premultiply()
   elseif tile_name == "powerup1" then
@@ -126,7 +136,7 @@ function load_images(tile_name, img_path)
 end
 
 function get_image(tile_name)
-  if tile_name == "floor1" then
+  if tile_name == "floor" then
     return floorimg
   elseif tile_name == "powerup1" then
     return powerup1Img
@@ -149,8 +159,6 @@ function get_image(tile_name)
   elseif tile_name == "obstacle6" then
     return obstacleRightSpikeImg
   elseif tile_name == "win" then
-    return winImg
-  else
     return winImg
   end 
 end

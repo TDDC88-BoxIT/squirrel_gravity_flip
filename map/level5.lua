@@ -12,7 +12,7 @@ return {
 },
   tilesets = {
     {
-      name = "floor1",
+      name = "floor",
       firstgid = 1,
       tilewidth = 32,
       tileheight = 32,
@@ -52,7 +52,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "images/obstacle1.png",
+      image = "images/obstacleGroundSpike.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
@@ -69,7 +69,7 @@ return {
       tileheight = 32,
       spacing = 0,
       margin = 0,
-      image = "images/obstacle2.png",
+      image = "images/obstacleCeilingSpike.png",
       imagewidth = 32,
       imageheight = 32,
       tileoffset = {
