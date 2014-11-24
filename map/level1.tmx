@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="350" height="22" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="character_start_pos_x" value="0"/>
+  <property name="character_start_pos_y" value="12"/>
+ </properties>
  <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32">
   <image source="../images/floor1.png" width="32" height="32"/>
  </tileset>
@@ -15,7 +19,7 @@
  <tileset firstgid="5" name="powerup4" tilewidth="32" tileheight="32">
   <image source="../images/powerup4.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="6" name="winTile" tilewidth="32" tileheight="32">
+ <tileset firstgid="6" name="win" tilewidth="32" tileheight="32">
   <image source="../images/winTile.png" width="32" height="32"/>
  </tileset>
  <tileset firstgid="7" name="obstacle1" tilewidth="32" tileheight="32">

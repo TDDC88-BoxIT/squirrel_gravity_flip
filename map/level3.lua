@@ -6,7 +6,10 @@ return {
   height = 22,
   tilewidth = 32,
   tileheight = 32,
-  properties = {},
+  properties = {
+    ["character_start_pos_x"] = "0",
+    ["character_start_pos_y"] = "10"
+  },
   tilesets = {
     {
       name = "floor",
@@ -94,7 +97,7 @@ return {
       tiles = {}
     },
     {
-      name = "winTile",
+      name = "win",
       firstgid = 6,
       tilewidth = 32,
       tileheight = 32,
