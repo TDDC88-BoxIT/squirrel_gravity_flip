@@ -337,10 +337,11 @@ THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
 ]]  
 function draw_tiles()
   local sf = nil
+  local w = screen:get_width()
     for k,v in pairs(Level.tiles) do
       -- This code can't run properly on the box because the difference 
       -- of screen:copyfrom function . Wait for further improvement
-      if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter+v.width<screen:get_width() + v.width then
+      if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter+v.width<w + v.width then
         if v.gid == 9 then
           move_cloud(v)
         elseif v.gid == 10 then
