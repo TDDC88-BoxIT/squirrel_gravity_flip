@@ -133,7 +133,7 @@ function draw_number(number, position, x_coordinate, y_coordinate)
   -- Treat Numbers and Letters differently.
   -- Cause we have to draw Number every frame in the game,
   -- load them each time is too expensive, we buffer the Number, but not letters.
-  if number >= "0" and number <= "9" then
+  if number >= "0" and number <= "9" and number_image[number] ~= nil then
     score = number_image[number]
   else
     score = gfx.loadpng("images/font/"..number..".png")
