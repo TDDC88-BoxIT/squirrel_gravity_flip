@@ -56,13 +56,11 @@ function start_game(level,game_type,life)
   if Level.load_level(current_level,current_game_type)== "level_loaded" then
     prepare_fail_success_handler()
     load_level_atttributes()
-    load_image_if_needed()
     create_game_character()
 
     if current_game_type=="tutorial" then
       create_tutorial_helper(current_level)
     end
-    
     set_character_start_position()
     timer = sys.new_timer(20, "update_game")
     pos_change = 0
@@ -84,7 +82,7 @@ function load_level_atttributes()
   end
 end
 
-function load_image_if_needed()
+function load_font_images()
   if (gameBackground == nil) then
     gameBackground = gfx.loadpng("images/level_sky.png")
   end
@@ -127,7 +125,7 @@ function destroy_image()
 end
 
 function resume_game()
-  load_image_if_needed()
+  load_font_images()
   timer = sys.new_timer(20, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
@@ -195,11 +193,6 @@ end
 function update_score()
     game_score = game_score - 1
 end
-
---[[
-@desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
-@params: pu_name - The name (as defined in level files) of the object to activate.
-]]
 
 function move_character()
   local falling=0
@@ -324,7 +317,7 @@ function draw_screen()
     draw_lives()
     --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
     
-    if current_game_type=="tutorial" then
+    if current_game_type=="tutorial" and tutorial_goal_is_fulfilled==false then
       draw_tutorial_helper()
       --print(string.format("Draw_tutorial_helper %d", ((sys.time() - t)) * 1000))
     end
@@ -422,6 +415,10 @@ end
 function get_lives()
   return lives  
 end
+
+function get_global_game_state() 
+  return global_game_state
+end 
 
 
 function game_navigation(key, state)

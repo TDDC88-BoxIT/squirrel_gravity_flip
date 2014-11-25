@@ -124,6 +124,7 @@ end
 --@author: Amanda Persson
 function draw_number(number, position, x_coordinate, y_coordinate)
 -- loads the picture corresponding to the correct digit or letter. Feel free to refactor 
+
   if number == nil then
     number = "Z"
   end
