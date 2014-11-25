@@ -6,11 +6,20 @@ function read_unlocked_level()
 
 	file = io.open(file_path, "r")
 
+  --[[
 	for line in file:lines() do 
       	if string.sub(line,1,5) == "level" then
 			unlocked_level = tonumber(string.sub(line,6,string.len(line)))
 		end
 	end
+  ]]
+  while true do
+    local line = file:read()
+    if not line then break end
+    if string.sub(line,1,5) == "level" then
+			--unlocked_level = tonumber(string.sub(line,6,string.len(line)))
+    end
+  end
 
 	file:close()
 	return unlocked_level
