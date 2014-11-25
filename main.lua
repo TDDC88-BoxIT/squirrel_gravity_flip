@@ -8,7 +8,6 @@ sys = require('sys')
 
 function love.load()
   --print('love.load')
-  image = love.graphics.newImage("tv_picture.jpg")
   love.keyboard.setKeyRepeat(true)
   first_run = true
   

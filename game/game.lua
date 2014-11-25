@@ -14,10 +14,11 @@ require ("game/fail_and_success_handler")
 require ("tool_box/character_object")
 require ("game/score")
 require("game/tutorial/tutorial_handler")
+require("game/power_up")
 
 local imageDir = "images/"
 local mapDir = "map/"
-local player = {}
+player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
@@ -33,10 +34,10 @@ local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=2;     --gravity
 local Tcount=1
+game_score=0
 
 -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
 function start_game(level,game_type,life) 
-  game_score = 10000
   gameCounter=0
 
   if game_type ~= "current" then
@@ -45,13 +46,15 @@ function start_game(level,game_type,life)
 
   if level=="next" then
     current_level = current_level+1
-  elseif level~="restart" then
+  elseif level == "restart" then
+    game_score=0
+  else
     current_level = level
   end
 
   if Level.load_level(current_level,current_game_type)== "level_loaded" then
     prepare_fail_success_handler()
-
+    game_score = game_score+(Level.width * 10)
     load_level_atttributes()
     load_image_if_needed()
 
@@ -85,9 +88,6 @@ end
 function load_image_if_needed()
   if (gameBackground == nil) then
     gameBackground = gfx.loadpng("images/level_sky.png")
-  end
-  if life == nil then
-    life = gfx.loadpng("images/Game-hearts-icon.png")
   end
 
   if number_image["0"] == nil then
@@ -179,7 +179,9 @@ function update_game()
   screen:clear()
   draw_screen()
   if game_score > 0 then
-    game_score = game_score -10
+    if current_game_type ~= "tutorial" then
+      game_score = game_score -10
+    end
   else
     print("Death caused by score == 0")
     get_killed()
@@ -187,45 +189,6 @@ function update_game()
   end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
-
-function update_score()
-    game_score = game_score - 1
-end
-
-
---[[
-@desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
-@params: pu_name - The name (as defined in level files) of the object to activate.
-]]
-function activate_power_up(pu_name)
-  --[[
-  This prevents additional powerup events from being fired if the game is over (if you die).
-  Previously, hitting two or more obstacles at the same time (easily done on level4) would cause the game to try
-  and destroy the surface twice, throwing a runtime exception.
-  ]]
-  player_name = get_player_name()
-  print("playername == " .. player_name)
-  if(pu_name=="powerup1") then -- Score tile
-    game_score = game_score + 100
-  elseif(pu_name=="powerup2") then -- Speed tile
-    change_game_speed(15,1000)
-  elseif(pu_name=="powerup3") then -- Freeze tile
-    change_game_speed(1,1000)    
-  elseif(pu_name=="powerup4") then -- Invulnerability tile
-    activate_invulnerability(10000)
-  elseif(pu_name == "win") then -- Win tile!
-    -- the 1 represent the current level bein played, should be made generic as soon as possible
-    if player_name == "" then
-      player_name= "AAA"
-    end
-    score_page(player_name, game_score, 1)
-    draw_highscore(1,620)
-    levelwin()
-  elseif((pu_name == "obstacle1" or pu_name == "obstacle2" or pu_name == "obstacle3" or pu_name == "obstacle4") and not get_invulnerability_state()) then -- Obstacles
-    get_killed() -- This NEEDS to be changed to the actual fail screen when that has been implemented
-  end
-end
-
 
 function move_character()
   local falling=0
@@ -460,6 +423,9 @@ end
 
 function change_game_speed(new_speed, time)
   gameSpeed = new_speed
+  if speed_timer~=nil then
+    speed_timer=nil
+  end
   speed_timer = sys.new_timer(time, "reset_game_speed")
 end
 
@@ -494,5 +460,8 @@ end
 
 function reset_game_speed()
   gameSpeed = 10
-  speed_timer:stop()
+    if speed_timer ~=nil then
+      speed_timer:stop()
+      speed_timer=nil
+    end
   end
