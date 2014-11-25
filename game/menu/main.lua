@@ -58,6 +58,7 @@ function start_menu(state)
   was_pressed_from_menu = false -- This dumps the last keypress event so you can't get instantly transferred from gameover to main menu.
   add_menu_items()
   configure_menu_height()
+  load_font_images()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
   draw_menu()
 end 
@@ -79,9 +80,11 @@ function add_menu_items()
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
   elseif menuState == "pause_menu" then
     menu:add_button("resume",imageDir.."menuImg/resume.png")
+    menu:add_button("restart", imageDir.."menuImg/restart.png")
     menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
   elseif menuState == "levelwin_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
+    menu:add_button("restart", imageDir.."menuImg/restart.png")
     menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
   elseif menuState == "gameover_menu" then
     menu:add_button("restart", imageDir.."menuImg/restart.png")
