@@ -282,43 +282,70 @@ function move_character_V2()
     (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height)==nil)then  
       falling=1
     end
-    if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+    if (player.cur_x<-1) or (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
       print("Death caused by getting squeezed") 
       get_killed()
     end
   elseif player.cur_x<player.work_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
   end
-
-  --[[ MOVE CHARACTER ON THE Y-AXIS
-    S=(G*t^2)/2 
-    There has a rule that, F(t)=t^2, F(t)-F(t-1)=2t-1 
-    We can get S(t)-S(t-1)=(G*(2t-1))/2
-    ]]
-  if direction_flag == "down" then 
-    player.new_y=player.cur_y+0.5*G*(Tcount+0.5+gameSpeed)--since 2t-1 is looks to slow at the beginning and too fast at the end, so use t-1 here
-  else       
-    player.new_y=player.cur_y-0.5*G*(Tcount+0.5+gameSpeed)
+ if Tcount==1 or Tcount==4 then  
+  for k=Tcount,Tcount+2, 1 do    
+    player.new_y=Y_position()
+    if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+      print("Death caused by falling off grid")
+      get_killed()   
+    end
+    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+    if W==nil or falling==1 then
+      Tcount=Tcount+1 
+      player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+    else
+      if direction_flag == "down" then 
+        player.cur_y=B_T-32
+        Tcount=1
+      else
+        player.cur_y=B_B
+        Tcount=1
+      end
+    end
   end
+else
+  player.new_y=Y_position()
   if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
     print("Death caused by falling off grid")
     get_killed()   
   end
-  local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
-  if W==nil or falling==1 then
-    Tcount=Tcount+1  
-    player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-  else
-    if direction_flag == "down" then 
-      player.cur_y=B_T-32
-      Tcount=1
+    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+    if W==nil or falling==1 then
+      Tcount=Tcount+1  
+      player.cur_y = player.new_y-- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
     else
-      player.cur_y=B_B
-      Tcount=1
+      if direction_flag == "down" then 
+        player.cur_y=B_T-32
+        Tcount=1
+      else
+        player.cur_y=B_B
+        Tcount=1
+      end
     end
-  end     
+  end
 end
 
+--[[Gravity equation
+    S=(G*t^2)/2 
+    There has a rule that, F(t)=t^2, F(t)-F(t-1)=2t-1 
+    We can get S(t)-S(t-1)=(G*(2t-1))/2]]
+function Y_position() 
+  if direction_flag == "down" then 
+    player.new_y=player.cur_y+0.5*G*(Tcount-1+5)--since the curve is too sharp, use t-1 instead of 2t-1, and it need a start position 5
+    return player.new_y
+    
+  else       
+    player.new_y=player.cur_y-0.5*G*(Tcount-1+5)
+    return player.new_y
+  end
+end
 
 --the function that draws the score and the level
 
