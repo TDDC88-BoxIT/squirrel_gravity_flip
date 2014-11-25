@@ -79,6 +79,7 @@ function add_menu_items()
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
   elseif menuState == "pause_menu" then
     menu:add_button("resume",imageDir.."menuImg/resume.png")
+    menu:add_button("restart", imageDir.."menuImg/restart.png")
     menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
   elseif menuState == "levelwin_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
