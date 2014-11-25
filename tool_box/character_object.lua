@@ -135,6 +135,7 @@ end
 -- SETS THE IMAGE CURRENTLY INDEXED TO THE CHARACTER SURFACE
 local function set_image(self)
 	local sf = gfx.loadpng(self:get_current_image())
+  sf:premultiply()
 	self.character_surface:copyfrom(sf,nil,{x=0,y=0,width=self.width,height=self.height},true)
 	sf:destroy()
 end	
@@ -143,6 +144,7 @@ end
 function character_object:update()
 	if self.character_surface == nil then
 		self.character_surface=gfx.new_surface(self.width, self.height)
+    --self.character_surface:clear()
 	end
 	animate(self)
   	set_image(self)  	

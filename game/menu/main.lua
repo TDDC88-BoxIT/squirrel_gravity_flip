@@ -63,6 +63,10 @@ function start_menu(state)
 end 
 
 function stop_menu()
+  if backgroundImage ~= nil then
+    backgroundImage:destroy()
+    backgroundImage = nil
+  end
   screen:clear() 
  end
 
@@ -181,8 +185,6 @@ function add_menu_bling()
   end
 
   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
-  backgroundImage:destroy()
-  backgroundImage = nil
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
   thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
