@@ -60,7 +60,7 @@ function start_game(level,game_type,life)
   prepare_fail_success_handler()
 
   load_level_atttributes()
-  load_image_if_needed()
+  load_font_images()
 
   create_game_character()
 
@@ -86,7 +86,7 @@ function load_level_atttributes()
   end
 end
 
-function load_image_if_needed()
+function load_font_images()
   if (gameBackground == nil) then
     gameBackground = gfx.loadpng("images/level_sky.png")
   end
@@ -132,7 +132,7 @@ function destroy_image()
 end
 
 function resume_game()
-  load_image_if_needed()
+  load_font_images()
   timer = sys.new_timer(20, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
 end

@@ -58,6 +58,7 @@ function start_menu(state)
   was_pressed_from_menu = false -- This dumps the last keypress event so you can't get instantly transferred from gameover to main menu.
   add_menu_items()
   configure_menu_height()
+  load_font_images()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
   draw_menu()
 end 
