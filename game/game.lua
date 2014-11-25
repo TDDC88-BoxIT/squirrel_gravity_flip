@@ -26,7 +26,6 @@ local gameCounter=0
 local gameSpeed = 10 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local current_level
 local gameBackground=nil
-local number_image={}
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
@@ -34,6 +33,7 @@ local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=3;     --gravity
 local Tcount=1
+number_image={}
 
 
 -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
@@ -57,7 +57,6 @@ function start_game(level,game_type,life)
     prepare_fail_success_handler()
     load_level_atttributes()
     load_image_if_needed()
-
     create_game_character()
 
     if current_game_type=="tutorial" then
@@ -168,14 +167,17 @@ end
 
 function set_character_start_position()
   player.work_xpos= 200 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
-  player.cur_x = Level.character_start_pos_x -- START POSITION FOR CHARACTER ON THE X-AXIS
-  player.cur_y = Level.character_start_pos_y -- START POSITION FOR CHARACTER ON THE Y-AXIS
+  player.cur_x = Level.character_start_pos_x 
+  player.cur_y = Level.character_start_pos_y
   player.new_x = player.cur_x -- INITIALLY NEW X-POS IS THE SAME AS CURRENT POSITION
   player.new_y = player.cur_y -- INITIALLY NEW Y-POS IS THE SAME AS CURRENT POSITION
 end
 
 -- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
 function update_game() 
+  -- if lives > 0 then
+  -- if game_score > 0 then
+
   screen:clear()
   draw_screen()
   if game_score > 0 then
@@ -190,7 +192,54 @@ function update_game()
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
 end
 
+function update_score()
+    game_score = game_score - 1
+end
+
+
 function move_character()
+  -- MOVE CHARACTER ON THE X-AXIS
+  -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
+  local falling=0
+    player.new_x=player.cur_x+1
+    if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then  
+      player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
+      if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+        print("Death caused by getting squeezed")
+        get_killed()
+        return
+      end
+    elseif player.cur_x<player.work_xpos then
+      player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
+    end
+
+  -- MOVE CHARACTER ON THE Y-AXIS
+    for i=0, gameSpeed, 1 do
+      if direction_flag == "down" then 
+        player.new_y=player.cur_y+i
+      else
+        player.new_y=player.cur_y-i
+      end
+      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+        print("Death caused by falling off grid")
+        get_killed()
+        return;
+      end
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
+        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+      else
+        break
+      end
+    end  
+end
+
+
+--[[
+@desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
+@params: pu_name - The name (as defined in level files) of the object to activate.
+]]
+
+function move_character_V2()
   local falling=0
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
@@ -201,43 +250,70 @@ function move_character()
     (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height)==nil)then  
       falling=1
     end
-    if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
+    if (player.cur_x<-1) or (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
       print("Death caused by getting squeezed") 
       get_killed()
     end
   elseif player.cur_x<player.work_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
   end
-
-  --[[ MOVE CHARACTER ON THE Y-AXIS
-    S=(G*t^2)/2 
-    There has a rule that, F(t)=t^2, F(t)-F(t-1)=2t-1 
-    We can get S(t)-S(t-1)=(G*(2t-1))/2
-    ]]
-  if direction_flag == "down" then 
-    player.new_y=player.cur_y+0.5*G*(Tcount+0.5+gameSpeed)--since 2t-1 is looks to slow at the beginning and too fast at the end, so use t-1 here
-  else       
-    player.new_y=player.cur_y-0.5*G*(Tcount+0.5+gameSpeed)
+ if Tcount==1 or Tcount==4 then  
+  for k=Tcount,Tcount+2, 1 do    
+    player.new_y=Y_position()
+    if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+      print("Death caused by falling off grid")
+      get_killed()   
+    end
+    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+    if W==nil or falling==1 then
+      Tcount=Tcount+1 
+      player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+    else
+      if direction_flag == "down" then 
+        player.cur_y=B_T-32
+        Tcount=1
+      else
+        player.cur_y=B_B
+        Tcount=1
+      end
+    end
   end
+else
+  player.new_y=Y_position()
   if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
     print("Death caused by falling off grid")
     get_killed()   
   end
-  local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
-  if W==nil or falling==1 then
-    Tcount=Tcount+1  
-    player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-  else
-    if direction_flag == "down" then 
-      player.cur_y=B_T-32
-      Tcount=1
+    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+    if W==nil or falling==1 then
+      Tcount=Tcount+1  
+      player.cur_y = player.new_y-- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
     else
-      player.cur_y=B_B
-      Tcount=1
+      if direction_flag == "down" then 
+        player.cur_y=B_T-32
+        Tcount=1
+      else
+        player.cur_y=B_B
+        Tcount=1
+      end
     end
-  end     
+  end
 end
 
+--[[Gravity equation
+    S=(G*t^2)/2 
+    There has a rule that, F(t)=t^2, F(t)-F(t-1)=2t-1 
+    We can get S(t)-S(t-1)=(G*(2t-1))/2]]
+function Y_position() 
+  if direction_flag == "down" then 
+    player.new_y=player.cur_y+0.5*G*(Tcount-1+5)--since the curve is too sharp, use t-1 instead of 2t-1, and it need a start position 5
+    return player.new_y
+    
+  else       
+    player.new_y=player.cur_y-0.5*G*(Tcount-1+5)
+    return player.new_y
+  end
+end
 
 --the function that draws the score and the level
 
@@ -271,7 +347,7 @@ end
 function draw_screen()
   -- Measure the game speed of each function in millisecond.
   -- Remove the -- to trace and optimize.
-  move_character()
+  move_character_V2()
   if timer~=nil then
     --local t = sys.time()
     draw_background()
@@ -286,7 +362,7 @@ function draw_screen()
     draw_lives()
     --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
     
-    if current_game_type=="tutorial" and tutorial_goal_is_fulfilled==false then
+    if current_game_type=="tutorial" then
       draw_tutorial_helper()
       --print(string.format("Draw_tutorial_helper %d", ((sys.time() - t)) * 1000))
     end
