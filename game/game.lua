@@ -25,7 +25,6 @@ local gameCounter=0
 local gameSpeed = 10 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local current_level
 local gameBackground=nil
-local number_image={}
 local image1 = nil
 local image2 = nil
 local current_game_type=nil
@@ -33,6 +32,7 @@ local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=2;     --gravity
 local Tcount=1
+number_image={}
 
 -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
 function start_game(level,game_type,life) 
