@@ -1,5 +1,6 @@
 local alphabet = {{"A","B","C"},{"D", "E","F"},{"G","H","I"},{"J","K","L"},{"M","N","O"},{"P","Q","R"},{"S","T","U"},{"V","W","X"}}
 
+
 function menu_navigation_new_name(key,state)
   if key=="green" or key=="ok" and state=="down" then 
     if nr_buttons_pressed<3 and nr_buttons_pressed<string.len(player_name)  then 
@@ -22,6 +23,7 @@ function menu_navigation_new_name(key,state)
     draw_score(player_name, 600,600)
   elseif key=="red" and state=="down" then  
   -- let's you go back to the start menu
+    nr_buttons_pressed= 0
     stop_menu()
     start_menu("start_menu")
   elseif key=="9" and state=="down" and nr_buttons_pressed<3 then  

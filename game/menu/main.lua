@@ -171,7 +171,7 @@ function add_menu_bling()
   if menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" or menuState == "highscore_menu" and backgroundImage == nil then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" and backgroundImage == nil then
-    backgroundImage = gfx.loadpng(imageDir.."/menuImg/levelwin.jpg")
+    backgroundImage = gfx.loadpng(imageDir.."menuImg/levelwin.jpg")
   elseif menuState == "new_name_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gravityFlip.jpg")
     dash = gfx.loadpng(imageDir.."font/dash.png")
@@ -218,6 +218,22 @@ function draw_menu()
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
   
     draw_score("Your name ", 300,600)
+    -- the loading of the pictures should probaably not be done here for RAM effectiveness
+    backButton = gfx.loadpng(imageDir.."menuImg/backButton.png")
+    okButton = gfx.loadpng(imageDir.."menuImg/okButton.png")
+    eraseButton = gfx.loadpng(imageDir.."menuImg/eraseButton.png")
+    nextButton = gfx.loadpng(imageDir.."menuImg/nextButton.png")
+    instructions = gfx.loadpng(imageDir.."menuImg/HighscoreInputInstruction.png")
+    screen:copyfrom(backButton, nil,{x=1040,y=300,width=120,height=80})
+    screen:copyfrom(okButton, nil,{x=1040,y=400,width=120,height=80})
+    screen:copyfrom(eraseButton, nil,{x=900,y=400,width=120,height=80})
+    screen:copyfrom(nextButton, nil,{x=900,y=300,width=120,height=80})
+    screen:copyfrom(instructions, nil,{x=220,y=680,width=759,height=43})
+    backButton:destroy()
+    okButton:destroy()
+    eraseButton:destroy()
+    nextButton:destroy()
+    instructions:destroy()
     if nr_buttons_pressed> 0 and nr_buttons_pressed<= 3 then 
       for i=1,nr_buttons_pressed do
         screen:copyfrom(green_dash, nil,{x=600+i*30,y=656,width=30,height=6},true)

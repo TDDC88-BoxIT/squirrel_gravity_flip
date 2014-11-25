@@ -49,32 +49,28 @@ function start_game(level,game_type,life)
     current_level = level
   end
 
-  --if level=="first" then
-  --  current_level = 1
-  --elseif level=="next" then
-  --  current_level = current_level+1
-  --end
+  if Level.load_level(current_level,current_game_type)== "level_loaded" then
+    prepare_fail_success_handler()
 
-  Level.load_level(current_level,current_game_type)
+    load_level_atttributes()
+    load_image_if_needed()
 
-  prepare_fail_success_handler()
+    create_game_character()
 
-  load_level_atttributes()
-  load_image_if_needed()
-
-  create_game_character()
-
-  if current_game_type=="tutorial" then
-    create_tutorial_helper(current_level)
+    if current_game_type=="tutorial" then
+      create_tutorial_helper(current_level)
+    end
+    
+    set_character_start_position()
+    timer = sys.new_timer(20, "update_game")
+    pos_change = 0
+    lives = life
+    player.invulnerable = false
+  else
+    stop_game()
+    change_global_game_state(0)
+    start_menu("start_menu")
   end
-  
-  set_character_start_position()
-  timer = sys.new_timer(20, "update_game")
-  pos_change = 0
-  lives = life
-  player.invulnerable = false
-
-
 end
  
 -- LOADS THE LEVEL ATTRIBUTES IF THERE ARE ANY SPECIFIED IN THE LEVEL INPUT FILE
@@ -247,8 +243,7 @@ function activate_power_up(pu_name)
   Previously, hitting two or more obstacles at the same time (easily done on level4) would cause the game to try
   and destroy the surface twice, throwing a runtime exception.
   ]]
-  player_name = get_player_name()
-  print("playername == " .. player_name)
+  
   if(pu_name=="powerup1") then -- Score tile
     game_score = game_score + 100
   elseif(pu_name=="powerup2") then -- Speed tile
@@ -258,6 +253,8 @@ function activate_power_up(pu_name)
   elseif(pu_name=="powerup4") then -- Invulnerability tile
     activate_invulnerability(10000)
   elseif(pu_name == "win") then -- Win tile!
+    player_name = get_player_name()
+    print("playername == " .. player_name)
     -- the 1 represent the current level bein played, should be made generic as soon as possible
     if player_name == "" then
       player_name= "AAA"
@@ -367,7 +364,7 @@ function draw_screen()
     draw_lives()
     --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
     
-    if current_game_type=="tutorial" then
+    if current_game_type=="tutorial" and tutorial_goal_is_fulfilled==false then
       draw_tutorial_helper()
       --print(string.format("Draw_tutorial_helper %d", ((sys.time() - t)) * 1000))
     end
@@ -465,6 +462,10 @@ end
 function get_lives()
   return lives  
 end
+
+function get_global_game_state() 
+  return global_game_state
+end 
 
 
 function game_navigation(key, state)
