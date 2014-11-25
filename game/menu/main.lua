@@ -83,6 +83,7 @@ function add_menu_items()
     menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
   elseif menuState == "levelwin_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
+    menu:add_button("restart", imageDir.."menuImg/restart.png")
     menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
   elseif menuState == "gameover_menu" then
     menu:add_button("restart", imageDir.."menuImg/restart.png")
