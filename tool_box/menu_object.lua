@@ -146,27 +146,17 @@ function menu_object:get_current_index()
   return self.indexed_item
 end
 
-
 -- SETS THE PATH TO THE MENU BACKGROUND IMAGE
 function menu_object:set_background(path)
   self.menu_background=path
 end
 
 -- CREATES THE MENU BACKGROUND AND ADDS IT TO THE MENU
---<<<<<<< HEAD
 local function make_background(self)
   local img_surface=nil
   img_surface = gfx.loadpng(self.menu_background)
   self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height-(20+2*screen:get_height()/100)},true)
   img_surface:destroy()
---[[=======
-local function make_bakground(self)
-   local img_surface=nil
-    img_surface = gfx.loadpng(self.menu_background)
-    img_surface:premultiply()
-    self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height},true)
-    img_surface:destroy()
->>>>>>> development]]--
 end
 
 -- CREATES THE MENU INDICATOR AND ADDS IT TO THE MENU. THE Y-VALUE MARKS WHERE THE INDICATOR IS TO BE PUT

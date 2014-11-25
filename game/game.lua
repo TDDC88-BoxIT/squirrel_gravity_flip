@@ -14,10 +14,11 @@ require ("game/fail_and_success_handler")
 require ("tool_box/character_object")
 require ("game/score")
 require("game/tutorial/tutorial_handler")
+require("game/power_up")
 
 local imageDir = "images/"
 local mapDir = "map/"
-local player = {}
+player = {}
 local character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
@@ -30,14 +31,15 @@ local image2 = nil
 local current_game_type=nil
 local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
-local G=2;     --gravity
+local G=3;     --gravity
 local Tcount=1
 number_image={}
 
+
 -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
 function start_game(level,game_type,life) 
-  game_score = 10000
   gameCounter=0
+  game_score=10000
 
   if game_type ~= "current" then
     current_game_type=game_type
@@ -45,28 +47,31 @@ function start_game(level,game_type,life)
 
   if level=="next" then
     current_level = current_level+1
-  elseif level~="restart" then
+  elseif level == "restart" then
+
+  else
     current_level = level
   end
 
-    Level.load_level(current_level,current_game_type)
-  
+  if Level.load_level(current_level,current_game_type)== "level_loaded" then
     prepare_fail_success_handler()
-  
-    load_level_atttributes()
     load_font_images()
-  
+    load_level_atttributes()
     create_game_character()
-  
+
     if current_game_type=="tutorial" then
       create_tutorial_helper(current_level)
     end
-   
     set_character_start_position()
     timer = sys.new_timer(20, "update_game")
     pos_change = 0
     lives = life
     player.invulnerable = false
+  else
+    stop_game()
+    change_global_game_state(0)
+    start_menu("start_menu")
+  end
 end
  
 -- LOADS THE LEVEL ATTRIBUTES IF THERE ARE ANY SPECIFIED IN THE LEVEL INPUT FILE
@@ -81,9 +86,6 @@ end
 function load_font_images()
   if (gameBackground == nil) then
     gameBackground = gfx.loadpng("images/level_sky.png")
-  end
-  if life == nil then
-    life = gfx.loadpng("images/Game-hearts-icon.png")
   end
 
   if number_image["0"] == nil then
@@ -178,7 +180,9 @@ function update_game()
   screen:clear()
   draw_screen()
   if game_score > 0 then
-    game_score = game_score -10
+    if current_game_type ~= "tutorial" then
+      game_score = game_score -10
+    end
   else
     print("Death caused by score == 0")
     get_killed()
@@ -191,80 +195,7 @@ function update_score()
     game_score = game_score - 1
 end
 
-
 function move_character()
-  -- MOVE CHARACTER ON THE X-AXIS
-  -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
-  local falling=0
-    player.new_x=player.cur_x+1
-    if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then  
-      player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
-      if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
-        print("Death caused by getting squeezed")
-        get_killed()
-        return
-      end
-    elseif player.cur_x<player.work_xpos then
-      player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
-    end
-
-  -- MOVE CHARACTER ON THE Y-AXIS
-    for i=0, gameSpeed, 1 do
-      if direction_flag == "down" then 
-        player.new_y=player.cur_y+i
-      else
-        player.new_y=player.cur_y-i
-      end
-      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
-        print("Death caused by falling off grid")
-        get_killed()
-        return;
-      end
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
-        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-      else
-        break
-      end
-    end  
-end
-
-
---[[
-@desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
-@params: pu_name - The name (as defined in level files) of the object to activate.
-]]
-function activate_power_up(pu_name)
-  --[[
-  This prevents additional powerup events from being fired if the game is over (if you die).
-  Previously, hitting two or more obstacles at the same time (easily done on level4) would cause the game to try
-  and destroy the surface twice, throwing a runtime exception.
-  ]]
-  
-  if(pu_name=="powerup1") then -- Score tile
-    game_score = game_score + 100
-  elseif(pu_name=="powerup2") then -- Speed tile
-    change_game_speed(15,1000)
-  elseif(pu_name=="powerup3") then -- Freeze tile
-    change_game_speed(1,1000)    
-  elseif(pu_name=="powerup4") then -- Invulnerability tile
-    activate_invulnerability(10000)
-  elseif(pu_name == "win") then -- Win tile!
-    player_name = get_player_name()
-    print("playername == " .. player_name)
-    -- the 1 represent the current level bein played, should be made generic as soon as possible
-    if player_name == "" then
-      player_name= "AAA"
-    end
-    score_page(player_name, game_score, 1)
-    draw_highscore(1,620)
-    levelwin()
-  elseif((pu_name == "obstacle1" or pu_name == "obstacle2" or pu_name == "obstacle3" or pu_name == "obstacle4") and not get_invulnerability_state()) then -- Obstacles
-    get_killed() -- This NEEDS to be changed to the actual fail screen when that has been implemented
-  end
-end
-
-
-function move_character_V2()
   local falling=0
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
@@ -372,7 +303,7 @@ end
 function draw_screen()
   -- Measure the game speed of each function in millisecond.
   -- Remove the -- to trace and optimize.
-  move_character_V2()
+  move_character()
   if timer~=nil then
     --local t = sys.time()
     draw_background()
@@ -528,6 +459,9 @@ end
 
 function change_game_speed(new_speed, time)
   gameSpeed = new_speed
+  if speed_timer~=nil then
+    speed_timer=nil
+  end
   speed_timer = sys.new_timer(time, "reset_game_speed")
 end
 
@@ -562,5 +496,8 @@ end
 
 function reset_game_speed()
   gameSpeed = 10
-  speed_timer:stop()
+    if speed_timer ~=nil then
+      speed_timer:stop()
+      speed_timer=nil
+    end
   end

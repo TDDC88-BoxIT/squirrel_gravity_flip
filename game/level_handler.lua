@@ -26,9 +26,11 @@ local obstacle3Img
 local flame1Img
 local winImg
 local loaded_level
+local current_level=0
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
 function Level.load_level (level_number,game_type)
   if game_type=="tutorial" then
+    current_level=level_number
     local file = io.open("map/tutorialLevel"..level_number..".lua","r")
     if file~=nil then -- MAKE SURE LEVEL FILE EXISTS
       loaded_level = require("map/tutorialLevel"..level_number)
@@ -96,7 +98,7 @@ end
 
 
 function load_images(tile_name, img_path)
-  if tile_name == "floor" then
+  if string.sub(tile_name,1,5) == "floor" then
     floorimg = gfx.loadpng(img_path)
     floorimg:premultiply()
   elseif tile_name == "powerup1" then
@@ -129,14 +131,14 @@ function load_images(tile_name, img_path)
   elseif tile_name == "obstacle6" then
     obstacleRightSpikeImg = gfx.loadpng(img_path)
     obstacleRightSpikeImg:premultiply()
-  elseif tile_name == "win" then
+  elseif string.sub(tile_name,1,3) == "win" then
     winImg = gfx.loadpng(img_path)
     winImg:premultiply()
   end 
 end
 
 function get_image(tile_name)
-  if tile_name == "floor" then
+  if string.sub(tile_name,1,5) == "floor" then
     return floorimg
   elseif tile_name == "powerup1" then
     return powerup1Img
@@ -158,7 +160,11 @@ function get_image(tile_name)
     return obstacleLeftSpikeImg
   elseif tile_name == "obstacle6" then
     return obstacleRightSpikeImg
-  elseif tile_name == "win" then
+  elseif string.sub(tile_name,1,3) == "win" then
     return winImg
   end 
+end
+
+function get_current_level()
+  return current_level
 end

@@ -1,22 +1,10 @@
 level1
 AAA
-10270
+10000
 AAA
-10270
-AAA
-10270
-AAA
-9980
-AAA
-9930
+10000
 level2
-Bob the builder
-9991
-Bob the builder
-9991
-Bob the builder
-9991
-level3
-level4
-level5
-level6
+AAA
+12100
+AAA
+12100

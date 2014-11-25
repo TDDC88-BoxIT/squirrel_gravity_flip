@@ -1,9 +1,8 @@
--[[
+--[[
 @desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
 @params: pu_name - The name (as defined in level files) of the object to activate.
 ]]
 function activate_power_up(pu_name)
-  
   --[[
   This prevents additional powerup events from being fired if the game is over (if you die).
   Previously, hitting two or more obstacles at the same time (easily done on level4) would cause the game to try
@@ -23,3 +22,4 @@ function activate_power_up(pu_name)
     activate_invulnerability(10000)
   end
 end
+

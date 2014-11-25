@@ -17,7 +17,7 @@ function read_unlocked_level()
     local line = file:read()
     if not line then break end
     if string.sub(line,1,5) == "level" then
-			--unlocked_level = tonumber(string.sub(line,6,string.len(line)))
+			unlocked_level = tonumber(string.sub(line,6,string.len(line)))
     end
   end
 
