@@ -303,11 +303,20 @@ function menu_navigation(key, state)
       elseif menu:get_indexed_item().id=="previouspage" then
         current_page = current_page - 1
         stop_menu()
-        start_menu("level_menu")
+        if menuState == "level_menu" then
+          start_menu("level_menu")
+        elseif menuState == "highscore_menu" then
+          start_menu("highscore_menu")
+        end
       elseif menu:get_indexed_item().id=="nextpage" then
         current_page = current_page + 1
         stop_menu()
-        start_menu("level_menu")
+        if menuState == "level_menu" then
+          start_menu("level_menu")
+        elseif menuState == "highscore_menu" then
+          start_menu("highscore_menu")
+        end
+
       elseif (string.sub(menu:get_indexed_item().id, 1, 5) == "level") then
         if (string.find(menu:get_indexed_item().id, "locked") == nil) then
           local level = string.sub(menu:get_indexed_item().id, 6, 6)
