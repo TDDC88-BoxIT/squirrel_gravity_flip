@@ -55,7 +55,8 @@ function start_game(level,game_type,life)
 
   if Level.load_level(current_level,current_game_type)== "level_loaded" then
     prepare_fail_success_handler()
-    load_level_attributes()
+    load_font_images()
+    load_level_atttributes()
     create_game_character()
 
     if current_game_type=="tutorial" then
@@ -74,11 +75,40 @@ function start_game(level,game_type,life)
 end
  
 -- LOADS THE LEVEL ATTRIBUTES IF THERE ARE ANY SPECIFIED IN THE LEVEL INPUT FILE
-function load_level_attributes()
+function load_level_atttributes()
   if (Level.attributes ~= nil) then
     gameSpeed = Level.attributes.speed
     upper_bound_y = Level.attributes.upper_bound_y
     lower_bound_y = Level.attributes.lower_bound_y
+  end
+end
+
+function load_font_images()
+  if (gameBackground == nil) then
+    gameBackground = gfx.loadpng("images/level_sky.png")
+  end
+
+  if number_image["0"] == nil then
+    number_image["0"] = gfx.loadpng("images/font/0.png")
+    number_image["1"] = gfx.loadpng("images/font/1.png")
+    number_image["2"] = gfx.loadpng("images/font/2.png")
+    number_image["3"] = gfx.loadpng("images/font/3.png")
+    number_image["4"] = gfx.loadpng("images/font/4.png")
+    number_image["5"] = gfx.loadpng("images/font/5.png")
+    number_image["6"] = gfx.loadpng("images/font/6.png")
+    number_image["7"] = gfx.loadpng("images/font/7.png")
+    number_image["8"] = gfx.loadpng("images/font/8.png")
+    number_image["9"] = gfx.loadpng("images/font/9.png")
+    number_image["0"]:premultiply()
+    number_image["1"]:premultiply()
+    number_image["2"]:premultiply()
+    number_image["3"]:premultiply()
+    number_image["4"]:premultiply()
+    number_image["5"]:premultiply()
+    number_image["6"]:premultiply()
+    number_image["7"]:premultiply()
+    number_image["8"]:premultiply()
+    number_image["9"]:premultiply()
   end
 end
 
@@ -96,6 +126,7 @@ function destroy_image()
 end
 
 function resume_game()
+  load_font_images()
   timer = sys.new_timer(20, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
 end
@@ -409,6 +440,7 @@ function game_navigation(key, state)
     change_global_game_state(0)
     start_menu("pause_menu")
   elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
+    activate_power_up("win")
     levelwin()
   elseif key=="star" and state=="up" then -- Testing purposes (S on keyboard). Should probably be commented out at some point.
     game_score = game_score + 1000

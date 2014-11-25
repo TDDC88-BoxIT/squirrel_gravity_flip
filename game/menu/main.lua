@@ -18,6 +18,8 @@ local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
+--local squirrelImg1 = imageDir.."character/bigSquirrel1.png" 
+--local squirrelImg2 = imageDir.."character/bigSquirrel2.png"
 local backgroundImage = nil
 local dash = nil
 local green_dash = nil
@@ -29,6 +31,13 @@ text_button_pressed = {0,0,0,0,0,0,0,0,0}
 nr_buttons_pressed = 0
 local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
 local was_pressed_from_menu = false
+
+
+
+--local squirrel1 = nil
+--local squirrel2 = nil
+
+
 
 function start_menu(state)
   menuState=state
@@ -49,6 +58,7 @@ function start_menu(state)
   was_pressed_from_menu = false -- This dumps the last keypress event so you can't get instantly transferred from gameover to main menu.
   add_menu_items()
   configure_menu_height()
+  load_font_images()
   menu:set_background(imageDir.."menuImg/menuBackground.png")
   draw_menu()
 end 
@@ -87,6 +97,7 @@ function add_menu_items()
     menu3:add_button("name_3", imageDir.."font/3but.png")
     menu3:add_button("name_6", imageDir.."font/6but.png")
     menu3:add_button("name_9", imageDir.."font/9but.png")
+  
   elseif menuState == "levelwin_menu" or menuState == "gameover_menu" then
     menu:add_button("continue", imageDir.."menuImg/continue.png")
     menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
@@ -179,7 +190,6 @@ function add_menu_bling()
   thunderAcorn.img:premultiply()
   thunderAcorn.height=139
   thunderAcorn.width=101
-
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
@@ -208,7 +218,7 @@ function draw_menu()
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    
+  
     draw_score("Your name ", 300,600)
     -- the loading of the pictures should probaably not be done here for RAM effectiveness
     backButton = gfx.loadpng(imageDir.."menuImg/backButton.png")
@@ -226,17 +236,16 @@ function draw_menu()
     eraseButton:destroy()
     nextButton:destroy()
     instructions:destroy()
- 
     if nr_buttons_pressed> 0 and nr_buttons_pressed<= 3 then 
       for i=1,nr_buttons_pressed do
         screen:copyfrom(green_dash, nil,{x=600+i*30,y=656,width=30,height=6},true)
-        green_dash:destroy()
       end
     end
     for i=nr_buttons_pressed,2 do
       screen:copyfrom(dash, nil,{x=600+(i+1)*30,y=656,width=30,height=6},true)
-      dash:destroy()
     end
+
+    menu:destroy()
     menu2:destroy()
     menu3:destroy()
     gfx.update()
@@ -246,13 +255,11 @@ function draw_menu()
       call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
     end
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu:destroy()
   else
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    
+    menu:destroy()
     gfx.update()
   end
-  menu:destroy()
 end
 
 function update_menu()

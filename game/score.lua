@@ -80,8 +80,9 @@ function save_to_file(score_board, unlocked_levels)
   for level_read=1, unlocked_levels do
     io.write("level".. tostring(level_read).."\n")
   -- for each level go through the level under here
-    for player_i=1,#score_board[tostring(level_read)] do
+    for player_i=1,table_length(score_board[tostring(level_read)]) do
       if score_board[tostring(level_read)][tostring(player_i)] ~= nil then
+        print(tostring(level_read).." : "..tostring(player_i))
         io.write(score_board[tostring(level_read)][tostring(player_i)][1].."\n".. score_board[tostring(level_read)][tostring(player_i)][2].."\n") 
       end
     end
@@ -156,7 +157,6 @@ function draw_highscore(level, x_coordinate)
   read_from_file()
   index = 1
   i=1
-  load_font_images()
   while score_board[tostring(level)][tostring(i)] ~= nil and index<=5  do
     y_coordinate = 300+60*(i-1)
     position = 1
@@ -168,44 +168,6 @@ function draw_highscore(level, x_coordinate)
     end
     index = index +1
     i = i +1
-  end 
-  destroy_font_images() 
+  end  
 end
 
-function load_font_images()
-  if number_image["0"] == nil then
-    number_image["0"] = gfx.loadpng("images/font/0.png")
-    number_image["1"] = gfx.loadpng("images/font/1.png")
-    number_image["2"] = gfx.loadpng("images/font/2.png")
-    number_image["3"] = gfx.loadpng("images/font/3.png")
-    number_image["4"] = gfx.loadpng("images/font/4.png")
-    number_image["5"] = gfx.loadpng("images/font/5.png")
-    number_image["6"] = gfx.loadpng("images/font/6.png")
-    number_image["7"] = gfx.loadpng("images/font/7.png")
-    number_image["8"] = gfx.loadpng("images/font/8.png")
-    number_image["9"] = gfx.loadpng("images/font/9.png")
-    number_image["0"]:premultiply()
-    number_image["1"]:premultiply()
-    number_image["2"]:premultiply()
-    number_image["3"]:premultiply()
-    number_image["4"]:premultiply()
-    number_image["5"]:premultiply()
-    number_image["6"]:premultiply()
-    number_image["7"]:premultiply()
-    number_image["8"]:premultiply()
-    number_image["9"]:premultiply()
-  end
-end
-
-function destroy_font_images()
-  number_image["0"]:destroy()
-  number_image["1"]:destroy()
-  number_image["2"]:destroy()
-  number_image["3"]:destroy()
-  number_image["4"]:destroy()
-  number_image["5"]:destroy()
-  number_image["6"]:destroy()
-  number_image["7"]:destroy()
-  number_image["8"]:destroy()
-  number_image["9"]:destroy() 
-end
