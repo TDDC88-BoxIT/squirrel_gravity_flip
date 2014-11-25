@@ -196,50 +196,12 @@ function update_score()
     game_score = game_score - 1
 end
 
-
-function move_character()
-  -- MOVE CHARACTER ON THE X-AXIS
-  -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
-  local falling=0
-    player.new_x=player.cur_x+1
-    if hitTest(gameCounter, Level.tiles, player.new_x, player.cur_y, character.width, character.height)~=nil then  
-      player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING
-      if player.cur_x<-1 then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
-        print("Death caused by getting squeezed")
-        get_killed()
-        return
-      end
-    elseif player.cur_x<player.work_xpos then
-      player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
-    end
-
-  -- MOVE CHARACTER ON THE Y-AXIS
-    for i=0, gameSpeed, 1 do
-      if direction_flag == "down" then 
-        player.new_y=player.cur_y+i
-      else
-        player.new_y=player.cur_y-i
-      end
-      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
-        print("Death caused by falling off grid")
-        get_killed()
-        return;
-      end
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)==nil or falling==1 then
-        player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-      else
-        break
-      end
-    end  
-end
-
-
 --[[
 @desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
 @params: pu_name - The name (as defined in level files) of the object to activate.
 ]]
 
-function move_character_V2()
+function move_character()
   local falling=0
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
@@ -347,7 +309,7 @@ end
 function draw_screen()
   -- Measure the game speed of each function in millisecond.
   -- Remove the -- to trace and optimize.
-  move_character_V2()
+  move_character()
   if timer~=nil then
     --local t = sys.time()
     draw_background()

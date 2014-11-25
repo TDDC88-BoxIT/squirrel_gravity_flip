@@ -24,7 +24,7 @@ function love.load()
   key_translation["8"] = "8"
   key_translation["9"] = "9"
   key_translation[" "] = "ok"
-  key_translation["up"] = "up"
+  key_translation["up"] = "up"  
   key_translation["down"] = "down"
   key_translation["left"] = "left"
   key_translation["right"] = "right"
