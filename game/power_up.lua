@@ -13,7 +13,7 @@ function activate_power_up(pu_name)
   end
   
 	if(pu_name=="powerup1") then -- Score tile
-    game_score = game_score + 1000
+    game_score = game_score + 100
 	elseif(pu_name=="powerup2") then -- Speed tile
     change_game_speed(15,3000)
 	elseif(pu_name=="powerup3") then -- Freeze tile

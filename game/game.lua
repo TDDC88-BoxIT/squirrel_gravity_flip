@@ -32,13 +32,14 @@ local image2 = nil
 local current_game_type=nil
 local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
-local G=2;     --gravity
+local G=3;     --gravity
 local Tcount=1
-game_score=0
+
 
 -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
 function start_game(level,game_type,life) 
   gameCounter=0
+  game_score=10000
 
   if game_type ~= "current" then
     current_game_type=game_type
@@ -47,14 +48,13 @@ function start_game(level,game_type,life)
   if level=="next" then
     current_level = current_level+1
   elseif level == "restart" then
-    game_score=0
+
   else
     current_level = level
   end
 
   if Level.load_level(current_level,current_game_type)== "level_loaded" then
     prepare_fail_success_handler()
-    game_score = game_score+(Level.width * 10)
     load_level_atttributes()
     load_image_if_needed()
 
