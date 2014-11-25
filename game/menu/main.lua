@@ -180,7 +180,7 @@ function add_menu_bling()
     backgroundImage = gfx.loadjpeg(imageDir.."/menuImg/gravityFlip.jpg")
     dash = gfx.loadpng(imageDir.."font/dash.png")
     green_dash = gfx.loadpng(imageDir.."font/green_dash.png")
-  elseif menuState == "gameover_menu" then
+  elseif menuState == "gameover_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gameover.png")
   end
 
