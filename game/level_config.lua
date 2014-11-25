@@ -1,7 +1,7 @@
 
 -- READS THE UNLOCKED LEVEL FROM THE SPECIFIED FILE. RETURNS AN INTEGER
 function read_unlocked_level()
-	local file_path = "game/score_table.txt"
+	local file_path = file_prefix .. "game/score_table.txt"
 	local unlocked_level = nil
 
 	file = io.open(file_path, "r")

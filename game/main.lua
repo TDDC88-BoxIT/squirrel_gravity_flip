@@ -4,6 +4,7 @@
 --path for mac / linux:
 --package.path = package.path .. arg[1] .. "/game/?.lua;"
 
+file_prefix = ""
 require "game/game"
 require "game/menu/main"
 require "game/input_handler"

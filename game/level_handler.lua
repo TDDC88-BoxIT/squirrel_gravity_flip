@@ -31,14 +31,14 @@ local current_level=0
 function Level.load_level (level_number,game_type)
   if game_type=="tutorial" then
     current_level=level_number
-    local file = io.open("map/tutorialLevel"..level_number..".lua","r")
+    local file = io.open(file_prefix .. "map/tutorialLevel"..level_number..".lua","r")
     if file~=nil then -- MAKE SURE LEVEL FILE EXISTS
       loaded_level = require("map/tutorialLevel"..level_number)
     else -- IF LEVEL DOESN'T EXIST, THE USER IS SENT BACK TO THE START MENU
       return
     end
   else
-    local file = io.open("map/level"..level_number..".lua","r")
+    local file = io.open(file_prefix .. "map/level"..level_number..".lua","r")
     if file ~= nil then -- MAKE SURE LEVEL FILE EXISTS
       loaded_level = require("map/level"..level_number)
     else -- IF LEVEL DOESN'T EXIST, THE USER IS SENT BACK TO THE START MENU
