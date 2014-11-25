@@ -1,4 +1,4 @@
-logfile = assert(io.open("/usr/1123/logfile", "w"))
+logfile = assert(io.open("/usr/1125/logfile", "w"))
 
 function startApp()
  logfile:write("startApp\n")
