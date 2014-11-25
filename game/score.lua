@@ -127,10 +127,22 @@ function draw_number(number, position, x_coordinate, y_coordinate)
     number = "Z"
   end
   number = string.upper(number)
-  score = gfx.loadpng("images/font/"..number..".png")
+
+  -- Treat Numbers and Letters differently.
+  -- Cause we have to draw Number every frame in the game,
+  -- load them each time is too expensive, we buffer the Number, but not letters.
+  if number >= "0" and number <= "9" then
+    score = number_image[number]
+  else
+    score = gfx.loadpng("images/font/"..number..".png")
+  end
   -- prints the loaded picture
   screen:copyfrom(score,nil ,{x=x_coordinate+position*30, y = y_coordinate, height = 50, width = 30}, true)
-  score:destroy()
+  if number >= "0" and number <= "9" then
+    score = nil
+  else
+    score:destroy()
+  end
 end
 
 
