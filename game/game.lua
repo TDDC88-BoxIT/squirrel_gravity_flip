@@ -55,6 +55,7 @@ function start_game(level,game_type,life)
 
   if Level.load_level(current_level,current_game_type)== "level_loaded" then
     prepare_fail_success_handler()
+    load_font_images()
     load_level_atttributes()
     create_game_character()
 
