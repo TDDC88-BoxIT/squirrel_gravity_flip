@@ -138,6 +138,7 @@ function draw_number(number, position, x_coordinate, y_coordinate)
   else
     score = gfx.loadpng("images/font/"..number..".png")
   end
+  score:premultiply()
   -- prints the loaded picture
   screen:copyfrom(score,nil ,{x=x_coordinate+position*30, y = y_coordinate, height = 50, width = 30}, true)
   if number >= "0" and number <= "9" then
