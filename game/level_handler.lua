@@ -89,6 +89,16 @@ function get_tiles()
         x = ((k-1) % Level.raw_level.width) * tilesets[gid].tilewidth,
         y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[gid].tileheight
       }
+      if string.sub(tile.name,1,3)=="pow" then  --DISTINGUISING TYPES OF TILES WHICH CAN BE USED IN THE COLLISION HANDLER LATER
+        tile.type=2
+      elseif string.sub(tile.name,1,3)=="obs" then
+        tile.type=3
+      elseif string.sub(tile.name,1,3)=="win" then
+        tile.type=4
+      else
+        tile.type=1
+      end
+
       table.insert(tiles, tile)
       
     end

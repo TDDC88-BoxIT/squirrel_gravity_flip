@@ -26,6 +26,7 @@ function stop_tutorial_helper()
 	tutorial_goal_fulfilled=true
     tutorial_helper_timer:stop()
     tutorial_helper_timer=nil
+    tutorial_helper:destroy()
 end
 
 --[[
@@ -44,6 +45,8 @@ function update_tutorial_handler(key)
 			if ok_pressed_times==1 then
 				tutorial_goal_fulfilled=true
 			end
+		else
+			tutorial_goal_fulfilled=true
 		end
 	end
 	if tutorial_goal_fulfilled==true and tutorial_helper_timer~=nil then
