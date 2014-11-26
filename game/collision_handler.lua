@@ -10,9 +10,9 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
         elseif string.sub(v.name,1,3)=="pow" and v.visibility == true then-- hit power_up
           activate_power_up(v.name)
           v.visibility = false
-        elseif string.sub(v.name,1,3)=="obst" then -- hit obstacle
+        elseif string.sub(v.name,1,4)=="obst" then -- hit obstacle
           print("Death caused by hitting obstacle")
-          if player.invulnerable==false then
+          if get_invulnerability_state()==false then
             get_killed()
           end
         elseif string.sub(v.name,1,3)=="win" then --win
