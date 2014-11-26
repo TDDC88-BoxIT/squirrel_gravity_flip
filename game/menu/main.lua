@@ -214,8 +214,12 @@ function draw_menu()
 
   if menuState == "level_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    menu:destroy()
+    gfx.update()
   elseif menuState == "highscore_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=level_menu_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    menu:destroy()
+    gfx.update()
   elseif menuState == "new_name_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
     screen:copyfrom(menu2:get_surface(), nil,{x=name_menu2_x,y=name_menu2_y,width=menu:get_size().width,height=menu:get_size().height},true)
