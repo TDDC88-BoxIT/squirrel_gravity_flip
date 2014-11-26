@@ -5,17 +5,17 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then
       local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
       if temp1 ~= nil then
-        if v.gid==1 then -- gid==1 IS A FLOOR TILE
+        if string.sub(v.name,1,5)=="floor" then -- gid==1 IS A FLOOR TILE
           return temp1,temp2,temp3,temp4
-        elseif (v.gid==2 or v.gid==3 or v.gid==4 or v.gid==5) and v.visibility == true then-- hit power_up
+        elseif string.sub(v.name,1,3)=="pow" and v.visibility == true then-- hit power_up
           activate_power_up(v.name)
           v.visibility = false
-        elseif (v.gid==7 or v.gid==8 or v.gid==9 or v.gid==10) then -- hit obstacle
+        elseif string.sub(v.name,1,3)=="obst" then -- hit obstacle
           print("Death caused by hitting obstacle")
           if player.invulnerable==false then
             get_killed()
           end
-        elseif v.gid==6 then --win
+        elseif string.sub(v.name,1,3)=="win" then --win
           levelwin()
         end
       end
