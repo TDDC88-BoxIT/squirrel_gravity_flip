@@ -148,6 +148,7 @@ function add_level_menu_buttons()
   if current_level ~= nil then
     menu:add_button("continue", imageDir .. "menuImg/continue.png")
   end
+   menu:add_button("main_menu", imageDir.."menuImg/mainMenu.png")
 end
 
 function configure_menu_height()

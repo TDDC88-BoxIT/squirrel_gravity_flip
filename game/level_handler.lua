@@ -27,6 +27,9 @@ local flame1Img
 local winImg
 local loaded_level
 local current_level=0
+tileset_width = 0
+tileset_height = 0
+
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
 function Level.load_level (level_number,game_type)
   current_level=level_number
@@ -48,6 +51,8 @@ function Level.load_level (level_number,game_type)
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
+  tileset_width = loaded_level.width
+  tileset_height = loaded_level.height
   Level.attributes = loaded_level.attributes
   -- Get all the tiles and saves them into the Level.tiles table
   Level.tiles = get_tiles()
@@ -74,6 +79,7 @@ function get_tiles()
     end
   end   
   -- Loops all the numbers in the level file, 
+
   for k,gid in pairs(tile_layer_data) do
     -- Only if there actually is a tile on the current position
     if gid ~= 0 then
@@ -99,8 +105,8 @@ function get_tiles()
         tile.type=1
       end
 
-      table.insert(tiles, tile)
-      
+      tiles[k] = tile
+
     end
   end
   return tiles
