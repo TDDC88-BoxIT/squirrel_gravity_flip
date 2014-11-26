@@ -1,4 +1,10 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
+function RtileSet(herox,heroy,hero_width,hero_height,tileset_width,tileset_height)
+  local x1=math.floor(herox/32)*32--consider the gameSpeed
+  local x2=x1+32
+  local y1=math.floor(heroy/32)*32
+  local y2=y2+32
+end
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   local w = screen:get_width()
   for k,v in pairs(tileSet) do
