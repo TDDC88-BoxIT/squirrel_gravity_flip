@@ -3,6 +3,10 @@ AAA
 10000
 AAA
 10000
+AAA
+9980
+AAA
+2280
 level2
 AAA
 12100
@@ -12,3 +16,5 @@ level3
 level4
 level5
 level6
+level7
+level8

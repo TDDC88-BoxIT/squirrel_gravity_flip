@@ -29,8 +29,8 @@ local loaded_level
 local current_level=0
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
 function Level.load_level (level_number,game_type)
+  current_level=level_number
   if game_type=="tutorial" then
-    current_level=level_number
     local file = io.open(file_prefix .. "map/tutorialLevel"..level_number..".lua","r")
     if file~=nil then -- MAKE SURE LEVEL FILE EXISTS
       loaded_level = require("map/tutorialLevel"..level_number)
