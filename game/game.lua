@@ -33,6 +33,8 @@ local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=3;     --gravity
 local Tcount=1
+tileset_start = 0
+tileset_end = 0
 number_image={}
 
 
@@ -188,7 +190,27 @@ function update_game()
     get_killed()
     return
   end
-  gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW  
+  gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW
+  update_tile_index()
+end
+
+function update_tile_index()
+  local istart = math.floor(gameCounter / Level.width)
+  local iend = math.floor((gameCounter + screen:get_width()) / Level.width)
+  for i = istart, iend, 1 do
+    istart = i
+    if Level.tiles[i] ~=nil then
+      break
+    end
+  end
+  for i = iend, istart, -1 do
+    iend = i
+    if Level.tiles[i] ~=nil then
+      break
+    end
+  end
+  tileset_start = istart
+  tileset_end = iend
 end
 
 function update_score()

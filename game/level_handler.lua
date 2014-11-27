@@ -27,8 +27,7 @@ local flame1Img
 local winImg
 local loaded_level
 local current_level=0
-tileset_width = 0
-tileset_height = 0
+
 
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
 function Level.load_level (level_number,game_type)
@@ -51,8 +50,7 @@ function Level.load_level (level_number,game_type)
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
-  tileset_width = loaded_level.width
-  tileset_height = loaded_level.height
+
   Level.attributes = loaded_level.attributes
   -- Get all the tiles and saves them into the Level.tiles table
   Level.tiles = get_tiles()
@@ -80,22 +78,29 @@ function get_tiles()
   end   
   -- Loops all the numbers in the level file, 
 
-  for k,gid in pairs(tile_layer_data) do
-    -- Only if there actually is a tile on the current position
-    if gid ~= 0 then
-      -- Get the information about the current tile from it's tileset 
-      tile = {
-        name = tilesets[gid].name,
-        gid = tilesets[gid].firstgid,
-        visibility = true,
-        width = tilesets[gid].tilewidth,
-        height = tilesets[gid].tileheight,
-        image = get_image(tilesets[gid].name),    --tilesets[gid].image,
-        -- Calculates the X and Y coordinates depending in the position in the layer data number array and the width of the current tile
-        x = ((k-1) % Level.raw_level.width) * tilesets[gid].tilewidth,
-        y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[gid].tileheight
-      }
-      if string.sub(tile.name,1,3)=="pow" then  --DISTINGUISING TYPES OF TILES WHICH CAN BE USED IN THE COLLISION HANDLER LATER
+  --for k,gid in pairs(tile_layer_data) do
+  --[[
+    Order the tiles primary on Y position, to make index them more convenient.
+    ]]
+  for ix=1, Level.width, 1 do
+    for iy=1, Level.raw_level.height, 1 do
+      k = (ix - 1) * Level.raw_level.height + iy
+      gid = tile_layer_data[k]
+      -- Only if there actually is a tile on the current position
+      if gid ~= 0 then
+        -- Get the information about the current tile from it's tileset
+        tile = {
+          name = tilesets[gid].name,
+          gid = tilesets[gid].firstgid,
+          visibility = true,
+          width = tilesets[gid].tilewidth,
+          height = tilesets[gid].tileheight,
+          image = get_image(tilesets[gid].name),    --tilesets[gid].image,
+          -- Calculates the X and Y coordinates depending in the position in the layer data number array and the width of the current tile
+          x = ((k-1) % Level.raw_level.width) * tilesets[gid].tilewidth,
+          y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[gid].tileheight
+        }
+        if string.sub(tile.name,1,3)=="pow" then  --DISTINGUISING TYPES OF TILES WHICH CAN BE USED IN THE COLLISION HANDLER LATER
         tile.type=2
       elseif string.sub(tile.name,1,3)=="obs" then
         tile.type=3
@@ -104,9 +109,8 @@ function get_tiles()
       else
         tile.type=1
       end
-
       tiles[k] = tile
-
+      end
     end
   end
   return tiles
