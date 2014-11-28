@@ -19,7 +19,7 @@ require("game/power_up")
 local imageDir = "images/"
 local mapDir = "map/"
 player = {}
-local character = nil
+character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local gameCounter=0
@@ -154,14 +154,37 @@ end
 function create_game_character()
   if character==nil then
     character = character_object(32,32,imageDir.."character/squirrel1.png")
-    character:add_image(imageDir.."character/squirrel2.png")
-    character:add_flipped_image(imageDir.."character/squirrel1_flipped.png")
-    character:add_flipped_image(imageDir.."character/squirrel2_flipped.png")
+    add_character_images()
   else
     character:reset()
     direction_flag="down"
   end
   change_character_timer = sys.new_timer(200, "update_game_character")
+end
+
+function add_character_images()
+  -- ADD IMAGES FOR NORMAL MODE
+  character:add_image(imageDir.."character/squirrel2.png","normal")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped.png","normal")
+  character:add_flipped_image(imageDir.."character/squirrel2_flipped.png","normal")
+
+  -- ADD IMAGES FOR BOOST MODE
+  character:add_image(imageDir.."character/squirrel1.png","boost")
+  character:add_image(imageDir.."character/squirrel2_boost.png","boost")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped.png","boost")
+  character:add_flipped_image(imageDir.."character/squirrel2_flipped_boost.png","boost")
+  
+  -- ADD IMAGES FOR INVULNERABLE MODE
+  character:add_image(imageDir.."character/squirrel1_invulnerable.png","invulnerable")
+  character:add_image(imageDir.."character/squirrel2_invulnerable.png","invulnerable")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped_invulnerable.png","invulnerable")
+  character:add_flipped_image(imageDir.."character/squirrel2_flipped_invulnerable.png","invulnerable")
+  
+  -- ADD IMAGES FOR SLOW MODE
+  character:add_image(imageDir.."character/squirrel1_slow.png","slow")
+  character:add_image(imageDir.."character/squirrel2_slow.png","slow")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped_slow.png","slow")
+  character:add_flipped_image(imageDir.."character/squirrel2_flipped_slow.png","slow")
 end
 
 function update_game_character()
@@ -181,7 +204,6 @@ end
 function update_game() 
   -- if lives > 0 then
   -- if game_score > 0 then
-
   screen:clear()
   update_tile_index()
   draw_screen()

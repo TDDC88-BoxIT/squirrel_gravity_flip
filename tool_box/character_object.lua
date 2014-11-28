@@ -52,19 +52,24 @@ character_object = class(function (self, character_width, character_height, char
 	self.width = character_width or 50
 	self.height = character_height or 50
 	self.character_images={
-	boost={},
-	invulnerable={},
-	slow={},
-	normal={}
+		boost={},
+		invulnerable={},
+		slow={},
+		normal={}
 	}
 
-	self.character_state={} 		-- THE CHARACTER CAN BE IN SEVERAL STATES DEPENDING ON WHAT POWERUP IS BEING USED
-	self.character_flipped_images={}
+	self.character_state="normal" 		-- THE CHARACTER CAN BE IN SEVERAL STATES DEPENDING ON WHAT POWERUP IS BEING USED
+	self.character_flipped_images={
+		boost={},
+		invulnerable={},
+		slow={},
+		normal={}
+	}
 	self.current_character_image=1	-- DETERMINES WHICH CHARACTER IMAGE WILL BE DISPLAYED CURRENTLY
 	self.character_surface=nil
 	self.show_flipped_images = false -- DETERMINES WHICH SET OF CHARACTER IMAGES THAT WILL BE SHOWN
 	if character_img ~= nil then
-		self:add_image(character_img) 
+		self:add_image(character_img,"normal") 
 	end
 	self:update()
 end)
@@ -83,43 +88,53 @@ end
 
 -- ADDS NEW MENU ITEMS
 function character_object:add_image(img_Path,state)
-	if state == "boost" then
-		table.insert(self.character_images.boost, #self.character_images.boost+1, img_Path)
-	elseif state == "invulnerable" then
-		table.insert(self.character_images.invulnerable, #self.character_images.invulnerable+1, img_Path)
-	elseif state == "slow" then
-		table.insert(self.character_images.slow, #self.character_images.slow+1, img_Path)
-	else
-		table.insert(self.character_images.normal, #self.character_images.normal+1, img_Path)
-	end
+	table.insert(self.character_images[state], #self.character_images[state]+1, img_Path)
 end
 
 -- ADDS NEW FLIPPED MENU ITEMS
 function character_object:add_flipped_image(img_Path,state)
-	if state == "boost" then
-		table.insert(self.character_flipped_images.boost, #self.character_flipped_images.boost+1, img_Path)
-	elseif state == "invulnerable" then
-		table.insert(self.character_flipped_images.invulnerable, #self.character_flipped_images.invulnerable+1, img_Path)
-	elseif state == "slow" then
-		table.insert(self.character_flipped_images.slow, #self.character_flipped_images.slow+1, img_Path)
-	else
-		table.insert(self.character_flipped_images.normal, #self.character_flipped_images.normal+1, img_Path)
-	end
+	table.insert(self.character_flipped_images[state], #self.character_flipped_images[state]+1, img_Path)
 end
 
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
 function character_object:get_current_image()
 	if self.show_flipped_images==true then
-  		return self.character_flipped_images[self.current_character_image]
+  		if self.character_state == "boost" then
+  			return self.character_flipped_images.boost[self.current_character_image]
+		elseif self.character_state == "invulnerable" then
+			return self.character_flipped_images.invulnerable[self.current_character_image]
+		elseif self.character_state == "slow" then
+			return self.character_flipped_images.slow[self.current_character_image]
+		else
+			return self.character_flipped_images.normal[self.current_character_image]
+		end
   	else
-  		return self.character_images[self.current_character_image]
+  		if self.character_state == "boost" then
+  			return self.character_images.boost[self.current_character_image]
+		elseif self.character_state == "invulnerable" then
+			return self.character_images.invulnerable[self.current_character_image]
+		elseif self.character_state == "slow" then
+			return self.character_images.slow[self.current_character_image]
+		else
+			return self.character_images.normal[self.current_character_image]
+		end
   	end
 end 
 
 -- CLEARS ALL ADDED MENU ITEMS
 function character_object:clear_images()
-  	self.character_images={}
-  	self.character_flipped_images={}
+  	self.character_images={
+  		boost={},
+		invulnerable={},
+		slow={},
+		normal={}
+  	}
+  	self.character_flipped_images={
+  		boost={},
+		invulnerable={},
+		slow={},
+		normal={}
+  	}
 end
 
 -- CHANGES THE BOOLEAN DETERMINING WHICH SET OM CHARACTER IMAGES THAT ARE TO BE DISPLAYED
@@ -149,13 +164,13 @@ end
 -- CHANGES THE IMAGE INDEX IN ORDER TO CREATE AN ANIMATION OF THE CHARACTER IMAGES
 local function animate(self)
 	if self.show_flipped_images==true then
-		if self.current_character_image<#self.character_flipped_images then
+		if self.current_character_image<#self.character_flipped_images[self.character_state] then
 			self.current_character_image=self.current_character_image+1
 		else
 			self.current_character_image=1
 		end
 	else
-		if self.current_character_image<#self.character_images then
+		if self.current_character_image<#self.character_images[self.character_state] then
 			self.current_character_image=self.current_character_image+1
 		else
 			self.current_character_image=1
