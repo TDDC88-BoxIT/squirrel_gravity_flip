@@ -12,18 +12,18 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   local w = screen:get_width()
   --------------------------------test-----------------------------------------------
   local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
-  local x_n=math.floor((herox+gamecounter)/32)---the n'th tile in the column
+  local x_n=math.floor((herox+gameCounter)/32)---the n'th tile in the column
   local x2=x1+32
   local y1=math.floor(heroy/32)*32
   local y_n=math.floor(heroy/32)  -- the n'th tile in the row
   local y2=y1+32
-  print("x1 ="..x1.." :y1 ="..y1)
+  --print("x1 ="..x1.." :y1 ="..y1)
   ------------------------------------------------------------------------------------
   for k,v in pairs(tileSet) do
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then
       local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
       if temp1 ~= nil then
-        print("x="..v.x-gameCounter.." :y="..v.y)
+        --print("x="..v.x-gameCounter.." :y="..v.y)
         if v.type==1 then -- v.type==1  IS A FLOOR TILE
           return temp1,temp2,temp3,temp4
         elseif v.type==2  and v.visibility == true then -- v.type==2  IS A POWERUP TILE
