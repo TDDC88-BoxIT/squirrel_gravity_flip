@@ -221,6 +221,7 @@ function move_character()
   local falling=0
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
+  print("gameCounter="..gameCounter)
   if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height)~=nil then
     player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
     --This part is checking if the hero hit the tail by right side 

@@ -64,8 +64,7 @@ function get_tiles()
   -- Selects the first layer in the lua level file, as of today only one layer is supported
   tile_layer_data = Level.raw_level.layers[1].data
   tilesets = {}
-  tiles = {} 
-
+  tiles = {}
   -- Saves the tilesets data into an array with the firstgid index, this is the same number as in the tile_layer_data
   for k,v in pairs(Level.raw_level.tilesets) do 
     tilesets[v.firstgid] = v

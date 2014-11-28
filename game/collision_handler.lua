@@ -1,16 +1,25 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 function RtileSet(herox,heroy,hero_width,hero_height,tileset_width,tileset_height)
-  local x1=math.floor(herox/32)*32--consider the gameSpeed
-  local x2=x1+32
+  --local x1=math.floor(herox/32)*32--consider the gameSpeed
+  --local x2=x1+32
   local y1=math.floor(heroy/32)*32
   local y2=y2+32
 end
+
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   local w = screen:get_width()
+  --------------------------------test-----------------------------------------------
+  --local x1=math.floor(herox/32)*32--consider the gameSpeed
+  --local x2=x1+32
+  local y1=math.floor(heroy/32)*32
+  local y2=y1+32
+  --print("x1="..x1.." :y1="..y1)
+  ------------------------------------------------------------------------------------
   for k,v in pairs(tileSet) do
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then
       local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
       if temp1 ~= nil then
+        print("x="..v.x-gameCounter.." :y="..v.y)
         if v.type==1 then -- v.type==1  IS A FLOOR TILE
           return temp1,temp2,temp3,temp4
         elseif v.type==2  and v.visibility == true then -- v.type==2  IS A POWERUP TILE
