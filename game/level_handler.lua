@@ -4,11 +4,15 @@
 --   The raw level file as expressed in the .lua level file, contains all the level info unchanged 
 -- tiles
 --   This is a table of all the tiles that the map contains, it has the width, heigh, x, y and image path of each tile
+
+-- Cause we only store tile when its gid > 0, Level.map_table store the index-index map from all tiles to no-zero tiles.
+-- For example, map_table[38]=23 means the No.38 tile of raw_level data is the 23th value in our tiles table.
 Level = { 
   raw_level = nil,
   version = nil,
   width = nil,
   tiles = nil,
+  map_table = nil,
   attributes = {
     speed = nil,
     upper_bound_y = nil,
@@ -65,6 +69,9 @@ function get_tiles()
   tile_layer_data = Level.raw_level.layers[1].data
   tilesets = {}
   tiles = {}
+  Level.map_table = {}
+  local tile_index = 1
+
   -- Saves the tilesets data into an array with the firstgid index, this is the same number as in the tile_layer_data
   for k,v in pairs(Level.raw_level.tilesets) do 
     tilesets[v.firstgid] = v
@@ -77,13 +84,13 @@ function get_tiles()
   end   
   -- Loops all the numbers in the level file, 
 
-  --for k,gid in pairs(tile_layer_data) do
   --[[
     Order the tiles primary on Y position, to make index them more convenient.
     ]]
   for ix=1, Level.width, 1 do
     for iy=1, Level.raw_level.height, 1 do
-      k = (ix - 1) * Level.raw_level.height + iy
+      k = (iy - 1) * Level.raw_level.width + ix
+      key_index = (ix - 1) * Level.raw_level.height + iy
       gid = tile_layer_data[k]
       -- Only if there actually is a tile on the current position
       if gid ~= 0 then
@@ -100,15 +107,17 @@ function get_tiles()
           y = (math.floor((k-1) / Level.raw_level.width)) * tilesets[gid].tileheight
         }
         if string.sub(tile.name,1,3)=="pow" then  --DISTINGUISING TYPES OF TILES WHICH CAN BE USED IN THE COLLISION HANDLER LATER
-        tile.type=2
-      elseif string.sub(tile.name,1,3)=="obs" then
-        tile.type=3
-      elseif string.sub(tile.name,1,3)=="win" then
-        tile.type=4
-      else
-        tile.type=1
-      end
-      tiles[k] = tile
+          tile.type=2
+        elseif string.sub(tile.name,1,3)=="obs" then
+          tile.type=3
+        elseif string.sub(tile.name,1,3)=="win" then
+          tile.type=4
+        else
+          tile.type=1
+        end
+        tiles[tile_index] = tile
+        Level.map_table[key_index] = tile_index
+        tile_index = tile_index + 1
       end
     end
   end

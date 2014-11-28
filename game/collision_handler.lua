@@ -8,7 +8,7 @@ function RtileSet(herox,heroy,hero_width,hero_height,tileset_width,tileset_heigh
   local y2=y1+32
 end
 
-function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
+function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
   local w = screen:get_width()
   --------------------------------test-----------------------------------------------
   local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
@@ -19,7 +19,8 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   local y2=y1+32
   --print("x1 ="..x1.." :y1 ="..y1)
   ------------------------------------------------------------------------------------
-  for k,v in pairs(tileSet) do
+  for k = tileset_start, tileset_end, 1 do
+    v = tileSet[k]
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then
       local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
       if temp1 ~= nil then

@@ -33,8 +33,11 @@ local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=3;     --gravity
 local Tcount=1
+
+-- tileset_start and tileset_end mantain the current tiles that displayed to screen based on gameCounter.
 tileset_start = 0
 tileset_end = 0
+
 number_image={}
 
 
@@ -180,6 +183,7 @@ function update_game()
   -- if game_score > 0 then
 
   screen:clear()
+  update_tile_index()
   draw_screen()
   if game_score > 0 then
     if current_game_type ~= "tutorial" then
@@ -191,26 +195,26 @@ function update_game()
     return
   end
   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW
-  update_tile_index()
 end
 
+-- Update tileset_start and tileset_end based on gameCounter.
 function update_tile_index()
-  local istart = math.floor(gameCounter / Level.width)
-  local iend = math.floor((gameCounter + screen:get_width()) / Level.width)
+  local istart = math.floor(gameCounter / Level.raw_level.tilewidth) * Level.raw_level.height
+  local iend = math.ceil((gameCounter + screen:get_width()) / Level.raw_level.tilewidth) * Level.raw_level.height
   for i = istart, iend, 1 do
     istart = i
-    if Level.tiles[i] ~=nil then
+    if Level.map_table[i] ~=nil then
       break
     end
   end
   for i = iend, istart, -1 do
     iend = i
-    if Level.tiles[i] ~=nil then
+    if Level.map_table[i] ~=nil then
       break
     end
   end
-  tileset_start = istart
-  tileset_end = iend
+  tileset_start = Level.map_table[istart]
+  tileset_end = Level.map_table[iend]
 end
 
 function update_score()
@@ -222,11 +226,11 @@ function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
   print("gameCounter="..gameCounter)
-  if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height)~=nil then
+  if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height, tileset_start, tileset_end)~=nil then
     player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
     --This part is checking if the hero hit the tail by right side 
-    if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height)==nil) or 
-    (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height)==nil)then  
+    if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height, tileset_start, tileset_end)==nil) or 
+    (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height, tileset_start, tileset_end)==nil)then  
       falling=1
     end
     if (player.cur_x<-1) or (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
@@ -243,7 +247,7 @@ function move_character()
       print("Death caused by falling off grid")
       get_killed()   
     end
-    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height, tileset_start, tileset_end)
     if W==nil or falling==1 then
       Tcount=Tcount+1 
       player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
@@ -263,7 +267,7 @@ else
     print("Death caused by falling off grid")
     get_killed()   
   end
-    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
+    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height, tileset_start, tileset_end)
     if W==nil or falling==1 then
       Tcount=Tcount+1  
       player.cur_y = player.new_y-- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
@@ -360,22 +364,24 @@ THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
 function draw_tiles()
   local sf = nil
   local w = screen:get_width()
-    for k,v in pairs(Level.tiles) do
-      -- This code can't run properly on the box because the difference 
-      -- of screen:copyfrom function . Wait for further improvement
-      if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter+v.width<w + v.width then
-        if v.name == "obstacle3" then
-          move_cloud(v)
-        elseif v.name == "obstacle4" then
-          move_flame(v)
-        end
-        if v.image == nil then
-          print("The tile the want to draw == nil")
-          v.image = gfx.loadpng("images/font/Z.png")
-        end
-        screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
+  --for k,v in pairs(Level.tiles) do
+  for k = tileset_start, tileset_end, 1 do
+    v = Level.tiles[k]
+    -- This code can't run properly on the box because the difference
+    -- of screen:copyfrom function . Wait for further improvement
+    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter+v.width<w + v.width then
+      if v.name == "obstacle3" then
+        move_cloud(v)
+      elseif v.name == "obstacle4" then
+        move_flame(v)
       end
+      if v.image == nil then
+        print("The tile the want to draw == nil")
+        v.image = gfx.loadpng("images/font/Z.png")
+      end
+      screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
     end
+  end
 end
 
 --[[
@@ -448,12 +454,12 @@ end
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
     if direction_flag == "down" then
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height, tileset_start, tileset_end) ~= nil then
         character:flip()
         direction_flag="up"
       end
     else
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height, tileset_start, tileset_end) ~= nil then
         character:flip()
         direction_flag="down"
       end
