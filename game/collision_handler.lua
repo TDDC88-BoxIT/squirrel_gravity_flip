@@ -1,19 +1,23 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 function RtileSet(herox,heroy,hero_width,hero_height,tileset_width,tileset_height)
-  --local x1=math.floor(herox/32)*32--consider the gameSpeed
-  --local x2=x1+32
+  local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
+  local x_n=math.floor((herox+gamecounter)/32)
+  local x2=x1+32
   local y1=math.floor(heroy/32)*32
-  local y2=y2+32
+  local y_n=math.floor(heroy/32)
+  local y2=y1+32
 end
 
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   local w = screen:get_width()
   --------------------------------test-----------------------------------------------
-  --local x1=math.floor(herox/32)*32--consider the gameSpeed
-  --local x2=x1+32
+  local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
+  local x_n=math.floor((herox+gamecounter)/32)---the n'th tile in the column
+  local x2=x1+32
   local y1=math.floor(heroy/32)*32
+  local y_n=math.floor(heroy/32)  -- the n'th tile in the row
   local y2=y1+32
-  --print("x1="..x1.." :y1="..y1)
+  print("x1 ="..x1.." :y1 ="..y1)
   ------------------------------------------------------------------------------------
   for k,v in pairs(tileSet) do
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then
