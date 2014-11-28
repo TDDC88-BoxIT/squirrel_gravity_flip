@@ -12,19 +12,67 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, til
   local w = screen:get_width()
   --------------------------------test-----------------------------------------------
   local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
-  local x_n=math.floor((herox+gameCounter)/32)---the n'th tile in the column
-  local x2=x1+32
+  local x_n=math.floor((herox+gameCounter)/32)+1---the n'th tile in the column
   local y1=math.floor(heroy/32)*32
-  local y_n=math.floor(heroy/32)  -- the n'th tile in the row
-  local y2=y1+32
-  --print("x1 ="..x1.." :y1 ="..y1)
+  local y_n=math.floor(heroy/32)+1  -- the n'th tile in the row 
+  print("gameCounter= "..gameCounter)
+  print("herox ="..herox.."heroy ="..heroy)
+  print("x1 ="..x1+gameCounter.." :y1 ="..y1)
+  print("Xn ="..x_n.." Yn ="..y_n)
+  print(Level.map_table[(x_n-1)*22+y_n])
+  if Level.map_table[(x_n-1)*22+y_n] ~= nil then
+    print(tiles[Level.map_table[(x_n-1)*22+y_n]].name)
+    local t_x=tiles[Level.map_table[(x_n-1)*22+y_n]].x-gameCounter
+    local t_y=tiles[Level.map_table[(x_n-1)*22+y_n]].y
+    print("t_x :"..t_x+gameCounter)
+    print("t_y :"..t_y)
+    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
+      print("There has a collision!--1")
+    end  
+  end
+  
+  if Level.map_table[(x_n)*22+y_n+1] ~= nil then
+    print(tiles[Level.map_table[(x_n)*22+y_n+1]].name)
+    local t_x=tiles[Level.map_table[(x_n)*22+y_n+1]].x-gameCounter
+    local t_y=tiles[Level.map_table[(x_n)*22+y_n+1]].y
+    print("t_x :"..t_x+gameCounter)
+    print("t_y :"..t_y)
+    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
+      print("There has a collision!--4")
+    end  
+  end
+  
+  if Level.map_table[(x_n)*22+y_n] ~= nil then
+    print(tiles[Level.map_table[(x_n)*22+y_n]].name)
+    local t_x=tiles[Level.map_table[(x_n)*22+y_n]].x-gameCounter
+    local t_y=tiles[Level.map_table[(x_n)*22+y_n]].y
+    print("t_x :"..t_x+gameCounter)
+    print("t_y :"..t_y)
+    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
+      print("There has a collision!--2")
+    end  
+  end
+  
+  if Level.map_table[(x_n-1)*22+y_n+1] ~= nil then
+    print(tiles[Level.map_table[(x_n-1)*22+y_n+1]].name)
+    local t_x=tiles[Level.map_table[(x_n-1)*22+y_n+1]].x-gameCounter
+    local t_y=tiles[Level.map_table[(x_n-1)*22+y_n+1]].y
+    print("t_x :"..t_x+gameCounter)
+    print("t_y :"..t_y)
+    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
+      print("There has a collision!--3")
+    end  
+  end
+
   ------------------------------------------------------------------------------------
   for k = tileset_start, tileset_end, 1 do
     v = tileSet[k]
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then
+      --print("old_x= "..v.x-gameCounter.." : old_y= "..v.y)
       local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
       if temp1 ~= nil then
-        --print("x="..v.x-gameCounter.." :y="..v.y)
+        --print("old collision function")
+        --print("x="..v.x.." :y="..v.y)
         if v.type==1 then -- v.type==1  IS A FLOOR TILE
           return temp1,temp2,temp3,temp4
         elseif v.type==2  and v.visibility == true then -- v.type==2  IS A POWERUP TILE
