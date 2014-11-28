@@ -225,7 +225,6 @@ function move_character()
   local falling=0
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
-  print("gameCounter="..gameCounter)
   if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height, tileset_start, tileset_end)~=nil then
     player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
     --This part is checking if the hero hit the tail by right side 
@@ -486,50 +485,13 @@ function game_navigation(key, state)
   end
 end 
 
-function change_game_speed(new_speed, time)
-  gameSpeed = new_speed
-  if speed_timer~=nil then
-    speed_timer=nil
-  end
-  speed_timer = sys.new_timer(time, "reset_game_speed")
+function get_game_speed()
+  return gameSpeed
 end
 
---[[
-@desc: Makes the player character invulnerable (i.e. unable to die from touching obstacles).
-@params: time - Time (in milliseconds) to apply invulnerability.
-]]
-function activate_invulnerability(time)
-  if(player.invulnerable) then
-    return
-  else
-    player.invulnerable = true
-    invul_timer = sys.new_timer(time, "end_invulnerability")
-  end
+function set_game_speed(speed)
+  gameSpeed = speed
 end
-
---[[
-@desc: Public getter for player local attribute "invulnerable".
-@return: (bool) Whether or not the character is currently invulnerable.
-]]
-function get_invulnerability_state()
-  return player.invulnerable
-end
-
---[[
-@desc: Ends invulnerability by setting the player.invulnerable flag to false. Called by system timer, which is stopped.
-]]
-function end_invulnerability()
-  player.invulnerable = false
-  invul_timer:stop()
-end
-
-function reset_game_speed()
-  gameSpeed = 10
-    if speed_timer ~=nil then
-      speed_timer:stop()
-      speed_timer=nil
-    end
-  end
 
 function get_game_type()
   return current_game_type

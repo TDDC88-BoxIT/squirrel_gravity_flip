@@ -1,3 +1,7 @@
+local speed_timer
+local invul_timer
+
+
 --[[
 @desc: Activates a collidable object (power-up, power-down or obstacle) and lets the game react to it.
 @params: pu_name - The name (as defined in level files) of the object to activate.
@@ -23,3 +27,47 @@ function activate_power_up(pu_name)
   end
 end
 
+function change_game_speed(new_speed, time)
+   set_game_speed(new_speed)
+  if speed_timer~=nil then
+    speed_timer=nil
+  end
+  speed_timer = sys.new_timer(time, "reset_game_speed")
+end
+
+--[[
+@desc: Makes the player character invulnerable (i.e. unable to die from touching obstacles).
+@params: time - Time (in milliseconds) to apply invulnerability.
+]]
+function activate_invulnerability(time)
+  if(player.invulnerable) then
+    return
+  else
+    player.invulnerable = true
+    invul_timer = sys.new_timer(time, "end_invulnerability")
+  end
+end
+
+--[[
+@desc: Public getter for player local attribute "invulnerable".
+@return: (bool) Whether or not the character is currently invulnerable.
+]]
+function get_invulnerability_state()
+  return player.invulnerable
+end
+
+--[[
+@desc: Ends invulnerability by setting the player.invulnerable flag to false. Called by system timer, which is stopped.
+]]
+function end_invulnerability()
+  player.invulnerable = false
+  invul_timer:stop()
+end
+
+function reset_game_speed()
+  set_game_speed(10)
+  if speed_timer ~=nil then
+    speed_timer:stop()
+    speed_timer=nil
+  end
+  end
