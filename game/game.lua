@@ -449,6 +449,17 @@ function get_global_game_state()
   return global_game_state
 end 
 
+function get_game_speed()
+  return gameSpeed
+end
+
+function set_game_speed(speed)
+  gameSpeed = speed
+end
+
+function get_game_type()
+  return current_game_type
+end
 
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
@@ -485,14 +496,4 @@ function game_navigation(key, state)
   end
 end 
 
-function get_game_speed()
-  return gameSpeed
-end
 
-function set_game_speed(speed)
-  gameSpeed = speed
-end
-
-function get_game_type()
-  return current_game_type
-end

@@ -51,7 +51,14 @@ character_object = class(function (self, character_width, character_height, char
 
 	self.width = character_width or 50
 	self.height = character_height or 50
-	self.character_images={}
+	self.character_images={
+	boost={},
+	invulnerable={},
+	slow={},
+	normal={}
+	}
+
+	self.character_state={} 		-- THE CHARACTER CAN BE IN SEVERAL STATES DEPENDING ON WHAT POWERUP IS BEING USED
 	self.character_flipped_images={}
 	self.current_character_image=1	-- DETERMINES WHICH CHARACTER IMAGE WILL BE DISPLAYED CURRENTLY
 	self.character_surface=nil
@@ -75,13 +82,29 @@ function character_object:get_size()
 end
 
 -- ADDS NEW MENU ITEMS
-function character_object:add_image(img_Path)
-	table.insert(self.character_images, #self.character_images+1, img_Path)
+function character_object:add_image(img_Path,state)
+	if state == "boost" then
+		table.insert(self.character_images.boost, #self.character_images.boost+1, img_Path)
+	elseif state == "invulnerable" then
+		table.insert(self.character_images.invulnerable, #self.character_images.invulnerable+1, img_Path)
+	elseif state == "slow" then
+		table.insert(self.character_images.slow, #self.character_images.slow+1, img_Path)
+	else
+		table.insert(self.character_images.normal, #self.character_images.normal+1, img_Path)
+	end
 end
 
 -- ADDS NEW FLIPPED MENU ITEMS
-function character_object:add_flipped_image(img_Path)
-	table.insert(self.character_flipped_images, #self.character_flipped_images+1, img_Path)
+function character_object:add_flipped_image(img_Path,state)
+	if state == "boost" then
+		table.insert(self.character_flipped_images.boost, #self.character_flipped_images.boost+1, img_Path)
+	elseif state == "invulnerable" then
+		table.insert(self.character_flipped_images.invulnerable, #self.character_flipped_images.invulnerable+1, img_Path)
+	elseif state == "slow" then
+		table.insert(self.character_flipped_images.slow, #self.character_flipped_images.slow+1, img_Path)
+	else
+		table.insert(self.character_flipped_images.normal, #self.character_flipped_images.normal+1, img_Path)
+	end
 end
 
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
@@ -112,6 +135,14 @@ end
 function character_object:reset()
 	self.show_flipped_images=false
 	self.current_character_image=1
+end
+
+function character_object:get_state()
+	return self.character_state
+end
+
+function character_object:set_state(state)
+	self.character_state = state
 end
 
 
