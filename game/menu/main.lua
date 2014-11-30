@@ -351,6 +351,7 @@ function menu_navigation(key, state)
         for i=1,unlocked_level do
           if menu:get_indexed_item().id == "highscore" .. i then 
             draw_highscore(i,350)
+            gfx.update()
           end
         end
       end
