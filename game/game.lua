@@ -359,16 +359,23 @@ function draw_tiles()
     v = Level.tiles[k]
     -- This code can't run properly on the box because the difference
     -- of screen:copyfrom function . Wait for further improvement
-    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter+v.width<w + v.width then
-      if v.name == "obstacle3" then
-        move_cloud(v)
-      elseif v.name == "obstacle4" then
-        move_flame(v)
-      end
-      if v.image == nil then
-        print("The tile the want to draw == nil")
-        v.image = gfx.loadpng("images/font/Z.png")
-      end
+    if v.name == "obstacle3" then
+      move_cloud(v)
+    elseif v.name == "obstacle4" then
+      move_flame(v)
+    end
+    if v.image == nil then
+      print("The tile the want to draw == nil")
+      v.image = gfx.loadpng("images/font/Z.png")
+    end
+    if v.x-gameCounter<0 and v.visibility==true then
+      local x0 = (gameCounter - v.x)
+      local w0 = (v.x+v.width-gameCounter)
+      screen:copyfrom(v.image, {x=x0, y=0, width=w0, height=v.height}, {x=0, y=v.y, width=w0, height=v.height},true)
+    elseif v.x+v.width > w+gameCounter and v.visibility==true then
+      screen:copyfrom(v.image,{x=0, y=0, width=w+gameCounter-v.x, height=v.height}
+        ,{x=v.x - gameCounter, y=v.y, width=w+gameCounter-v.x, height=v.height},true)
+    elseif v.visibility == true then
       screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
     end
   end
