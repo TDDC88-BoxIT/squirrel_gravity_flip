@@ -1,70 +1,48 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
-function RtileSet(herox,heroy,hero_width,hero_height,tileset_width,tileset_height)
-  local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
-  local x_n=math.floor((herox+gamecounter)/32)
-  local x2=x1+32
-  local y1=math.floor(heroy/32)*32
-  local y_n=math.floor(heroy/32)
-  local y2=y1+32
+--Rebuild the hitTest, narrow the travel range to 4 tiles
+  local s_width = screen:get_width()
+function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
+  --Collision detection for cloud and flame since they don't have fixed position compare to other tiles
+  for k,v in pairs(SpSet) do
+    if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil then
+      print("Death caused by hitting Cloud or Flame")
+      get_killed()
+    end
+  end
+  --Check the 4 tiles around the character if they have collision
+  local inputSet= {}
+  local x_n=math.floor((herox+gameCounter)/32)+1---the n'th tile in the column
+  local y_n=math.floor(heroy/32)+1  -- the n'th tile in the row 
+  inputSet={(x_n-1)*22+y_n, x_n*22+y_n, (x_n-1)*22+y_n+1, x_n*22+y_n+1}
+  for i=1, 4, 1 do
+    if Level.map_table[inputSet[i]] ~=nil then
+      local ob= tiles[Level.map_table[inputSet[i]]]
+      local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, ob.x-gameCounter, ob.y, ob.width, ob.height)
+      if temp1 ~= nil then
+        if ob.type==1 then -- ob.type==1  IS A FLOOR TILE
+          return temp1,temp2,temp3,temp4
+        elseif ob.type==2  and ob.visibility == true then -- ob.type==2  IS A POWERUP TILE
+          activate_power_up(ob.name)
+          ob.visibility = false
+        elseif ob.type==3  and player.invulnerable==false then -- ob.type==3  IS AN OBSTACLE TILE        
+          print("Death caused by hitting obstacle")
+          get_killed()
+        elseif ob.type==4  then -- ob.type==4  IS A WIN TILE
+          if get_game_type() == "tutorial" and tutorial_goal_is_fulfilled()==false then
+            get_killed()
+          else
+            levelwin()
+          end
+        end
+      end
+    end
+  end
+  return nil
 end
 
-function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
-  local w = screen:get_width()
-  --------------------------------test-----------------------------------------------
-  local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
-  local x_n=math.floor((herox+gameCounter)/32)+1---the n'th tile in the column
-  local y1=math.floor(heroy/32)*32
-  local y_n=math.floor(heroy/32)+1  -- the n'th tile in the row 
-  print("gameCounter= "..gameCounter)
-  print("herox ="..herox.."heroy ="..heroy)
-  print("x1 ="..x1+gameCounter.." :y1 ="..y1)
-  print("Xn ="..x_n.." Yn ="..y_n)
-  print(Level.map_table[(x_n-1)*22+y_n])
-  if Level.map_table[(x_n-1)*22+y_n] ~= nil then
-    print(tiles[Level.map_table[(x_n-1)*22+y_n]].name)
-    local t_x=tiles[Level.map_table[(x_n-1)*22+y_n]].x-gameCounter
-    local t_y=tiles[Level.map_table[(x_n-1)*22+y_n]].y
-    print("t_x :"..t_x+gameCounter)
-    print("t_y :"..t_y)
-    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
-      print("There has a collision!--1")
-    end  
-  end
-  
-  if Level.map_table[(x_n)*22+y_n+1] ~= nil then
-    print(tiles[Level.map_table[(x_n)*22+y_n+1]].name)
-    local t_x=tiles[Level.map_table[(x_n)*22+y_n+1]].x-gameCounter
-    local t_y=tiles[Level.map_table[(x_n)*22+y_n+1]].y
-    print("t_x :"..t_x+gameCounter)
-    print("t_y :"..t_y)
-    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
-      print("There has a collision!--4")
-    end  
-  end
-  
-  if Level.map_table[(x_n)*22+y_n] ~= nil then
-    print(tiles[Level.map_table[(x_n)*22+y_n]].name)
-    local t_x=tiles[Level.map_table[(x_n)*22+y_n]].x-gameCounter
-    local t_y=tiles[Level.map_table[(x_n)*22+y_n]].y
-    print("t_x :"..t_x+gameCounter)
-    print("t_y :"..t_y)
-    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
-      print("There has a collision!--2")
-    end  
-  end
-  
-  if Level.map_table[(x_n-1)*22+y_n+1] ~= nil then
-    print(tiles[Level.map_table[(x_n-1)*22+y_n+1]].name)
-    local t_x=tiles[Level.map_table[(x_n-1)*22+y_n+1]].x-gameCounter
-    local t_y=tiles[Level.map_table[(x_n-1)*22+y_n+1]].y
-    print("t_x :"..t_x+gameCounter)
-    print("t_y :"..t_y)
-    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
-      print("There has a collision!--3")
-    end  
-  end
 
-  ------------------------------------------------------------------------------------
+--[[function hitTest_old(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
+  local w = screen:get_width()
   for k = tileset_start, tileset_end, 1 do
     v = tileSet[k]
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then
@@ -92,7 +70,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, til
     end
   end
   return nil
-end
+end]]
 
 -- purpose: Check Collision between two objects.
 -- input: (x,y) and (width, height) of Object A.
@@ -121,9 +99,6 @@ function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
     local H=Y[3][2]-Y[2][2]
     return W,H,B_T,B_B
     --return X[2][1], X[3][1], Y[2][1], Y[3][1]
-
-
-    --return "hit"
   end
   return nil
 end
