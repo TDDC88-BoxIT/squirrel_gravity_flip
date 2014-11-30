@@ -1,0 +1,12 @@
+[Description]
+Patches in this directory is used to handle the different between the emulator and the STB.
+
+[Usage]
+Type command git apply [patch name].
+For exmaple: git apply 0001-patch-for-box.patch
+
+[0001-patch-for-box.patch]
+This is the only neccessary one to keep the current code run on the STB. Contains some transparant function and handle errors which will crash the STB.
+
+[0001-box_performance_log.patch]
+This is used to check the CPU consumption of the main game scene. It will log the time & memory info to files, which can be view by cat /usr/squirrel/logfile.
