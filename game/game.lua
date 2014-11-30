@@ -169,9 +169,9 @@ function add_character_images()
   character:add_flipped_image(imageDir.."character/squirrel2_flipped.png","normal")
 
   -- ADD IMAGES FOR BOOST MODE
-  character:add_image(imageDir.."character/squirrel1.png","boost")
+  character:add_image(imageDir.."character/squirrel1_boost.png","boost")
   character:add_image(imageDir.."character/squirrel2_boost.png","boost")
-  character:add_flipped_image(imageDir.."character/squirrel1_flipped.png","boost")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped_boost.png","boost")
   character:add_flipped_image(imageDir.."character/squirrel2_flipped_boost.png","boost")
   
   -- ADD IMAGES FOR INVULNERABLE MODE

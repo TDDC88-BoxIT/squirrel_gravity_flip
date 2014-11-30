@@ -11,59 +11,58 @@ end
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
   local w = screen:get_width()
   --------------------------------test-----------------------------------------------
-  local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
-  local x_n=math.floor((herox+gameCounter)/32)+1---the n'th tile in the column
-  local y1=math.floor(heroy/32)*32
-  local y_n=math.floor(heroy/32)+1  -- the n'th tile in the row 
-  print("gameCounter= "..gameCounter)
-  print("herox ="..herox.."heroy ="..heroy)
-  print("x1 ="..x1+gameCounter.." :y1 ="..y1)
-  print("Xn ="..x_n.." Yn ="..y_n)
-  print(Level.map_table[(x_n-1)*22+y_n])
-  if Level.map_table[(x_n-1)*22+y_n] ~= nil then
-    print(tiles[Level.map_table[(x_n-1)*22+y_n]].name)
-    local t_x=tiles[Level.map_table[(x_n-1)*22+y_n]].x-gameCounter
-    local t_y=tiles[Level.map_table[(x_n-1)*22+y_n]].y
-    print("t_x :"..t_x+gameCounter)
-    print("t_y :"..t_y)
-    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
-      print("There has a collision!--1")
-    end  
-  end
+  -- local x1=math.floor((herox+gameCounter)/32)*32-gameCounter
+  -- local x_n=math.floor((herox+gameCounter)/32)+1---the n'th tile in the column
+  -- local y1=math.floor(heroy/32)*32
+  -- local y_n=math.floor(heroy/32)+1  -- the n'th tile in the row 
+  -- print("gameCounter= "..gameCounter)
+  -- print("herox ="..herox.."heroy ="..heroy)
+  -- print("x1 ="..x1+gameCounter.." :y1 ="..y1)
+  -- print("Xn ="..x_n.." Yn ="..y_n)
+  -- print(Level.map_table[(x_n-1)*22+y_n])
+  -- if Level.map_table[(x_n-1)*22+y_n] ~= nil then
+  --   print(tiles[Level.map_table[(x_n-1)*22+y_n]].name)
+  --   local t_x=tiles[Level.map_table[(x_n-1)*22+y_n]].x-gameCounter
+  --   local t_y=tiles[Level.map_table[(x_n-1)*22+y_n]].y
+  --   print("t_x :"..t_x+gameCounter)
+  --   print("t_y :"..t_y)
+  --   if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
+  --     print("There has a collision!--1")
+  --   end  
+  -- end
   
-  if Level.map_table[(x_n)*22+y_n+1] ~= nil then
-    print(tiles[Level.map_table[(x_n)*22+y_n+1]].name)
-    local t_x=tiles[Level.map_table[(x_n)*22+y_n+1]].x-gameCounter
-    local t_y=tiles[Level.map_table[(x_n)*22+y_n+1]].y
-    print("t_x :"..t_x+gameCounter)
-    print("t_y :"..t_y)
-    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
-      print("There has a collision!--4")
-    end  
-  end
+  -- if Level.map_table[(x_n)*22+y_n+1] ~= nil then
+  --   print(tiles[Level.map_table[(x_n)*22+y_n+1]].name)
+  --   local t_x=tiles[Level.map_table[(x_n)*22+y_n+1]].x-gameCounter
+  --   local t_y=tiles[Level.map_table[(x_n)*22+y_n+1]].y
+  --   print("t_x :"..t_x+gameCounter)
+  --   print("t_y :"..t_y)
+  --   if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
+  --     print("There has a collision!--4")
+  --   end  
+  -- end
   
-  if Level.map_table[(x_n)*22+y_n] ~= nil then
-    print(tiles[Level.map_table[(x_n)*22+y_n]].name)
-    local t_x=tiles[Level.map_table[(x_n)*22+y_n]].x-gameCounter
-    local t_y=tiles[Level.map_table[(x_n)*22+y_n]].y
-    print("t_x :"..t_x+gameCounter)
-    print("t_y :"..t_y)
-    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
-      print("There has a collision!--2")
-    end  
-  end
+  -- if Level.map_table[(x_n)*22+y_n] ~= nil then
+  --   print(tiles[Level.map_table[(x_n)*22+y_n]].name)
+  --   local t_x=tiles[Level.map_table[(x_n)*22+y_n]].x-gameCounter
+  --   local t_y=tiles[Level.map_table[(x_n)*22+y_n]].y
+  --   print("t_x :"..t_x+gameCounter)
+  --   print("t_y :"..t_y)
+  --   if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
+  --     print("There has a collision!--2")
+  --   end  
+  -- end
   
-  if Level.map_table[(x_n-1)*22+y_n+1] ~= nil then
-    print(tiles[Level.map_table[(x_n-1)*22+y_n+1]].name)
-    local t_x=tiles[Level.map_table[(x_n-1)*22+y_n+1]].x-gameCounter
-    local t_y=tiles[Level.map_table[(x_n-1)*22+y_n+1]].y
-    print("t_x :"..t_x+gameCounter)
-    print("t_y :"..t_y)
-    if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
-      print("There has a collision!--3")
-    end  
-  end
-
+  -- if Level.map_table[(x_n-1)*22+y_n+1] ~= nil then
+  --   print(tiles[Level.map_table[(x_n-1)*22+y_n+1]].name)
+  --   local t_x=tiles[Level.map_table[(x_n-1)*22+y_n+1]].x-gameCounter
+  --   local t_y=tiles[Level.map_table[(x_n-1)*22+y_n+1]].y
+  --   print("t_x :"..t_x+gameCounter)
+  --   print("t_y :"..t_y)
+  --   if CheckCollision(herox, heroy, hero_width, hero_height, t_x, t_y, 32, 32)~=nil then
+  --     print("There has a collision!--3")
+  --   end  
+  -- end
   ------------------------------------------------------------------------------------
   for k = tileset_start, tileset_end, 1 do
     v = tileSet[k]

@@ -57,7 +57,6 @@ character_object = class(function (self, character_width, character_height, char
 		slow={},
 		normal={}
 	}
-
 	self.character_state="normal" 		-- THE CHARACTER CAN BE IN SEVERAL STATES DEPENDING ON WHAT POWERUP IS BEING USED
 	self.character_flipped_images={
 		boost={},

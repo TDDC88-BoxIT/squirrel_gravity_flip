@@ -1,5 +1,10 @@
 local speed_timer
 local invul_timer
+local fast_speed=15
+local fast_speed_duration=3000
+local slow_speed=1
+local slow_speed_duration=1000
+local invulnerability_duration=10000
 
 
 --[[
@@ -20,13 +25,13 @@ function activate_power_up(pu_name)
     game_score = game_score + 100
 	elseif(pu_name=="powerup2") then -- Speed tile
     character:set_state("boost")
-    change_game_speed(15,3000)
+    change_game_speed(fast_speed,fast_speed_duration)
 	elseif(pu_name=="powerup3") then -- Freeze tile
     character:set_state("slow")
-    change_game_speed(1,1000)    
+    change_game_speed(slow_speed,slow_speed_duration)    
 	elseif(pu_name=="powerup4") then -- Invulnerability tile
     character:set_state("invulnerable")
-    activate_invulnerability(10000)
+    activate_invulnerability(invulnerability_duration)
   end
 end
 
@@ -63,16 +68,25 @@ end
 @desc: Ends invulnerability by setting the player.invulnerable flag to false. Called by system timer, which is stopped.
 ]]
 function end_invulnerability()
-  character:set_state("normal")
+  if speed_timer ==nil then
+    character:set_state("normal")
+  end
   player.invulnerable = false
-  invul_timer:stop()
+  if invul_timer ~=nil then
+    invul_timer:stop()
+    invul_timer=nil
+  end
 end
 
 function reset_game_speed()
-  character:set_state("normal")
+  if invul_timer ==nil then
+    character:set_state("normal")
+  else
+    character:set_state("invulnerable")
+  end
   set_game_speed(10)
   if speed_timer ~=nil then
     speed_timer:stop()
     speed_timer=nil
   end
-  end
+end
