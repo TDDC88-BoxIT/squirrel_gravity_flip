@@ -2,8 +2,16 @@ local alphabet = {{"A","B","C"},{"D", "E","F"},{"G","H","I"},{"J","K","L"},{"M",
 
 
 function menu_navigation_new_name(key,state)
-  if key=="green" or key=="ok" and state=="down" then 
-    if nr_buttons_pressed<3 and nr_buttons_pressed<string.len(player_name)  then 
+
+  if player_name == nil then
+    length_player_name = 0
+  else
+    length_player_name = string.len(player_name)
+  end
+
+  if key=="green" or key=="ok" and state=="down" then
+    
+    if nr_buttons_pressed<3 and nr_buttons_pressed<length_player_name then 
       --Accepts a letter, allows you to write the next one 
       text_button_pressed = {0,0,0,0,0,0,0,0,0}
       nr_buttons_pressed = nr_buttons_pressed +1
