@@ -19,7 +19,7 @@ require("game/power_up")
 local imageDir = "images/"
 local mapDir = "map/"
 player = {}
-local character = nil
+character = nil
 local ok_button_character=nil
 local direction_flag="down" -- KEEPS TRACK OF WHAT WAY THE SQUIRREL I MOVING
 local gameCounter=0
@@ -154,14 +154,37 @@ end
 function create_game_character()
   if character==nil then
     character = character_object(32,32,imageDir.."character/squirrel1.png")
-    character:add_image(imageDir.."character/squirrel2.png")
-    character:add_flipped_image(imageDir.."character/squirrel1_flipped.png")
-    character:add_flipped_image(imageDir.."character/squirrel2_flipped.png")
+    add_character_images()
   else
     character:reset()
     direction_flag="down"
   end
   change_character_timer = sys.new_timer(200, "update_game_character")
+end
+
+function add_character_images()
+  -- ADD IMAGES FOR NORMAL MODE
+  character:add_image(imageDir.."character/squirrel2.png","normal")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped.png","normal")
+  character:add_flipped_image(imageDir.."character/squirrel2_flipped.png","normal")
+
+  -- ADD IMAGES FOR BOOST MODE
+  character:add_image(imageDir.."character/squirrel1_boost.png","boost")
+  character:add_image(imageDir.."character/squirrel2_boost.png","boost")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped_boost.png","boost")
+  character:add_flipped_image(imageDir.."character/squirrel2_flipped_boost.png","boost")
+  
+  -- ADD IMAGES FOR INVULNERABLE MODE
+  character:add_image(imageDir.."character/squirrel1_invulnerable.png","invulnerable")
+  character:add_image(imageDir.."character/squirrel2_invulnerable.png","invulnerable")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped_invulnerable.png","invulnerable")
+  character:add_flipped_image(imageDir.."character/squirrel2_flipped_invulnerable.png","invulnerable")
+  
+  -- ADD IMAGES FOR SLOW MODE
+  character:add_image(imageDir.."character/squirrel1_slow.png","slow")
+  character:add_image(imageDir.."character/squirrel2_slow.png","slow")
+  character:add_flipped_image(imageDir.."character/squirrel1_flipped_slow.png","slow")
+  character:add_flipped_image(imageDir.."character/squirrel2_flipped_slow.png","slow")
 end
 
 function update_game_character()
@@ -181,7 +204,6 @@ end
 function update_game() 
   -- if lives > 0 then
   -- if game_score > 0 then
-
   screen:clear()
   update_tile_index()
   draw_screen()
@@ -239,6 +261,7 @@ function move_character()
   elseif player.cur_x<player.work_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
   end
+
   if Tcount==1 or Tcount==4 then
     for k=Tcount,Tcount+2, 1 do
       player.new_y=Y_position()
@@ -257,6 +280,7 @@ function move_character()
       Y_check(falling)
   end
 end
+
 function Y_check(falling)
   --Check if the hero has collision with the tiles or not, and if there will be a collision, adjust the y_position to fit the object.
   local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height, tileset_start, tileset_end)
@@ -368,14 +392,14 @@ function draw_tiles()
       print("The tile the want to draw == nil")
       v.image = gfx.loadpng("images/font/Z.png")
     end
-    if v.x-gameCounter<0 and v.visibility==true then
+    if v.x-gameCounter<0 and v.visibility==true then -- TILES WHICH ARE ON THE LOWER BOUNDARY OF THE SCREEN WIDTH
       local x0 = (gameCounter - v.x)
       local w0 = (v.x+v.width-gameCounter)
       screen:copyfrom(v.image, {x=x0, y=0, width=w0, height=v.height}, {x=0, y=v.y, width=w0, height=v.height},true)
-    elseif v.x+v.width > w+gameCounter and v.visibility==true then
-      screen:copyfrom(v.image,{x=0, y=0, width=w+gameCounter-v.x, height=v.height}
+    elseif v.x+v.width > w+gameCounter and v.visibility==true then -- TILES WHICH ARE ON THE UPPER BUNDARY OF SCREEN WIDTH
+        screen:copyfrom(v.image,{x=0, y=0, width=w+gameCounter-v.x, height=v.height}
         ,{x=v.x - gameCounter, y=v.y, width=w+gameCounter-v.x, height=v.height},true)
-    elseif v.visibility == true then
+    elseif v.visibility == true then -- TILES WHICH ARE NOT ON THE UPPER BOUNDARY OF THE SCREEN WIDTH NOR THE LOWER BOUNDARY OF SCREEN WIDTH
       screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
     end
   end
@@ -447,6 +471,17 @@ function get_global_game_state()
   return global_game_state
 end 
 
+function get_game_speed()
+  return gameSpeed
+end
+
+function set_game_speed(speed)
+  gameSpeed = speed
+end
+
+function get_game_type()
+  return current_game_type
+end
 
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
@@ -483,51 +518,4 @@ function game_navigation(key, state)
   end
 end 
 
-function change_game_speed(new_speed, time)
-  gameSpeed = new_speed
-  if speed_timer~=nil then
-    speed_timer=nil
-  end
-  speed_timer = sys.new_timer(time, "reset_game_speed")
-end
 
---[[
-@desc: Makes the player character invulnerable (i.e. unable to die from touching obstacles).
-@params: time - Time (in milliseconds) to apply invulnerability.
-]]
-function activate_invulnerability(time)
-  if(player.invulnerable) then
-    return
-  else
-    player.invulnerable = true
-    invul_timer = sys.new_timer(time, "end_invulnerability")
-  end
-end
-
---[[
-@desc: Public getter for player local attribute "invulnerable".
-@return: (bool) Whether or not the character is currently invulnerable.
-]]
-function get_invulnerability_state()
-  return player.invulnerable
-end
-
---[[
-@desc: Ends invulnerability by setting the player.invulnerable flag to false. Called by system timer, which is stopped.
-]]
-function end_invulnerability()
-  player.invulnerable = false
-  invul_timer:stop()
-end
-
-function reset_game_speed()
-  gameSpeed = 10
-    if speed_timer ~=nil then
-      speed_timer:stop()
-      speed_timer=nil
-    end
-  end
-
-function get_game_type()
-  return current_game_type
-end
