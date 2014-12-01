@@ -72,6 +72,8 @@ function start_game(level,game_type,life)
     pos_change = 0
     lives = life
     player.invulnerable = false
+    reset_game_speed()
+    end_invulnerability()
   else
     stop_game()
     change_global_game_state(0)
@@ -134,6 +136,16 @@ function resume_game()
   load_font_images()
   timer = sys.new_timer(20, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
+  if get_speed_timer()~=nil then
+    if character:get_state() == "boost" then
+      change_game_speed(15, 3)
+    else
+      change_game_speed(1, 3)
+    end
+  end
+  if get_invul_timer()~=nil then
+    activate_invulnerability(10)
+  end
 end
 
 function stop_game()
@@ -141,14 +153,33 @@ function stop_game()
     timer:stop()
     timer = nil
   end
-  if speed_timer ~= nil then
-    reset_game_speed()
-  end
+  reset_game_speed()
+  end_invulnerability()
   destroy_image()
   if change_character_timer~=nil then
     change_character_timer:stop()
     change_character_timer=nil 
   end  
+end
+
+function pause_game()
+  if timer~=nil then
+    timer:stop()
+    timer = nil
+  end
+  destroy_image()
+  if change_character_timer~=nil then
+    change_character_timer:stop()
+    change_character_timer=nil 
+  end 
+  local st = get_speed_timer()
+  local it = get_invul_timer() 
+  if st~=nil then
+    st:stop()
+  end
+  if it~=nil then
+    it:stop()
+  end
 end
 
 function create_game_character()
@@ -497,7 +528,7 @@ function game_navigation(key, state)
       end
     end
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
-    stop_game()
+    pause_game()    
     change_global_game_state(0)
     start_menu("pause_menu")
   elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE

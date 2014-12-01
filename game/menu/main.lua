@@ -256,11 +256,14 @@ function draw_menu()
     menu3:destroy()
     gfx.update()
   elseif menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
-    --draw_level() --STILL TO BE IMPLEMENTED
-    if menuState == "levelwin_menu" then
-      call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
+    player_name = get_player_name()
+    if player_name == "" then
+      player_name= "AAA"
     end
+    score_page(player_name, game_score, get_current_level())
+    call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
+    draw_highscore(get_current_level(),800)
   else
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
     menu:destroy()

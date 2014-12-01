@@ -2,7 +2,7 @@ local tutorial_goal_fulfilled
 local tutorial_helper=nil
 local tutorial_helper_timer=nil
 local tutorial_level=nil
-local ok_pressed_times=0
+local ok_pressed_times
 local imageDir = "images/"
 
 
@@ -10,6 +10,7 @@ local imageDir = "images/"
 function create_tutorial_helper(level_number)
 	tutorial_level= level_number
 	tutorial_goal_fulfilled=false
+	ok_pressed_times=0
   	if tutorial_helper==nil and tutorial_level==1 then
     	tutorial_helper = character_object(236,219,imageDir.."tutorialImg/okButtonDown.png")
     	tutorial_helper:add_image(imageDir.."tutorialImg/okButtonUp.png")
@@ -27,6 +28,7 @@ function stop_tutorial_helper()
     tutorial_helper_timer:stop()
     tutorial_helper_timer=nil
     tutorial_helper:destroy()
+    tutorial_helper=nil
 end
 
 --[[

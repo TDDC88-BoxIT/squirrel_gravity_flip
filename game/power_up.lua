@@ -64,6 +64,14 @@ function get_invulnerability_state()
   return player.invulnerable
 end
 
+function get_invul_timer()
+  return invul_timer
+end
+
+function get_speed_timer()
+  return speed_timer
+end
+
 --[[
 @desc: Ends invulnerability by setting the player.invulnerable flag to false. Called by system timer, which is stopped.
 ]]
