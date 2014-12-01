@@ -2,6 +2,12 @@ require("game.score")
 
 test_score = {}
 
+function test_score:setUp()
+  
+  file_prefix = ""
+  
+end
+
 function test_score:test_read_from_file_return_not_nil()
   
   assertNotNil(read_from_file())
@@ -24,3 +30,6 @@ if file == nil then
 end
 
 end  
+
+function test_score:tearDown()
+end
