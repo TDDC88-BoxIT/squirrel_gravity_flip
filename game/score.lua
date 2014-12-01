@@ -159,7 +159,7 @@ function draw_highscore(level, x_coordinate)
   index = 1
   i=1
   while score_board[tostring(level)][tostring(i)] ~= nil and index<=5  do
-    y_coordinate = 300+60*(i-1)
+    y_coordinate = 180+60*(i-1)
     position = 1
     draw_score(score_board[tostring(level)][tostring(i)][1], x_coordinate + 200, y_coordinate)
     string_score= score_board[tostring(level)][tostring(i)][2] 
