@@ -1,7 +1,8 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 --Rebuild the hitTest, narrow the travel range to 4 tiles
---local s_width = screen:get_width()
 
+-- REMOVED TO DUE TO TESTING 
+-- local s_width = screen:get_width()
 -- function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
 --   --Collision detection for cloud and flame since they don't have fixed position compare to other tiles
 --   for k,v in pairs(SpSet) do

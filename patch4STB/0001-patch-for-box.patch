@@ -1,18 +1,17 @@
-From a236687ee297e9bf90742a19e53ce6ad6dbbf5fb Mon Sep 17 00:00:00 2001
+From 9cda5e33280a8da3df29c4433de553ab01f0b2ac Mon Sep 17 00:00:00 2001
 From: wangrq <dlazycat@gmail.com>
-Date: Sun, 30 Nov 2014 16:26:39 +0100
+Date: Sun, 30 Nov 2014 18:46:23 +0100
 Subject: [PATCH] patch for box
 
 ---
  game/game.lua                 | 2 +-
- game/menu/main.lua            | 2 +-
  index.lua                     | 4 ++--
  tool_box/character_object.lua | 2 +-
  tool_box/menu_object.lua      | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/game/game.lua b/game/game.lua
-index 853e15a..51dd9ea 100644
+index 39e77d5..67189ef 100644
 --- a/game/game.lua
 +++ b/game/game.lua
 @@ -68,7 +68,7 @@ function start_game(level,game_type,life)
@@ -24,19 +23,6 @@ index 853e15a..51dd9ea 100644
      pos_change = 0
      lives = life
      player.invulnerable = false
-diff --git a/game/menu/main.lua b/game/menu/main.lua
-index 4c79c98..7ff838a 100644
---- a/game/menu/main.lua
-+++ b/game/menu/main.lua
-@@ -182,7 +182,7 @@ function add_menu_bling()
-     dash = gfx.loadpng(imageDir.."font/dash.png")
-     green_dash = gfx.loadpng(imageDir.."font/green_dash.png")
-   elseif menuState == "gameover_menu" and backgroundImage == nil then
--    backgroundImage = gfx.loadpng(imageDir.."/menuImg/gameover.png")
-+    backgroundImage = gfx.loadjpeg(imageDir.."/menuImg/gravityFlip.jpg")
-   end
- 
-   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
 diff --git a/index.lua b/index.lua
 index e21e00b..b23e5ce 100644
 --- a/index.lua
@@ -66,10 +52,10 @@ index c539b04..9324087 100644
  	animate(self)
    	set_image(self)  	
 diff --git a/tool_box/menu_object.lua b/tool_box/menu_object.lua
-index c4b6363..0089e8b 100644
+index 59d1a88..677d691 100644
 --- a/tool_box/menu_object.lua
 +++ b/tool_box/menu_object.lua
-@@ -198,7 +198,7 @@ end
+@@ -199,7 +199,7 @@ end
  local function update(self)
    if self.menu_surface == nil then
      self.menu_surface=gfx.new_surface(self.width, self.height)
