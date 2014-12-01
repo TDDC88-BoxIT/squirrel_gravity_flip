@@ -1,7 +1,7 @@
 -- NEEDED FILES FOR RUNNING THE TESTS
 require("game.luaunit")
 require("game.game")
-require("game.input_handler")  
+require("game.input_handler") 
 
 --UNIT TESTS
 require("game.tests.test_collision_handler")
