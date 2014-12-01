@@ -261,49 +261,42 @@ function move_character()
   elseif player.cur_x<player.work_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
   end
- if Tcount==1 or Tcount==4 then  
-  for k=Tcount,Tcount+2, 1 do    
+
+  if Tcount==1 or Tcount==4 then
+    for k=Tcount,Tcount+2, 1 do
+      player.new_y=Y_position()
+      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+        print("Death caused by falling off grid")
+        get_killed()
+      end
+      Y_check(falling)
+    end
+  else
     player.new_y=Y_position()
     if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
       print("Death caused by falling off grid")
-      get_killed()   
+      get_killed()
     end
-    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height, tileset_start, tileset_end)
-    if W==nil or falling==1 then
-      Tcount=Tcount+1 
-      player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-    else
-      if direction_flag == "down" then 
-        player.cur_y=B_T-32
-        Tcount=1
-      else
-        player.cur_y=B_B
-        Tcount=1
-      end
-    end
-  end
-else
-  player.new_y=Y_position()
-  if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
-    print("Death caused by falling off grid")
-    get_killed()   
-  end
-    local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height, tileset_start, tileset_end)
-    if W==nil or falling==1 then
-      Tcount=Tcount+1  
-      player.cur_y = player.new_y-- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-    else
-      if direction_flag == "down" then 
-        player.cur_y=B_T-32
-        Tcount=1
-      else
-        player.cur_y=B_B
-        Tcount=1
-      end
-    end
+      Y_check(falling)
   end
 end
 
+function Y_check(falling)
+  --Check if the hero has collision with the tiles or not, and if there will be a collision, adjust the y_position to fit the object.
+  local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height, tileset_start, tileset_end)
+  if W==nil or falling==1 then
+    Tcount=Tcount+1
+    player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+  else
+    if direction_flag == "down" then
+      player.cur_y=B_T-32
+      Tcount=1
+    else
+      player.cur_y=B_B
+      Tcount=1
+    end
+  end
+end
 --[[Gravity equation
     S=(G*t^2)/2 
     There has a rule that, F(t)=t^2, F(t)-F(t-1)=2t-1 

@@ -87,7 +87,11 @@ end
 
 -- ADDS NEW MENU ITEMS
 function character_object:add_image(img_Path,state)
-	table.insert(self.character_images[state], #self.character_images[state]+1, img_Path)
+	if state ~= nil then
+		table.insert(self.character_images[state], #self.character_images[state]+1, img_Path)
+	else
+		table.insert(self.character_images["normal"], #self.character_images["normal"]+1, img_Path)
+	end
 end
 
 -- ADDS NEW FLIPPED MENU ITEMS

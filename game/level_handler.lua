@@ -32,7 +32,6 @@ local winImg
 local loaded_level
 local current_level=0
 
-
 -- This function needs to be called to load the level file into memory, you will then be able to just call Level.tiles to get a list of all the tiles
 function Level.load_level (level_number,game_type)
   current_level=level_number
@@ -58,6 +57,7 @@ function Level.load_level (level_number,game_type)
   Level.attributes = loaded_level.attributes
   -- Get all the tiles and saves them into the Level.tiles table
   Level.tiles = get_tiles()
+  Level.CloudAndFlameSet = CloudAndFlameSet()
   Level.character_start_pos_x = loaded_level.properties["character_start_pos_x"] * 32  -- Sets the characters start position on the x-axis
   Level.character_start_pos_y = loaded_level.properties["character_start_pos_y"] * 32  -- Sets the characters start position on the y-axis
   return "level_loaded"
@@ -195,4 +195,15 @@ end
 
 function get_current_level()
   return current_level
+end
+function CloudAndFlameSet()
+  SpSet = {}
+  local index=1
+  for k,v in pairs(tiles) do
+    if v.gid==9 or v.gid==10 then
+      SpSet[index]=v
+      index=index+1
+    end
+  end
+  return SpSet
 end

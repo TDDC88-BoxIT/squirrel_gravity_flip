@@ -9,6 +9,7 @@ function menu_navigation_new_name(key,state)
       nr_buttons_pressed = nr_buttons_pressed +1
       update_menu()
       draw_score(player_name, 600,600)
+      gfx.update()
     elseif nr_buttons_pressed== 3 then
         -- let's you go back to the start menu
         nr_buttons_pressed = 0
@@ -21,6 +22,7 @@ function menu_navigation_new_name(key,state)
     nr_buttons_pressed = 0
     update_menu()
     draw_score(player_name, 600,600)
+    gfx.update()
   elseif key=="red" and state=="down" then  
   -- let's you go back to the start menu
     nr_buttons_pressed= 0
@@ -44,6 +46,7 @@ function menu_navigation_new_name(key,state)
     end 
     update_menu()
     draw_score(player_name, 600,600)
+    gfx.update()
   end
 
   for number=1,8 do
@@ -73,6 +76,7 @@ function menu_navigation_new_name(key,state)
       end 
       update_menu()
       draw_score(player_name, 600,600)
+      gfx.update()
       break
     end
   end

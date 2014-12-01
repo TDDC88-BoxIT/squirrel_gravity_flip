@@ -155,6 +155,7 @@ end
 local function make_background(self)
   local img_surface=nil
   img_surface = gfx.loadpng(self.menu_background)
+  img_surface:premultiply()
   self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height-(20+2*screen:get_height()/100)},true)
   img_surface:destroy()
 end

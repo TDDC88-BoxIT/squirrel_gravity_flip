@@ -1,0 +1,83 @@
+From a236687ee297e9bf90742a19e53ce6ad6dbbf5fb Mon Sep 17 00:00:00 2001
+From: wangrq <dlazycat@gmail.com>
+Date: Sun, 30 Nov 2014 16:26:39 +0100
+Subject: [PATCH] patch for box
+
+---
+ game/game.lua                 | 2 +-
+ game/menu/main.lua            | 2 +-
+ index.lua                     | 4 ++--
+ tool_box/character_object.lua | 2 +-
+ tool_box/menu_object.lua      | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/game/game.lua b/game/game.lua
+index 853e15a..51dd9ea 100644
+--- a/game/game.lua
++++ b/game/game.lua
+@@ -68,7 +68,7 @@ function start_game(level,game_type,life)
+       create_tutorial_helper(current_level)
+     end
+     set_character_start_position()
+-    timer = sys.new_timer(20, "update_game")
++    timer = sys.new_timer(40, "update_game")
+     pos_change = 0
+     lives = life
+     player.invulnerable = false
+diff --git a/game/menu/main.lua b/game/menu/main.lua
+index 4c79c98..7ff838a 100644
+--- a/game/menu/main.lua
++++ b/game/menu/main.lua
+@@ -182,7 +182,7 @@ function add_menu_bling()
+     dash = gfx.loadpng(imageDir.."font/dash.png")
+     green_dash = gfx.loadpng(imageDir.."font/green_dash.png")
+   elseif menuState == "gameover_menu" and backgroundImage == nil then
+-    backgroundImage = gfx.loadpng(imageDir.."/menuImg/gameover.png")
++    backgroundImage = gfx.loadjpeg(imageDir.."/menuImg/gravityFlip.jpg")
+   end
+ 
+   screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
+diff --git a/index.lua b/index.lua
+index e21e00b..b23e5ce 100644
+--- a/index.lua
++++ b/index.lua
+@@ -1,8 +1,8 @@
+ -- This file is used in the box as start point.
+ -- Type: sendcmd LuaEngine run /usr/1128/index.lua to start App.
+ 
+-logfile = assert(io.open("/usr/1128/logfile", "w"))
+-file_prefix = "/usr/1128/"
++logfile = assert(io.open("/usr/squirrel/logfile", "w"))
++file_prefix = "/usr/squirrel/"
+ 
+ function startApp()
+  logfile:write("startApp\n")
+diff --git a/tool_box/character_object.lua b/tool_box/character_object.lua
+index c539b04..9324087 100644
+--- a/tool_box/character_object.lua
++++ b/tool_box/character_object.lua
+@@ -144,7 +144,7 @@ end
+ function character_object:update()
+ 	if self.character_surface == nil then
+ 		self.character_surface=gfx.new_surface(self.width, self.height)
+-    --self.character_surface:clear()
++    self.character_surface:clear()
+ 	end
+ 	animate(self)
+   	set_image(self)  	
+diff --git a/tool_box/menu_object.lua b/tool_box/menu_object.lua
+index c4b6363..0089e8b 100644
+--- a/tool_box/menu_object.lua
++++ b/tool_box/menu_object.lua
+@@ -198,7 +198,7 @@ end
+ local function update(self)
+   if self.menu_surface == nil then
+     self.menu_surface=gfx.new_surface(self.width, self.height)
+-    --self.menu_surface:clear()
++    self.menu_surface:clear()
+   end
+   --if self.height~=#self.menu_items*(self.button_height+20) then
+     --self:set_button_size(nil,(self.height-(#self.menu_items)*20-(2*screen:get_height()/100))/#self.menu_items) --ADJUSTS THE BUTTON HEIGHT IN CASE IT IS TOO BIG TO FIT ALL BUTTONS ON THE SCREEN (LEVEL MENU). TAKES INTO ACCOUNT THE FACT THAT THE LEVEL MENU STARTS 1/100 DOWN
+-- 
+1.9.0.msysgit.0
+
