@@ -45,7 +45,7 @@ end
 
 --@desc: Saves the new score if it is good enough, scores are added in its correct position size-wise
 --@params: player's name, score , level that has been played
---@author: Gustav Beck-Norén
+--@author: 
 function score_page(player,score,level)
   local unlocked_levels = read_from_file()
   if score_board[tostring(level)] == nil then
@@ -80,7 +80,7 @@ function save_to_file(score_board, unlocked_levels)
   for level_read=1, unlocked_levels do
     io.write("level".. tostring(level_read).."\n")
   -- for each level go through the level under here
-    for player_i=1,table_length(score_board[tostring(level_read)]) do
+    for player_i=1,#score_board[tostring(level_read)] do
       if score_board[tostring(level_read)][tostring(player_i)] ~= nil then
         print(tostring(level_read).." : "..tostring(player_i))
         io.write(score_board[tostring(level_read)][tostring(player_i)][1].."\n".. score_board[tostring(level_read)][tostring(player_i)][2].."\n") 
