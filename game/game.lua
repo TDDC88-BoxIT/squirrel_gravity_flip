@@ -548,5 +548,3 @@ function game_navigation(key, state)
       update_tutorial_handler(key)
   end
 end 
-
-

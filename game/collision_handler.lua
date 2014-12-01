@@ -1,12 +1,23 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 --Rebuild the hitTest, narrow the travel range to 4 tiles
-local s_width = screen:get_width()
+
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
+  local s_width = screen:get_width()
 --Collision detection for cloud and flame since they don't have fixed position compare to other tiles
-  for k,v in pairs(SpSet) do
-    if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil then
-      print("Death caused by hitting Cloud or Flame")
-      get_killed()
+  for k,v in pairs(CloudSet) do
+    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
+      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil then
+        print("Death caused by hitting Cloud")
+        get_killed()
+      end
+    end
+  end
+  for k,v in pairs(FlameSet) do
+    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
+      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil then
+        print("Death caused by hitting Flame")
+        get_killed()
+      end
     end
   end
    --Check the 4 tiles around the character if they have collision

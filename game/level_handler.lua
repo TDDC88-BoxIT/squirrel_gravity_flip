@@ -57,7 +57,8 @@ function Level.load_level (level_number,game_type)
   Level.attributes = loaded_level.attributes
   -- Get all the tiles and saves them into the Level.tiles table
   Level.tiles = get_tiles()
-  Level.CloudAndFlameSet = CloudAndFlameSet()
+  Level.CloudSet = Cloud_set()
+  Level.FlameSet = Flame_set()
   Level.character_start_pos_x = loaded_level.properties["character_start_pos_x"] * 32  -- Sets the characters start position on the x-axis
   Level.character_start_pos_y = loaded_level.properties["character_start_pos_y"] * 32  -- Sets the characters start position on the y-axis
   return "level_loaded"
@@ -196,14 +197,27 @@ end
 function get_current_level()
   return current_level
 end
-function CloudAndFlameSet()
-  SpSet = {}
-  local index=1
+function Cloud_set()
+  CloudSet = {}
+  local cloud_index=1
   for k,v in pairs(tiles) do
-    if v.gid==9 or v.gid==10 then
-      SpSet[index]=v
-      index=index+1
+    if v.gid==9 then
+      CloudSet[cloud_index]=v
+      print("v"..v.name.." : "..cloud_index)
+      cloud_index=cloud_index+1
     end
   end
-  return SpSet
+  return CloudSet
+end
+function Flame_set()
+  FlameSet = {}
+  local flame_index=1
+  for k,v in pairs(tiles) do
+    if v.gid==10 then
+      FlameSet[flame_index]=v
+      print("v"..v.name.." : "..flame_index)
+      flame_index=flame_index+1
+    end
+  end
+  return FlameSet
 end
