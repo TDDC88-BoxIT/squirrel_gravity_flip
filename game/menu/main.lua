@@ -360,6 +360,9 @@ function menu_navigation(key, state)
       end
     elseif key=="ok" and state=="down" and was_pressed_from_menu == false then
       was_pressed_from_menu = true
+    elseif key=="back" and state=="down" then
+      stop_menu()
+      start_menu("start_menu") 
     end
   end
 end
