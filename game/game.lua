@@ -392,14 +392,14 @@ function draw_tiles()
       print("The tile the want to draw == nil")
       v.image = gfx.loadpng("images/font/Z.png")
     end
-    if v.x-gameCounter<0 and v.visibility==true then
+    if v.x-gameCounter<0 and v.visibility==true then -- TILES WHICH ARE ON THE LOWER BOUNDARY OF THE SCREEN WIDTH
       local x0 = (gameCounter - v.x)
       local w0 = (v.x+v.width-gameCounter)
       screen:copyfrom(v.image, {x=x0, y=0, width=w0, height=v.height}, {x=0, y=v.y, width=w0, height=v.height},true)
-    elseif v.x+v.width > w+gameCounter and v.visibility==true then
-      screen:copyfrom(v.image,{x=0, y=0, width=w+gameCounter-v.x, height=v.height}
+    elseif v.x+v.width > w+gameCounter and v.visibility==true then -- TILES WHICH ARE ON THE UPPER BUNDARY OF SCREEN WIDTH
+        screen:copyfrom(v.image,{x=0, y=0, width=w+gameCounter-v.x, height=v.height}
         ,{x=v.x - gameCounter, y=v.y, width=w+gameCounter-v.x, height=v.height},true)
-    elseif v.visibility == true then
+    elseif v.visibility == true then -- TILES WHICH ARE NOT ON THE UPPER BOUNDARY OF THE SCREEN WIDTH NOR THE LOWER BOUNDARY OF SCREEN WIDTH
       screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
     end
   end
