@@ -292,7 +292,7 @@ function move_character()
   elseif player.cur_x<player.work_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
   end
-
+  -- MOVE CHARACTER ON THE Y-AXIS
   if Tcount==1 or Tcount==4 then
     for k=Tcount,Tcount+2, 1 do
       player.new_y=Y_position()
