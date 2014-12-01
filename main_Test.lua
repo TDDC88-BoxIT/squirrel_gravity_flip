@@ -10,7 +10,5 @@ require("game.tests.test_fail_and_success_handler")
 require("game.tests.test_level_config")
 require("game.tests.test_score")
 
--- INTEGRATION TESTS
-require("game.tests.test_integration")
-
+--Try
 os.exit(LuaUnit.run())
