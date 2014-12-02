@@ -3,22 +3,31 @@
 
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
   local s_width = screen:get_width()
---Collision detection for cloud and flame since they don't have fixed position compare to other tiles
-  for k,v in pairs(CloudSet) do
-    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
-      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-        print("Death caused by hitting Cloud")
-        get_killed()
-        return
+--Collision detection for flames, only canculate the columns of flames which close to the hero 
+  local x_cloud=math.floor((herox+gameCounter)/32)+1
+  for i = ((x_cloud-1)*Level.raw_level.height+1), x_cloud*Level.raw_level.height, 1 do
+    if Level.map_table[i] ~= nil then
+      v = tiles[Level.map_table[i]]
+      if v.gid == 9 then
+        if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
+          print("Death caused by hitting Cloud")
+          get_killed()
+          return
+        end
       end
     end
   end
-  for k,v in pairs(FlameSet) do
-    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
-      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-        print("Death caused by hitting Flame")
-        get_killed()
-        return
+  --Collision detection for flames, only canculate the rows of flames which close to the hero 
+  local y_flame=math.floor((heroy/32)+1)
+  for i = y_flame, ((Level.raw_level.width-1)*(Level.raw_level.height)+y_flame), (Level.raw_level.height) do
+    if Level.map_table[i] ~= nil then
+      v = tiles[Level.map_table[i]]
+      if v.gid==10 and v.x-gameCounter+v.width>0 and v.x-gameCounter<s_width then
+        if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
+          print("Death caused by hitting Flame")
+          get_killed()
+          return
+        end
       end
     end
   end
@@ -86,7 +95,34 @@ end
   end
   return nil
 end]]
-
+  --[[for k,v in pairs(CloudSet) do   
+    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
+      print("hero_x= "..herox)
+      print("hero_y= "..heroy)
+      print("old_function_x= "..v.x+gameCounter)
+      print("old_function_y= "..v.y)
+      print("------------------------")
+      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
+        print("Death caused by hitting Cloud")
+        get_killed()
+        return
+      end
+    end
+  end]]
+  --[[  for k,v in pairs(FlameSet) do
+    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
+      print("hero_x= "..herox)
+      print("hero_y= "..heroy)
+      print("old_function_x= "..v.x+gameCounter)
+      print("old_function_y= "..v.y)
+      print("------------------------")
+      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
+        print("Death caused by hitting Flame")
+        get_killed()
+        return
+      end
+    end
+  end]]
 -- purpose: Check Collision between two objects.
 -- input: (x,y) and (width, height) of Object A.
 -- input: (x,y) and (width, height) of Object B.
