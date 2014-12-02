@@ -288,6 +288,7 @@ function move_character()
     if (player.cur_x<-1) or (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
       print("Death caused by getting squeezed") 
       get_killed()
+      return
     end
   elseif player.cur_x<player.work_xpos then
       player.cur_x = player.cur_x+0.5*gameSpeed -- RESETS THE CHARACTER TO player.work_xpos IF IS HAS BEEN PUSHED BACK AND DOESN'T HIT ANYTHING ANYMORE
@@ -299,6 +300,7 @@ function move_character()
       if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
         print("Death caused by falling off grid")
         get_killed()
+        return
       end
       Y_check(falling)
     end
@@ -307,6 +309,7 @@ function move_character()
     if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
       print("Death caused by falling off grid")
       get_killed()
+      return
     end
       Y_check(falling)
   end

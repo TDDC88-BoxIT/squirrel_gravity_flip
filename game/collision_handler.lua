@@ -6,17 +6,19 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, til
 --Collision detection for cloud and flame since they don't have fixed position compare to other tiles
   for k,v in pairs(CloudSet) do
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
-      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil then
+      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
         print("Death caused by hitting Cloud")
         get_killed()
+        return
       end
     end
   end
   for k,v in pairs(FlameSet) do
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
-      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil then
+      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
         print("Death caused by hitting Flame")
         get_killed()
+        return
       end
     end
   end
@@ -38,11 +40,14 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, til
         elseif ob.type==3  and player.invulnerable==false then -- ob.type==3  IS AN OBSTACLE TILE        
           print("Death caused by hitting obstacle")
           get_killed()
+          return temp1,temp2,temp3,temp4
         elseif ob.type==4  then -- ob.type==4  IS A WIN TILE
           if get_game_type() == "tutorial" and tutorial_goal_is_fulfilled()==false then
             get_killed()
+            return temp1,temp2,temp3,temp4
           else
             levelwin()
+            break
           end
         end
       end
