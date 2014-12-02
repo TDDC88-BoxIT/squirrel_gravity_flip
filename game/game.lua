@@ -376,7 +376,7 @@ function call_draw_score()
     xplace = 100
     yplace = 10
   end
-  draw_score(tostring(current_level), xplace,yplace)
+  draw_score(current_level, xplace,yplace)
 end
 
 

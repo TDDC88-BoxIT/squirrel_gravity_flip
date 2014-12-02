@@ -38,6 +38,7 @@ end
 function change_game_speed(new_speed, time)
   set_game_speed(new_speed)
   if speed_timer~=nil then
+    speed_timer:stop()
     speed_timer=nil
   end
   speed_timer = sys.new_timer(time, "reset_game_speed")
@@ -49,11 +50,11 @@ end
 ]]
 function activate_invulnerability(time)
   if(player.invulnerable) then
-    return
+    invul_timer:stop()
   else
     player.invulnerable = true
-    invul_timer = sys.new_timer(time, "end_invulnerability")
   end
+    invul_timer = sys.new_timer(time, "end_invulnerability")
 end
 
 --[[
