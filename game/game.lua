@@ -92,7 +92,12 @@ end
 
 function load_font_images()
   if (gameBackground == nil) then
-    gameBackground = gfx.loadpng("images/level_sky.png")
+    if current_level == 1 then
+      gameBackground = gfx.loadpng("images/city_background.png")
+    else
+      gameBackground = gfx.loadpng("images/city_background2.png")
+    end
+    --gameBackground = gfx.loadpng("images/level_sky.png")
   end
 
   if number_image["0"] == nil then
@@ -138,13 +143,13 @@ function resume_game()
   change_character_timer = sys.new_timer(200, "update_game_character")
   if get_speed_timer()~=nil then
     if character:get_state() == "boost" then
-      change_game_speed(15, 3)
+      change_game_speed(15, 3000)
     else
-      change_game_speed(1, 3)
+      change_game_speed(1, 3000)
     end
   end
   if get_invul_timer()~=nil then
-    activate_invulnerability(10)
+    activate_invulnerability(10000)
   end
 end
 
@@ -401,7 +406,7 @@ function draw_screen()
 end
 
 function draw_background()
-  screen:copyfrom(gameBackground,nil,nil)
+  screen:copyfrom(gameBackground,nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
 end
 
 --[[ 
@@ -448,14 +453,14 @@ function move_cloud(cloud)
     cloud.directionTimer = 0
   end
   cloud.directionTimer = cloud.directionTimer + 1
-  if(cloud.directionTimer >= 20) then
+  if(cloud.directionTimer >= 54) then
     cloud.up = not cloud.up
     cloud.directionTimer = 0
   end
   if(cloud.up == true) then
-    cloud.y = cloud.y + 8
+    cloud.y = cloud.y + 3
   else
-    cloud.y = cloud.y - 8
+    cloud.y = cloud.y - 3
   end
 end
 

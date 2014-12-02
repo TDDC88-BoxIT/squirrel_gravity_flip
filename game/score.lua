@@ -1,5 +1,5 @@
 nr_of_scores_saved = 5
-
+file_prefix=""
 
 --@desc: reads all the high scores saved in score_table.txt and saves them in a table
 --@params: none
@@ -7,6 +7,7 @@ nr_of_scores_saved = 5
 --@author: Amanda Persson
 function read_from_file()
   score_board={} 
+  
   -- text file where score is saved is opened
   file = io.open(file_prefix .. "game/score_table.txt", "r")
   -- if the does not exist the ScoreTable will be empty, 
