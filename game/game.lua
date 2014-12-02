@@ -92,9 +92,9 @@ end
 
 function load_font_images()
   if (gameBackground == nil) then
-    if tonumber(current_level) <= 3 then
+    if tonumber(current_level) <= 4 then
       gameBackground = gfx.loadpng("images/city_background.png")
-    elseif tonumber(current_level) <= 6 then
+    elseif tonumber(current_level) <= 8 then
       gameBackground = gfx.loadpng("images/city_background2.png")
     else
       gameBackground = gfx.loadpng("images/city_background3.png")
