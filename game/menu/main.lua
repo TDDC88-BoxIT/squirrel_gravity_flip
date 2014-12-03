@@ -323,6 +323,7 @@ function menu_navigation(key, state)
         change_global_game_state(1)
         start_game("restart","current",0)
       elseif menu:get_indexed_item().id=="main_menu" then
+        stop_menu()
         start_menu("start_menu")
       elseif menu:get_indexed_item().id=="previouspage" then
         current_page = current_page - 1
