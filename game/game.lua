@@ -304,14 +304,14 @@ function move_character()
   local falling=0
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
-  if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height, tileset_start, tileset_end)~=nil then
+  if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height)~=nil then
     if islevelWon() then
       return
     end
     player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
     --This part is checking if the hero hit the tail by right side 
-    if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height, tileset_start, tileset_end)==nil) or 
-    (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height, tileset_start, tileset_end)==nil)then  
+    if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height)==nil) or 
+    (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height)==nil)then  
       falling=1
     end
     if (player.cur_x<-1) or (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
@@ -346,7 +346,7 @@ end
 
 function Y_check(falling)
   --Check if the hero has collision with the tiles or not, and if there will be a collision, adjust the y_position to fit the object.
-  local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height, tileset_start, tileset_end)
+  local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
   if islevelWon() then
       return
   else
@@ -553,12 +553,12 @@ end
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
     if direction_flag == "down" then
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height, tileset_start, tileset_end) ~= nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
         character:flip()
         direction_flag="up"
       end
     else
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height, tileset_start, tileset_end) ~= nil then
+      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then
         character:flip()
         direction_flag="down"
       end

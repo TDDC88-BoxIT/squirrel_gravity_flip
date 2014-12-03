@@ -1,7 +1,7 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 --Rebuild the hitTest, narrow the travel range to 4 tiles
 
-function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
+function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   local s_width = screen:get_width()
 --Collision detection for flames, only canculate the columns of flames which close to the hero 
   local x_cloud=math.floor((herox+gameCounter)/32)+1
