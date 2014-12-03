@@ -6,39 +6,35 @@ file_prefix=""
 --@return: the number of levels that have been read (nr of unlocked lvs) 
 --@author: Amanda Persson
 function read_from_file()
-  score_board={} 
-  
+  local score_board={} 
   -- text file where score is saved is opened
-  file = io.open(file_prefix .. "game/score_table.txt", "r")
+  file = io.open("game/score_table.txt", "r")
   -- if the does not exist the ScoreTable will be empty, 
   if file ~= nil then 
     -- the scores stored in the file are read
     local player_i =1
     local score_or_name = "name"
-    local player = ""
-    local score = ""
+    local player
+    local score
     local level_reads
     -- iterates through all text in score_table
-    for line in io.lines(file_prefix .. "game/score_table.txt") do
-      s_line = tostring(line)
+    for line in io.lines("game/score_table.txt") do
+      --line = tostring(line)
       -- checks whether the line contains the level,name or score and stores it as such
-      if string.sub(s_line,1,5) == "level" then
-        level_read = string.sub(s_line,6,string.len(s_line))
-        score_board[tostring(level_read)] = {}
+      if string.sub(line,1,5) == "level" then
+        level_read = tonumber(string.sub(line,6,string.len(line)))
+        score_board[level_read] = {}
         player_i = 1
-        score_or_name = "player"
-      elseif score_or_name== "player" then
-        player = s_line
-        score_or_name= "score"
-      elseif score_or_name == "score" then
-        score = s_line
-        score_or_name = "player"
-        score_board[tostring(level_read)][tostring(player_i)] = {player,score}
+      else
+        player = string.sub(line,1,3)
+        score = string.sub(line,5,string.len(line))
+        score_board[level_read][player_i] = {pl = player,sc = score}
         player_i = player_i+1 
       end
     end
     io.close(file)
-    return level_read
+    --return level_read
+    return score_board
   else
     return 0
   end
@@ -48,47 +44,53 @@ end
 --@params: player's name, score , level that has been played
 --@author: 
 function score_page(player,score,level)
-  local unlocked_levels = read_from_file()
-  if score_board[tostring(level)] == nil then
-    score_board[tostring(level)] = {}
-    unlocked_levels = unlocked_levels + 1
+  local sco = score
+  local unlocked_levels
+  -- GET SCOREBOARD FROM FILE
+  local score_board = read_from_file()
+  -- CHECK IF THERE ARE SOME PREVIOUS SCORES FROM THE LEVEL
+  if score_board[level] == nil then
+    score_board[level] = {}
   end
+  unlocked_levels = #score_board
   --if the score is good enough it is saved in its correct position which is given by the score
-  for i=1,nr_of_scores_saved do
-    if score_board[tostring(level)][tostring(i)]==nil then
-      score_board[tostring(level)][tostring(i)]={player,score}
+  for i=1, nr_of_scores_saved do
+    if score_board[level][i]==nil then
+      score_board[level][i]={pl=player,sc=sco}
       break
-    elseif score>= tonumber(score_board[tostring(level)][tostring(i)][2]) then
-      for t=nr_of_scores_saved-1,1,-1 do 
-        score_board[tostring(level)][tostring(t+1)] = score_board[tostring(level)][tostring(t)]
-      end
-      score_board[tostring(level)][tostring(i)]={player,score}
-      break
+    elseif sco>= tonumber(score_board[level][i].sc)  then
+      -- TEMPORARILY SAVING THE SCORE IN THE SCOREBOARD TO BE ABLE TO MOVIE IT DOWN IN THE SCOREBOARD 
+      local temp_sc = tonumber(score_board[level][i].sc)
+      -- ADDING THE NEW SCORE TO THE SCOREBOARD
+      score_board[level][i]={pl = player,sc = sco}
+      -- PUTTING THE TEMPORARY SCORE BACK AS THE SCORE VARIABLE AND CONTINUE THE FOR-LOOP
+      sco = temp_sc
     end
   end
-  save_to_file(score_board, unlocked_levels)
+  save_to_file(score_board)
 end 
 
 
 --@desc: Saves the entire table with score in score_table.txt , replaces earlier text
 --@param: table with scores, and the number of levels that has been unlocked by the player
 --@author: Amanda Persson
-function save_to_file(score_board, unlocked_levels)
+function save_to_file(score_board)
   -- if the file does not exist it is created
-  file = io.open(file_prefix .. "game/score_table.txt","w+")
-  io.output(file)
-  --the table with the scores is written to the file
-  for level_read=1, unlocked_levels do
-    io.write("level".. tostring(level_read).."\n")
-  -- for each level go through the level under here
-    for player_i=1,#score_board[tostring(level_read)] do
-      if score_board[tostring(level_read)][tostring(player_i)] ~= nil then
-        print(tostring(level_read).." : "..tostring(player_i))
-        io.write(score_board[tostring(level_read)][tostring(player_i)][1].."\n".. score_board[tostring(level_read)][tostring(player_i)][2].."\n") 
+  file = io.open("game/score_table.txt","w+")
+  if file~=nil then
+    io.output(file)
+    --the table with the scores is written to the file
+    for level_read=1, #score_board do
+      io.write("level"..level_read.."\n")
+      -- for each level go through the level under here
+      for player_i=1,#score_board[level_read] do
+        if score_board[level_read][player_i] ~= nil then
+          io.write(score_board[level_read][player_i].pl.." "..score_board[level_read][player_i].sc.."\n") 
+        end
       end
     end
+    io.close(file)
   end
-  io.close(file)
 end
 
 --@desc: Finds length of a table
@@ -156,14 +158,14 @@ end
 function draw_highscore(level, x_coordinate) 
   local position
   local y_coordinate
-  read_from_file()
+  local score_board=read_from_file()
   index = 1
   i=1
-  while score_board[tostring(level)][tostring(i)] ~= nil and index<=5  do
+  while score_board[level][i] ~= nil and index<=5  do
     y_coordinate = 180+60*(i-1)
     position = 1
-    draw_score(score_board[tostring(level)][tostring(i)][1], x_coordinate + 200, y_coordinate)
-    string_score= score_board[tostring(level)][tostring(i)][2] 
+    draw_score(score_board[level][i].pl, x_coordinate + 200, y_coordinate)
+    string_score= score_board[level][i].sc
     while position <= string.len(string_score) do
       draw_number(string.sub(string_score,position,position),position, x_coordinate, y_coordinate)
       position = position + 1
