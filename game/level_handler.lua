@@ -203,7 +203,6 @@ function Cloud_set()
   for k,v in pairs(tiles) do
     if v.gid==9 then
       CloudSet[cloud_index]=v
-      print("v"..v.name.." : "..cloud_index)
       cloud_index=cloud_index+1
     end
   end
@@ -215,7 +214,6 @@ function Flame_set()
   for k,v in pairs(tiles) do
     if v.gid==10 then
       FlameSet[flame_index]=v
-      print("v"..v.name.." : "..flame_index)
       flame_index=flame_index+1
     end
   end

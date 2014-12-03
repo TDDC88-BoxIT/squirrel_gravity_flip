@@ -68,7 +68,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, til
             return temp1,temp2,temp3,temp4
           else
             levelwin()
-            break
+            return temp1,temp2,temp3,temp4
           end
         end
       end

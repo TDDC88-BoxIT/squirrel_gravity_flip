@@ -305,6 +305,9 @@ function move_character()
   -- MOVE CHARACTER ON THE X-AXIS
   -- LOOP OVER EACH PIXEL THAT THE CHARACTER IS ABOUT TO MOVE AND CHECK IF IT HIT HITS SOMETHING
   if hitTest(gameCounter, Level.tiles, player.cur_x+1, player.cur_y, character.width, character.height, tileset_start, tileset_end)~=nil then
+    if islevelWon() then
+      return
+    end
     player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
     --This part is checking if the hero hit the tail by right side 
     if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height, tileset_start, tileset_end)==nil) or 
@@ -344,16 +347,20 @@ end
 function Y_check(falling)
   --Check if the hero has collision with the tiles or not, and if there will be a collision, adjust the y_position to fit the object.
   local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height, tileset_start, tileset_end)
-  if W==nil or falling==1 then
-    Tcount=Tcount+1
-    player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+  if islevelWon() then
+      return
   else
-    if direction_flag == "down" then
-      player.cur_y=B_T-32
-      Tcount=1
+    if W==nil or falling==1 then
+      Tcount=Tcount+1
+      player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
     else
-      player.cur_y=B_B
-      Tcount=1
+      if direction_flag == "down" then
+        player.cur_y=B_T-32
+        Tcount=1
+      else
+        player.cur_y=B_B
+        Tcount=1
+      end
     end
   end
 end
@@ -490,8 +497,8 @@ end
 @params: flame - A tile object identified as a flame.
 ]]
 function move_flame(flame)
-  local distanceToRightEdge = 1080 --1280 (screen width) minus player's relative screen position.
-  local distanceToLeftEdge = 232 --200 (character position) minus tile pixel size
+  local distanceToRightEdge = 950 --1280 (screen width) minus player's relative screen position.
+  local distanceToLeftEdge = 332 --200 (character position) minus tile pixel size
   if(flame.x - gameCounter < player.cur_x + distanceToRightEdge and flame.x - gameCounter > player.cur_x - distanceToLeftEdge) then -- Checks if the flame object is currently on-screen.
     flame.x = flame.x - gameSpeed*2.5    
   end
