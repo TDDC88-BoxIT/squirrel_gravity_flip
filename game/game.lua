@@ -250,7 +250,7 @@ function update_game_character()
 end
 
 function set_character_start_position()
-  player.work_xpos= 200 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
+  player.work_xpos= 300 -- WHERE WE WANT THE CHARACTER TO BE ON THE X-AXIS WHEN HE IS NOT PUSHED BACK
   player.cur_x = Level.character_start_pos_x 
   player.cur_y = Level.character_start_pos_y
   player.new_x = player.cur_x -- INITIALLY NEW X-POS IS THE SAME AS CURRENT POSITION
