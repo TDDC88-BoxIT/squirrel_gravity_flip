@@ -1,5 +1,4 @@
 nr_of_scores_saved = 5
-file_prefix=""
 
 --@desc: reads all the high scores saved in score_table.txt and saves them in a table
 --@params: none
@@ -13,7 +12,6 @@ function read_from_file()
   if file ~= nil then 
     -- the scores stored in the file are read
     local player_i =1
-    local score_or_name = "name"
     local player
     local score
     local level_reads
@@ -61,10 +59,12 @@ function score_page(player,score,level)
     elseif sco>= tonumber(score_board[level][i].sc)  then
       -- TEMPORARILY SAVING THE SCORE IN THE SCOREBOARD TO BE ABLE TO MOVIE IT DOWN IN THE SCOREBOARD 
       local temp_sc = tonumber(score_board[level][i].sc)
+      local temp_pl = score_board[level][i].pl
       -- ADDING THE NEW SCORE TO THE SCOREBOARD
       score_board[level][i]={pl = player,sc = sco}
       -- PUTTING THE TEMPORARY SCORE BACK AS THE SCORE VARIABLE AND CONTINUE THE FOR-LOOP
       sco = temp_sc
+      player = temp_pl
     end
   end
   save_to_file(score_board)

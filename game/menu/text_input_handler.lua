@@ -15,7 +15,7 @@ function menu_navigation_new_name(key,state)
       --Accepts a letter, allows you to write the next one 
       text_button_pressed = {0,0,0,0,0,0,0,0,0}
       nr_buttons_pressed = nr_buttons_pressed +1
-      update_menu()
+      draw_menu()
       draw_score(player_name, 600,600)
       gfx.update()
     elseif nr_buttons_pressed== 3 then
@@ -28,7 +28,7 @@ function menu_navigation_new_name(key,state)
   --The button backspace, removes a letter
     player_name =""
     nr_buttons_pressed = 0
-    update_menu()
+    draw_menu()
     draw_score(player_name, 600,600)
     gfx.update()
   elseif key=="red" and state=="down" then  
@@ -52,7 +52,7 @@ function menu_navigation_new_name(key,state)
       end
       text_button_pressed[9] = 0
     end 
-    update_menu()
+    draw_menu()
     draw_score(player_name, 600,600)
     gfx.update()
   end
@@ -82,7 +82,7 @@ function menu_navigation_new_name(key,state)
         end
         text_button_pressed[number] = 0
       end 
-      update_menu()
+      draw_menu()
       draw_score(player_name, 600,600)
       gfx.update()
       break
