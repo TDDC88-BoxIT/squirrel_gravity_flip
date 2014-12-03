@@ -256,12 +256,6 @@ function draw_menu()
     menu3:destroy()
     gfx.update()
   elseif menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
-    player_name = get_player_name()
-    if player_name == "" then
-      player_name= "AAA"
-    end
-    score_page(player_name, game_score, get_current_level())
-    call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
     draw_highscore(get_current_level(),800)
   else
@@ -269,10 +263,6 @@ function draw_menu()
     menu:destroy()
     gfx.update()
   end
-end
-
-function update_menu()
-  draw_menu()
 end
 
 
@@ -283,10 +273,10 @@ function menu_navigation(key, state)
   else
     if key=="down" and state=='down' then -- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF START MENU
       menu:increase_index()-- ALLOW USER TO NAVIGATE DOWN IF CURRENT ITEMS IS NOT LAST OF PAUSE MENU 
-      update_menu()   
+      draw_menu()   
     elseif key=="up" and state=='down' then
         menu:decrease_index()
-        update_menu()
+        draw_menu()
     elseif key=="ok" and state=='up' and was_pressed_from_menu == true then
       -- ACTIONS WHEN menu BUTTONS ARE PRESSED
       if menu:get_indexed_item().id=="start_new" then

@@ -9,6 +9,12 @@ function get_killed() -- TO BE CALLED WHEN THE SQUIRREL IS KILLED. DECREAES LIFE
 end
 
 function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
+ 	 player_name = get_player_name()
+    if player_name == "" then
+      player_name= "AAA"
+    end
+    score_page(player_name, game_score, get_current_level())
+    call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
  	level_won = true
 	stop_game()
 	change_global_game_state(0)
