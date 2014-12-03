@@ -161,7 +161,7 @@ function draw_highscore(level, x_coordinate)
   local score_board=read_from_file()
   index = 1
   i=1
-  while score_board[level][i] ~= nil and index<=5  do
+  for i=1, #score_board[level] do
     y_coordinate = 180+60*(i-1)
     position = 1
     draw_score(score_board[level][i].pl, x_coordinate + 200, y_coordinate)
