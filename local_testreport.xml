@@ -15,11 +15,6 @@
         <testcase classname="test_check_collision"
             name="test_check_collision.test_check_collision_return_type_number">
         </testcase>
-        <testcase classname="test_check_collision"
-            name="test_check_collision.test_check_collision_type_not_expected">
-            <failure type="Failure detected" >
-                <![CDATA[./game/collision_handler.lua:150: attempt to perform arithmetic on local 'ax1' (a nil value)]]></failure>
-        </testcase>
     </testsuite>
     <testsuite name="test_fail_and_success_handler">
         <testcase classname="test_fail_and_success_handler"
@@ -65,9 +60,7 @@
             name="test_score.test_read_from_file_return_not_nil">
         </testcase>
         <testcase classname="test_score"
-            name="test_score.test_read_from_file_return_type_number">
-            <failure type="Failure detected" >
-                <![CDATA[./game/tests/test_score.lua:19: Expected: a string value, actual: type table, value {{{pl="AAA", sc="5120"}, {pl="AAA", sc="630"}, {pl="AAA", sc="120"}}, {{pl="AAA", sc="830"}}}]]></failure>
+            name="test_score.test_read_from_file_return_type_table">
         </testcase>
         <testcase classname="test_score"
             name="test_score.test_read_from_file_return_zero_or_error">

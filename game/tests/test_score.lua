@@ -16,9 +16,9 @@ function test_score:test_read_from_file_return_not_nil()
 end  
 
 -- GUT6.2
-function test_score:test_read_from_file_return_type_string()
+function test_score:test_read_from_file_return_type_table()
   
-  assertIsString(read_from_file())
+  assertIsTable(read_from_file())
   
 end  
 

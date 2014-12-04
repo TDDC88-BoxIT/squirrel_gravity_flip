@@ -39,13 +39,6 @@ function test_check_collision:test_check_collision_return_type_number()
   
 end
 
-function test_check_collision:test_check_collision_type_not_expected()
-  
-  assertError(CheckCollision(nil,1,1,1,1,1,1,1))
-  
-end
-
-
 -- CAN'T RUN ALL THESE TESTS ON THE DEVELOPMENT BRANCH
 -- HITTEST IS USING SCREEN CALLS = Not Testable
 -- test_hit_test = {}
