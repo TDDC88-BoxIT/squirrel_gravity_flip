@@ -334,7 +334,7 @@ function menu_navigation(key, state)
 
       elseif (string.sub(menu:get_indexed_item().id, 1, 5) == "level") then
         if (string.find(menu:get_indexed_item().id, "locked") == nil) then
-          local level = string.sub(menu:get_indexed_item().id, 6, 6)
+          local level = string.sub(menu:get_indexed_item().id, 6, 7)
           stop_menu()
           change_global_game_state(1)
           start_game(level,"story",0)
