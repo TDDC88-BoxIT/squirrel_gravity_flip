@@ -11,5 +11,7 @@ require("game.tests.test_fail_and_success_handler")
 require("game.tests.test_level_config")
 require("game.tests.test_score")
 
---Try
-os.exit(LuaUnit.run())
+lu = LuaUnit.new()
+lu:setOutputType("Junit")
+lu:setFname("local_testreport")
+os.exit(lu:runSuite())

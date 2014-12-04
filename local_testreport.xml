@@ -1,0 +1,76 @@
+<testsuites>
+    <testsuite name="test_check_collision">
+        <testcase classname="test_check_collision"
+            name="test_check_collision.test_check_collision_boundaries_numbers">
+        </testcase>
+        <testcase classname="test_check_collision"
+            name="test_check_collision.test_check_collision_boundaries_numbers2">
+        </testcase>
+        <testcase classname="test_check_collision"
+            name="test_check_collision.test_check_collision_nil">
+        </testcase>
+        <testcase classname="test_check_collision"
+            name="test_check_collision.test_check_collision_not_nil">
+        </testcase>
+        <testcase classname="test_check_collision"
+            name="test_check_collision.test_check_collision_return_type_number">
+        </testcase>
+        <testcase classname="test_check_collision"
+            name="test_check_collision.test_check_collision_type_not_expected">
+            <failure type="Failure detected" >
+                <![CDATA[./game/collision_handler.lua:150: attempt to perform arithmetic on local 'ax1' (a nil value)]]></failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="test_fail_and_success_handler">
+        <testcase classname="test_fail_and_success_handler"
+            name="test_fail_and_success_handler.test_islevelWon_return_false">
+        </testcase>
+        <testcase classname="test_fail_and_success_handler"
+            name="test_fail_and_success_handler.test_islevelWon_return_not_nil">
+        </testcase>
+        <testcase classname="test_fail_and_success_handler"
+            name="test_fail_and_success_handler.test_prepare_fail_success_handlers_sets_false">
+        </testcase>
+    </testsuite>
+    <testsuite name="test_level_config">
+        <testcase classname="test_level_config"
+            name="test_level_config.test_read_unlocked_level_has_no_errors">
+        </testcase>
+        <testcase classname="test_level_config"
+            name="test_level_config.test_read_unlocked_level_return_not_nil">
+        </testcase>
+        <testcase classname="test_level_config"
+            name="test_level_config.test_read_unlocked_level_return_type_number">
+        </testcase>
+    </testsuite>
+    <testsuite name="test_power_up">
+        <testcase classname="test_power_up"
+            name="test_power_up.test_activate_power_up_global_game_state_is_zero">
+        </testcase>
+        <testcase classname="test_power_up"
+            name="test_power_up.test_activate_power_up_increasing_score">
+        </testcase>
+        <testcase classname="test_power_up"
+            name="test_power_up.test_activate_power_up_increasing_score_100_times">
+        </testcase>
+        <testcase classname="test_power_up"
+            name="test_power_up.test_activate_power_up_nil_as_parameter">
+        </testcase>
+        <testcase classname="test_power_up"
+            name="test_power_up.test_activate_power_up_score_is_minus">
+        </testcase>
+    </testsuite>
+    <testsuite name="test_score">
+        <testcase classname="test_score"
+            name="test_score.test_read_from_file_return_not_nil">
+        </testcase>
+        <testcase classname="test_score"
+            name="test_score.test_read_from_file_return_type_number">
+            <failure type="Failure detected" >
+                <![CDATA[./game/tests/test_score.lua:19: Expected: a string value, actual: type table, value {{{pl="AAA", sc="5120"}, {pl="AAA", sc="630"}, {pl="AAA", sc="120"}}, {{pl="AAA", sc="830"}}}]]></failure>
+        </testcase>
+        <testcase classname="test_score"
+            name="test_score.test_read_from_file_return_zero_or_error">
+        </testcase>
+    </testsuite>
+</testsuites>
