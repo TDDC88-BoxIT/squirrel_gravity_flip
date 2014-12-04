@@ -44,6 +44,7 @@ end
 function score_page(player,score,level)
   local sco = score
   local unlocked_levels
+  local new_high_score = false
   -- GET SCOREBOARD FROM FILE
   local score_board = read_from_file()
   -- CHECK IF THERE ARE SOME PREVIOUS SCORES FROM THE LEVEL
