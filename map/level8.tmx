@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="500" height="14" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="280" height="22" tilewidth="32" tileheight="32">
  <properties>
   <property name="character_start_pos_x" value="0"/>
   <property name="character_start_pos_y" value="12"/>
  </properties>
- <tileset firstgid="1" name="floor1" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32">
   <image source="../images/floor1.png" width="32" height="32"/>
  </tileset>
  <tileset firstgid="2" name="powerup1" tilewidth="32" tileheight="32">
@@ -19,7 +19,7 @@
  <tileset firstgid="5" name="powerup4" tilewidth="32" tileheight="32">
   <image source="../images/powerup4.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="6" name="winTile" tilewidth="32" tileheight="32">
+ <tileset firstgid="6" name="win" tilewidth="32" tileheight="32">
   <image source="../images/winTile.png" width="32" height="32"/>
  </tileset>
  <tileset firstgid="7" name="obstacle1" tilewidth="32" tileheight="32">
@@ -34,9 +34,9 @@
  <tileset firstgid="10" name="obstacle4" tilewidth="32" tileheight="32">
   <image source="../images/flame1.png" width="32" height="32"/>
  </tileset>
- <layer name="Tile Layer 1" width="500" height="14">
+ <layer name="Tile Layer 1" width="280" height="22">
   <data encoding="base64" compression="zlib">
-   eJztnIuKwjAQAOvjTu3/f/BROCHUprubbJ7OwCJINklb7Jhs9bIsy4UYNkI0bfa0nn/pc+CBdQ7afK+xe4lf5TEBwPi8Fvs9NiVnT0q+Jsfa748yvMYbmWfrCTiw/r++gpgZfA4wHteM3FJubTHmiH5d5SYASeBzgO8Cn38f0r7DrITr8/B1VvA5wFjkrM03UvZRvXx+cx7T2+c5dWJLuxpo6ghnjn+UmFRAan1+FK5B5ORbwOcAIGG5px554Chf8kUrn/eAh9u8n7UakbC2UWptfo+8f13SnB7L0fSBzwHGIXdtnorVI6nvWceMtYl9V5Ac1Yu3YvOoNT+8oOO+6H2u/ezG2mr64LoBgLRWtuzRHznnKF9yk2ZMq/eeQr+z+ty6RsQLMmcuf2NxutQGnwPMg3Vtbql/enpM25fHmDE3p+4nWPKke3kOHj7XuCR2DL15oXQN4LYLCY3LQ6TroHG+5jtBb9cNAHzI3SOXONvTLjWmFu1evdYRtWvLHj6vUT+fpQaf4nMrMWdb9uTxOcD4pNTNS/s8xzke/1FzRotn6TxpXT/fmP23XSEWn+fsy0g+1+bHwOcAc9LC51pP4/NzvH2uXXeG4PNPStVYcp+Ve4PPAfom9Zn2Gj5fd1HL59J9dev7sYujNjXx+O29Zc57Rx2NfzYnfD4e+BygLd51TqKPem6JubU+X7nn0bv/1sfdW+BzgLb8AWsqBec=
+   eJztm4tuwyAMRdOsr/X/P7iq1GoMQbGNjQ25R7IqTZAQQg6GZKdt206IaSOFUibHu/3WfaABtw3U+lrnjhJX4jVZIrnnWuNE+5zcdl3eAdrcvRugwOP9+5vEymj5Ze+oe2S/RODRLgKACOQvuuec0S8eHDVvS/OX9HdVNPzSk7u8kOS9Hs8xpZ2efpHuR4xq86UQpTI1bhaNSpDu78zCnkRPfQ4R8hcJnHtMHZca43fWsddC41mz3MOdhXQtapW7nCt/3zeZY2p1KMfo9Utv7iKFO661j2l5jIjUrmvU9c46D47mvNH9Qn12a2Upx5j1vnHWVPBLP9p+4c6h3uO0Z10xim9u+cBxTKuMtV+4/W29fq4x0i+e71BbY6sHDb9QxnbtGjzz7FJd6zXbTxYtKG5Jad0HioMojho5L3jN7SP9YonnXoWGX0bsv2j3i1fOIvELl5pDOGsoK79I+h1+mRfv/ZcXo9/leq6JOH7pyVtbfqHWr4H8hV/uiGj7hTovp3j4xQuqX6zWxL17vx8kfpH2+8p+odznWxbecJ5vDb/kz0zp/N/atPq3aCnc9VFUSn7RXicj9PYDerBom3d/9faj9vG9rztaeL/3A39wngvwH4s5PnLecJ8k4Jc4WPtlV/4FoAX8EgfkL2A14Jc4IH85HtL/IS99qxgx4Jc4IH8BqwG/xAH5C1gN+CUOR8hfIr+TmYn8W6qoAb/EwftbBQTCInKesK4JCA==
   </data>
  </layer>
 </map>
