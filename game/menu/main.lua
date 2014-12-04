@@ -76,7 +76,7 @@ function add_menu_items()
     menu:add_button("start_new",imageDir.."menuImg/start.png")
     menu:add_button("select_level", imageDir.."menuImg/select_level.png")
     menu:add_button("high_score",imageDir.."menuImg/highScore.png")
-    menu:add_button("settings",imageDir.."menuImg/settings.png")
+    menu:add_button("set_name",imageDir.."menuImg/setName.png")
     menu:add_button("tutorial",imageDir.."menuImg/tutorial.png")
     menu:add_button("exit",imageDir.."menuImg/exit.png") 
   elseif menuState == "pause_menu" then
@@ -298,7 +298,7 @@ function menu_navigation(key, state)
         -- COMMAND TO VIEW HIGH SCORE
         stop_menu()
         start_menu("highscore_menu")
-      elseif menu:get_indexed_item().id=="settings" then
+      elseif menu:get_indexed_item().id=="set_name" then
         -- COMMAND TO VIEW SETTINGS
         stop_menu()
         start_menu("new_name_menu")

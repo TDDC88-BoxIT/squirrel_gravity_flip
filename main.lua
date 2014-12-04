@@ -19,7 +19,7 @@ function love.load()
   key_translation["3"] = "3"
   key_translation["4"] = "4"
   key_translation["5"] = "5" 
-  key_translation["6"] = "6"
+  key_translation["6"] = "6"  
   key_translation["7"] = "7"
   key_translation["8"] = "8"
   key_translation["9"] = "9"
