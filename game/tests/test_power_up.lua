@@ -2,6 +2,7 @@ require("game.power_up")
 
 test_power_up ={}
 
+-- GUT5.1
 function test_power_up:test_activate_power_up_increasing_score()
   game_score = 0
   global_game_state = 1
@@ -14,6 +15,7 @@ function test_power_up:test_activate_power_up_increasing_score()
  
 end  
 
+-- GUT5.2
 function test_power_up:test_activate_power_up_increasing_score_100_times()
   
   game_score = 0
@@ -28,7 +30,7 @@ function test_power_up:test_activate_power_up_increasing_score_100_times()
  
 end  
 
-
+-- GUT5.3
 function test_power_up:test_activate_power_up_global_game_state_is_zero()
   
   global_game_state = 0
@@ -42,6 +44,7 @@ function test_power_up:test_activate_power_up_global_game_state_is_zero()
   
 end
 
+-- GUT5.4
 function test_power_up:test_activate_power_up_score_is_minus()
   global_game_state = 1
   
@@ -51,6 +54,7 @@ function test_power_up:test_activate_power_up_score_is_minus()
   
 end
 
+-- GUT5.5
 function test_power_up:test_activate_power_up_nil_as_parameter()
   
   global_game_state = 1
