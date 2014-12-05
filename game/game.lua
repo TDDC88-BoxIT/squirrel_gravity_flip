@@ -497,7 +497,7 @@ end
 @params: flame - A tile object identified as a flame.
 ]]
 function move_flame(flame)
-  local distanceToRightEdge = 950 --1280 (screen width) minus player's relative screen position.
+  local distanceToRightEdge = 1180 --1280 (screen width) minus player's relative screen position.
   local distanceToLeftEdge = 332 --200 (character position) minus tile pixel size
   if(flame.x - gameCounter < player.cur_x + distanceToRightEdge and flame.x - gameCounter > player.cur_x - distanceToLeftEdge) then -- Checks if the flame object is currently on-screen.
     flame.x = flame.x - gameSpeed*2.5    
