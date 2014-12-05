@@ -7,7 +7,7 @@ nr_of_scores_saved = 5
 function read_from_file()
   local score_board={} 
   -- text file where score is saved is opened
-  file = io.open("game/score_table.txt", "r")
+  file = io.open(file_prefix.."game/score_table.txt", "r")
   -- if the does not exist the ScoreTable will be empty, 
   if file ~= nil then 
     -- the scores stored in the file are read
@@ -16,7 +16,7 @@ function read_from_file()
     local score
     local level_reads
     -- iterates through all text in score_table
-    for line in io.lines("game/score_table.txt") do
+    for line in io.lines(file_prefix.."game/score_table.txt") do
       --line = tostring(line)
       -- checks whether the line contains the level,name or score and stores it as such
       if string.sub(line,1,5) == "level" then
@@ -77,7 +77,7 @@ end
 --@author: Amanda Persson
 function save_to_file(score_board)
   -- if the file does not exist it is created
-  file = io.open("game/score_table.txt","w+")
+  file = io.open(file_prefix.."game/score_table.txt","w+")
   if file~=nil then
     io.output(file)
     --the table with the scores is written to the file
