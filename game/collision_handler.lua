@@ -1,8 +1,7 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 --Rebuild the hitTest, narrow the travel range to 4 tiles
-
+local s_width = screen:get_width()
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
-  local s_width = screen:get_width()
 --Collision detection for flames, only canculate the columns of flames which close to the hero 
   local x_cloud=math.floor((herox+gameCounter)/32)+1
   for i = ((x_cloud-1)*Level.raw_level.height+1), (x_cloud+1)*Level.raw_level.height, 1 do
@@ -19,10 +18,15 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   end
   --Collision detection for flames, only canculate the rows of flames which close to the hero 
   local y_flame=math.floor((heroy/32)+1)
-  for i = y_flame, ((Level.raw_level.width-1)*(Level.raw_level.height)+y_flame), (Level.raw_level.height) do
+  local x_flame=math.floor((herox+gameCounter)/32)+1
+  --print("x_flame"..x_flame)
+  --print("y_flame"..y_flame)
+  --for i = y_flame, ((Level.raw_level.width-1)*(Level.raw_level.height)+y_flame), (Level.raw_level.height) do
+  for i= ((x_flame-1)*(Level.raw_level.height)+y_flame), ((x_flame-1+s_width/32)*(Level.raw_level.height)+y_flame), (Level.raw_level.height) do
     if Level.map_table[i] ~= nil then
       v = tiles[Level.map_table[i]]
-      if v.gid==10 and v.x-gameCounter+v.width>0 and v.x-gameCounter<s_width then
+      if v.gid==10 then
+        --print("gameCounter = "..(v.x-gameCounter+v.width))
         if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
           print("Death caused by hitting Flame")
           get_killed()
@@ -31,10 +35,11 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
       end
     end
   end
-  for i = y_flame+1, ((Level.raw_level.width-1)*(Level.raw_level.height)+y_flame+1), (Level.raw_level.height) do
+  --for i = y_flame+1, ((Level.raw_level.width-1)*(Level.raw_level.height)+y_flame+1), (Level.raw_level.height) do
+  for i= ((x_flame-1)*(Level.raw_level.height)+y_flame), ((x_flame-1+s_width/32)*(Level.raw_level.height)+y_flame), (Level.raw_level.height) do
     if Level.map_table[i] ~= nil then
       v = tiles[Level.map_table[i]]
-      if v.gid==10 and v.x-gameCounter+v.width>0 and v.x-gameCounter<s_width then
+      if v.gid==10 then
         if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
           print("Death caused by hitting Flame")
           get_killed()
