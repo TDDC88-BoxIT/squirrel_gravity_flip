@@ -53,8 +53,7 @@ function Level.load_level (level_number,game_type)
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
-
-  Level.attributes = loaded_level.attributes
+  set_game_boudries(screen:get_height(),0)
   -- Get all the tiles and saves them into the Level.tiles table
   Level.tiles = get_tiles()
   --Level.CloudSet = Cloud_set()

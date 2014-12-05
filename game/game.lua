@@ -62,7 +62,6 @@ function start_game(level,game_type,life)
   if Level.load_level(current_level,current_game_type)== "level_loaded" then
     prepare_fail_success_handler()
     load_font_images()
-    load_level_atttributes()
     create_game_character()
 
     if current_game_type=="tutorial" then
@@ -79,15 +78,6 @@ function start_game(level,game_type,life)
     stop_game()
     change_global_game_state(0)
     start_menu("start_menu")
-  end
-end
- 
--- LOADS THE LEVEL ATTRIBUTES IF THERE ARE ANY SPECIFIED IN THE LEVEL INPUT FILE
-function load_level_atttributes()
-  if (Level.attributes ~= nil) then
-    gameSpeed = Level.attributes.speed
-    upper_bound_y = Level.attributes.upper_bound_y
-    lower_bound_y = Level.attributes.lower_bound_y
   end
 end
 
@@ -551,6 +541,11 @@ end
 
 function get_game_type()
   return current_game_type
+end
+
+function set_game_boudries(upper_bound, lower_bound)
+  upper_bound_y = upper_bound
+  lower_bound_y = lower_bound
 end
 
 function game_navigation(key, state)
