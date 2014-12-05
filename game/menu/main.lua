@@ -260,6 +260,7 @@ function draw_menu()
     if get_game_type() ~= "tutorial" then
       draw_highscore(tonumber(get_current_level()),800)
     end
+    gfx.update()
   else
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
     menu:destroy()
