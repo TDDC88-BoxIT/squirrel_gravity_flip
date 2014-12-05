@@ -11,12 +11,14 @@ end
 function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
  	level_won = true
 	stop_game()
- 	player_name = get_player_name()
-    if player_name == "" then
-      player_name= "AAA"
-    end
-    score_page(player_name, game_score, get_current_level())
-    call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
+    if get_game_type() ~= "tutorial" then
+    	player_name = get_player_name()
+	    if player_name == "" then
+	      player_name= "AAA"
+	    end
+	    score_page(player_name, game_score, get_current_level())
+	    call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
+	end
 	change_global_game_state(0)
 	start_menu("levelwin_menu")
 end

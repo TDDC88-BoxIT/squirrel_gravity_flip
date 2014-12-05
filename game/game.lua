@@ -572,8 +572,8 @@ function game_navigation(key, state)
     pause_game()    
     change_global_game_state(0)
     start_menu("pause_menu")
+  --[[
   elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
-    activate_power_up("win")
     levelwin()
   elseif key=="star" and state=="up" then -- Testing purposes (S on keyboard). Should probably be commented out at some point.
     game_score = game_score + 1000
@@ -583,6 +583,7 @@ function game_navigation(key, state)
     else
       game_score = 0
     end
+    ]]
   end
 
   if current_game_type=="tutorial" and state=='up' then

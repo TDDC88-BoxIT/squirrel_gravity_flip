@@ -257,7 +257,9 @@ function draw_menu()
     gfx.update()
   elseif menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    draw_highscore(tonumber(get_current_level()),800)
+    if get_game_type() ~= "tutorial" then
+      draw_highscore(tonumber(get_current_level()),800)
+    end
   else
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
     menu:destroy()
