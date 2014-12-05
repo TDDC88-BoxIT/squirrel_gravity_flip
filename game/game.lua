@@ -33,6 +33,7 @@ local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=3;     --gravity
 local Tcount=1
+local touchGround = false
 
 -- tileset_start and tileset_end mantain the current tiles that displayed to screen based on gameCounter.
 tileset_start = 0
@@ -357,9 +358,11 @@ function Y_check(falling)
       if direction_flag == "down" then
         player.cur_y=B_T-32
         Tcount=1
+        touchGround = true
       else
         player.cur_y=B_B
         Tcount=1
+        touchGround = true
       end
     end
   end
@@ -459,14 +462,14 @@ function draw_tiles()
       print("The tile the want to draw == nil")
       v.image = gfx.loadpng("images/font/Z.png")
     end
-    if v.x-gameCounter<0 and v.visibility==true then -- TILES WHICH ARE ON THE LOWER BOUNDARY OF THE SCREEN WIDTH
+    if v.x-gameCounter<0 and v.x-gameCounter+v.width>0 and v.visibility==true then -- TILES WHICH ARE ON THE LOWER BOUNDARY OF THE SCREEN WIDTH
       local x0 = (gameCounter - v.x)
       local w0 = (v.x+v.width-gameCounter)
       screen:copyfrom(v.image, {x=x0, y=0, width=w0, height=v.height}, {x=0, y=v.y, width=w0, height=v.height},true)
     elseif v.x+v.width > w+gameCounter and v.visibility==true then -- TILES WHICH ARE ON THE UPPER BUNDARY OF SCREEN WIDTH
         screen:copyfrom(v.image,{x=0, y=0, width=w+gameCounter-v.x, height=v.height}
         ,{x=v.x - gameCounter, y=v.y, width=w+gameCounter-v.x, height=v.height},true)
-    elseif v.visibility == true then -- TILES WHICH ARE NOT ON THE UPPER BOUNDARY OF THE SCREEN WIDTH NOR THE LOWER BOUNDARY OF SCREEN WIDTH
+    elseif v.x-gameCounter+v.width > 0 and v.visibility == true then -- TILES WHICH ARE NOT ON THE UPPER BOUNDARY OF THE SCREEN WIDTH NOR THE LOWER BOUNDARY OF SCREEN WIDTH
       screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
     end
   end
@@ -553,15 +556,17 @@ end
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
     if direction_flag == "down" then
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
+      if touchGround == true  then
         character:flip()
         direction_flag="up"
       end
+      touchGround = false
     else
-      if hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then
+      if touchGround == true then
         character:flip()
         direction_flag="down"
       end
+      touchGround = false
     end
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
     pause_game()    
