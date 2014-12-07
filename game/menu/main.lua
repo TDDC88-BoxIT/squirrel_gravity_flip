@@ -42,6 +42,7 @@ local need_redraw = true
 
 function start_menu(state)
   menuState=state
+  need_redraw = true
 
   unlocked_level = read_unlocked_level()
   if menuState == "new_name_menu" then
