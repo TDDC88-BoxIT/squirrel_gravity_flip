@@ -518,10 +518,16 @@ end
 function Y_position() 
   if direction_flag == "down" then 
     player.new_y=player.cur_y+0.5*G*(Tcount-1+5)--since the curve is too sharp, use t-1 instead of 2t-1, and it need a start position 5
+    if math.abs(player.new_y-player.cur_y)>32 then
+      player.new_y=player.cur_y+32
+    end
     return player.new_y
     
   else       
     player.new_y=player.cur_y-0.5*G*(Tcount-1+5)
+    if math.abs(player.new_y-player.cur_y)>32 then
+      player.new_y=player.cur_y-32
+    end
     return player.new_y
   end
 end
