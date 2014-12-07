@@ -31,6 +31,7 @@ text_button_pressed = {0,0,0,0,0,0,0,0,0}
 nr_buttons_pressed = 0
 local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
 local was_pressed_from_menu = false
+local need_redraw = true
 
 
 
@@ -190,7 +191,7 @@ function add_menu_bling()
   if backgroundImage ~= nil then
     screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
   else
-    screen:fill({254, 254, 254, 128})
+    screen:fill({0, 0, 0, 128})
   end
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
@@ -213,8 +214,13 @@ function get_menu_state()
 end
 
 function draw_menu()
-  screen:clear()
-  if addBling==true then
+  if menuState ~= "pause_menu" then
+    screen:clear()
+  elseif need_redraw == true then
+    screen:fill({0, 0, 0, 128})
+    need_redraw = false
+  end
+  if addBling==true and menuState ~= "pause_menu" then
       add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
 
