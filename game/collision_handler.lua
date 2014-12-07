@@ -24,7 +24,6 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
     if Level.map_table[i] ~= nil then
       v = tiles[Level.map_table[i]]
       if v.gid==10 then
-        --print("gameCounter = "..(v.x-gameCounter+v.width))
         if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
           print("Death caused by hitting Flame")
           get_killed()
@@ -34,7 +33,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
     end
   end
   --for i = y_flame+1, ((Level.raw_level.width-1)*(Level.raw_level.height)+y_flame+1), (Level.raw_level.height) do
-  for i= ((x_flame-1)*(Level.raw_level.height)+y_flame), ((x_flame-1+s_width/32)*(Level.raw_level.height)+y_flame), (Level.raw_level.height) do
+  for i= ((x_flame-1)*(Level.raw_level.height)+y_flame+1), ((x_flame-1+s_width/32)*(Level.raw_level.height)+y_flame+1), (Level.raw_level.height) do
     if Level.map_table[i] ~= nil then
       v = tiles[Level.map_table[i]]
       if v.gid==10 then
@@ -156,6 +155,7 @@ function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
     local Y={{"ATop",ay1},{"ABottom",ay2},{"BTop",by1},{"BBottom",by2}}
     local B_T=Y[3][2]
     local B_B=Y[4][2]
+    --print("Y = "..Y[1][2].." : "..Y[2][2].." : "..Y[3][2].." : "..Y[4][2])
     local comp = function(a,b)
       return a[2] < b[2] 
     end

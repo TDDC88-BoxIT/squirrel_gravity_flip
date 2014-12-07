@@ -337,6 +337,7 @@ end
 
 function Y_check(falling)
   --Check if the hero has collision with the tiles or not, and if there will be a collision, adjust the y_position to fit the object.
+
   local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
   if islevelWon() then
       return
@@ -367,7 +368,7 @@ function Y_position()
       player.new_y= player.cur_y+32
     end
     return player.new_y
-  else       
+  else
     player.new_y=player.cur_y-0.5*G*(Tcount-1+5)
     if math.abs(player.new_y-player.cur_y)>32 then
       player.new_y= player.cur_y-32
