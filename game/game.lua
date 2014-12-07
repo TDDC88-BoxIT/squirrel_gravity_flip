@@ -68,7 +68,7 @@ function start_game(level,game_type,life)
       create_tutorial_helper(current_level)
     end
     set_character_start_position()
-    timer = sys.new_timer(20, "update_game")
+    timer = sys.new_timer(40, "update_game")
     pos_change = 0
     lives = life
     player.invulnerable = false
@@ -151,7 +151,7 @@ end
 
 function resume_game()
   load_font_images()
-  timer = sys.new_timer(20, "update_game")
+  timer = sys.new_timer(40, "update_game")
   change_character_timer = sys.new_timer(200, "update_game_character")
   if get_speed_timer()~=nil then
     if character:get_state() == "boost" then

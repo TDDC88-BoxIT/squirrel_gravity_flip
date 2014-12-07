@@ -193,7 +193,7 @@ end
 function character_object:update()
 	if self.character_surface == nil then
 		self.character_surface=gfx.new_surface(self.width, self.height)
-    --self.character_surface:clear()
+    self.character_surface:clear()
 	end
 	animate(self)
   	set_image(self)  	
