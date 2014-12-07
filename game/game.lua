@@ -496,7 +496,7 @@ function Y_check(falling)
   if islevelWon() then
       return
   else
-    if W==nil or falling==1 then
+    if W==nil or (falling==1 and W==nil) then
       Tcount=Tcount+1
       player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
     else
