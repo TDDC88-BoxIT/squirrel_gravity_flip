@@ -61,6 +61,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
         elseif ob.type==2  and ob.visibility == true then -- ob.type==2  IS A POWERUP TILE
           activate_power_up(ob.name)
           ob.visibility = false
+          table.insert(pending_redraw, ob.x)
         elseif ob.type==3  and player.invulnerable==false then -- ob.type==3  IS AN OBSTACLE TILE        
           print("Death caused by hitting obstacle")
           get_killed()

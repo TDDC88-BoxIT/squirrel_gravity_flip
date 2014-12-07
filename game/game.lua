@@ -34,6 +34,10 @@ local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=3;     --gravity
 local Tcount=1
 local touchGround = false
+local onscreen_buffer
+local w0 = screen:get_width()
+local h0 = screen:get_height()
+pending_redraw={}
 
 -- tileset_start and tileset_end mantain the current tiles that displayed to screen based on gameCounter.
 tileset_start = 0
@@ -63,6 +67,8 @@ function start_game(level,game_type,life)
     prepare_fail_success_handler()
     load_font_images()
     create_game_character()
+    update_tile_index()
+    set_up_buffer()
 
     if current_game_type=="tutorial" then
       create_tutorial_helper(current_level)
@@ -173,6 +179,7 @@ function stop_game()
   reset_game_speed()
   end_invulnerability()
   destroy_image()
+  destroy_buffer()
   if change_character_timer~=nil then
     change_character_timer:stop()
     change_character_timer=nil 
@@ -286,6 +293,154 @@ function update_tile_index()
   tileset_start = Level.map_table[istart]
   tileset_end = Level.map_table[iend]
 end
+
+-- find first index and last index of Level.tiles from the give x column.
+-- Input: column number.
+-- Output: first and last index of tiles that belong to given column.
+function find_col_from_index(first_x)
+  -- istart is first set the last index.
+  local istart = first_x * Level.raw_level.height+1
+  local iend = istart + 3*Level.raw_level.height
+  print("find_col_from_index, istart="..istart..", iend="..iend)
+  for i = istart, iend, 1 do
+    istart = i
+    if Level.map_table[i] ~=nil then
+      break
+    end
+  end
+  for i = iend, istart, -1 do
+    iend = i
+    if Level.map_table[i] ~=nil then
+      break
+    end
+  end
+  itileset_start = Level.map_table[istart]
+  itileset_end = Level.map_table[iend]
+  if itileset_start~=nil and itileset_end ~= nil and itileset_start<itileset_end then
+    return {itileset_start, itileset_end}
+  else
+    return {2, 1}
+  end
+end
+
+buffer_size = 0
+buffer_width = 32*3
+curindex = 1
+
+-- set up the tile buffer. malloc memory for each surface.
+function set_up_buffer()
+  onscreen_buffer={}
+  buffer_size= math.ceil(w0/buffer_width) + 1
+  for i = 1, buffer_size, 1 do
+    onscreen_buffer[i] = gfx.new_surface(buffer_width, h0)
+    onscreen_buffer[i]:clear()
+  end
+  for k = 1, #(Level.tiles), 1 do
+    v = Level.tiles[k]
+    if v.x >= buffer_width * buffer_size then
+      break
+    end
+    if v.gid ~= 9 and v.gid ~= 10 then
+      local curindex = (math.floor(v.x / buffer_width)) % buffer_size + 1
+      onscreen_buffer[curindex]:copyfrom(v.image, nil, {x=v.x % buffer_width, y=v.y, width=v.width, height=v.height}, true)
+    end
+  end
+end
+
+-- Destroy buffer when stop or pause game.
+function destroy_buffer()
+  for i = 1, buffer_size, 1 do
+    if onscreen_buffer[i]~=nil then
+      onscreen_buffer[i]:destroy()
+      onscreen_buffer[i] = nil
+    end
+  end
+end
+-- update certain buffer.
+-- Input: redraw_index, the index of buffers that need to be redraw.
+-- Input: first_x, the column number in that index buffer, used to find the tiles that need to be drawn.
+function update_buffer(redraw_index, first_x)
+  -- load new buffer
+  local col = find_col_from_index(first_x)
+  onscreen_buffer[redraw_index]:clear()
+  for i=col[1], col[2], 1 do
+    -- copy new tiles to one buffer
+    local v = Level.tiles[i]
+    if v.gid ~= 9 and v.gid ~= 10 and v.visibility == true then
+      onscreen_buffer[redraw_index]:copyfrom(v.image, nil, {x=v.x % buffer_width, y=v.y, width=v.width, height=v.height}, true)
+    end
+  end
+end
+
+function draw_tiles()
+
+  -- Step 1. check if we need load new buffer.
+  local newindex = math.floor(gameCounter / buffer_width) + 1
+  if newindex ~= curindex then
+    local first_x = math.floor((gameCounter - gameCounter%buffer_width + buffer_width*(buffer_size-1))/32)
+    update_buffer((newindex+buffer_size-2)%buffer_size+1, first_x)
+    curindex = newindex
+  end
+
+
+  local left_start_x = gameCounter%buffer_width
+  local left_width = buffer_width - left_start_x
+  local right_width = (gameCounter+w0)%buffer_width
+  local right_start_x = w0 - right_width
+
+  -- Step 2, redraw the buffer who have tiles that has changes its visibility.
+  local redraw_list = {}
+  local redraw_list_x = {}
+  for i=1, #(pending_redraw), 1 do
+
+    local reindex = (math.floor(pending_redraw[i] / buffer_width)  )% buffer_size +1
+    local dup = false
+    for k=1, #(redraw_list), 1 do
+      if redraw_list[k] == reindex then
+        dup = true
+      end
+    end
+    if dup == false then
+      table.insert(redraw_list, reindex)
+      redraw_list_x[reindex] = math.floor(pending_redraw[i]/32) - math.floor((pending_redraw[i]%buffer_width)/32)
+    end
+  end
+  pending_redraw={}
+
+  for k=1, #(redraw_list), 1 do
+    update_buffer(redraw_list[k], redraw_list_x[redraw_list[k]])
+  end
+
+  -- Step 3, draw tiles that not move by draw the buffers.
+  -- left one. we draw part of this tile.
+  screen:copyfrom(onscreen_buffer[(curindex-1)%buffer_size+1],
+    {x=left_start_x, y=0, width=left_width, height=h0},
+    {x=0, y=0, width=left_width, height = h0}, true)
+
+  local last_buffer = curindex - 2 + buffer_size
+  local not_show_threshold = left_width + buffer_width*(buffer_size-2)
+  if not_show_threshold > w0 then
+    last_buffer = last_buffer - 1
+  end
+
+  -- middle ones. we draw the entire buffer
+  for i=curindex +1, last_buffer, 1 do
+    screen:copyfrom(onscreen_buffer[(i-1)%buffer_size + 1],
+      nil,
+      {x=(i-curindex -1)*buffer_width + left_width, y=0, width=buffer_width, height = h0}, true)
+  end
+
+  --right one. we draw part of this tile.
+  if right_width > 0 then
+    screen:copyfrom(onscreen_buffer[(last_buffer)%buffer_size+1],
+      {x=0, y=0, width=right_width, height=h0},
+      {x=right_start_x, y=0, width=right_width, height = h0}, true)
+  end
+
+  -- Step 4, draw other tiles individually
+  draw_tiles_for_movable()
+end
+
 
 function update_score()
     game_score = game_score - 1
@@ -430,19 +585,19 @@ function draw_background()
   screen:copyfrom(gameBackground,nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
 end
 
---[[ 
+--[[
 LOOPS THROUGH TILES AND DRAWS THEM ON SCREEN
 WHERE THE TILES ARE DRAWN DEPENDS ON THE gameCounter WHICH STARTS TO COUNT FROM 0 WHEN THE GAME STARTS
 THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
-]]  
-function draw_tiles()
+
+The old draw_tiles have been removed, we add buffer surface to improve the performance.
+]]
+
+-- draw the movable tiles, ie, flame and cloud.
+function draw_tiles_for_movable()
   local sf = nil
-  local w = screen:get_width()
-  --for k,v in pairs(Level.tiles) do
   for k = tileset_start, tileset_end, 1 do
     v = Level.tiles[k]
-    -- This code can't run properly on the box because the difference
-    -- of screen:copyfrom function . Wait for further improvement
     if v.name == "obstacle3" then
       move_cloud(v)
     elseif v.name == "obstacle4" then
@@ -452,15 +607,17 @@ function draw_tiles()
       print("The tile the want to draw == nil")
       v.image = gfx.loadpng("images/font/Z.png")
     end
-    if v.x-gameCounter<0 and v.x-gameCounter+v.width>0 and v.visibility==true then -- TILES WHICH ARE ON THE LOWER BOUNDARY OF THE SCREEN WIDTH
-      local x0 = (gameCounter - v.x)
-      local w0 = (v.x+v.width-gameCounter)
-      screen:copyfrom(v.image, {x=x0, y=0, width=w0, height=v.height}, {x=0, y=v.y, width=w0, height=v.height},true)
-    elseif v.x+v.width > w+gameCounter and v.visibility==true then -- TILES WHICH ARE ON THE UPPER BUNDARY OF SCREEN WIDTH
-        screen:copyfrom(v.image,{x=0, y=0, width=w+gameCounter-v.x, height=v.height}
-        ,{x=v.x - gameCounter, y=v.y, width=w+gameCounter-v.x, height=v.height},true)
-    elseif v.x-gameCounter+v.width > 0 and v.visibility == true then -- TILES WHICH ARE NOT ON THE UPPER BOUNDARY OF THE SCREEN WIDTH NOR THE LOWER BOUNDARY OF SCREEN WIDTH
-      screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
+    if v.gid ==9 or v. gid == 10 then
+      if v.x-gameCounter<0 and v.x-gameCounter+v.width>0 and v.visibility==true then
+        local x1 = (gameCounter - v.x)
+        local w1 = (v.x+v.width-gameCounter)
+        screen:copyfrom(v.image, {x=x1, y=0, width=w1, height=v.height}, {x=0, y=v.y, width=w1, height=v.height},true)
+      elseif v.x+v.width > w0+gameCounter and v.visibility==true then
+          screen:copyfrom(v.image,{x=0, y=0, width=w0+gameCounter-v.x, height=v.height}
+          ,{x=v.x - gameCounter, y=v.y, width=w0+gameCounter-v.x, height=v.height},true)
+      elseif v.x-gameCounter+v.width > 0 and v.visibility == true then
+        screen:copyfrom(v.image,nil,{x=v.x-gameCounter,y=v.y,width=v.width,height=v.height},true)
+      end
     end
   end
 end

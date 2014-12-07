@@ -173,7 +173,7 @@ end
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
-  if (menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" or menuState == "highscore_menu") and backgroundImage == nil then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
+  if (menuState == "start_menu" or menuState == "level_menu" or menuState == "highscore_menu") and backgroundImage == nil then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
     backgroundImage = gfx.loadjpeg(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadjpeg(imageDir.."menuImg/levelwin.jpg")
@@ -183,9 +183,15 @@ function add_menu_bling()
     green_dash = gfx.loadpng(imageDir.."font/green_dash.png")
   elseif menuState == "gameover_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gameover.png")
+  elseif menuState == "pause_menu" then
+    backgroundImage = nil
   end
 
-  screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
+  if backgroundImage ~= nil then
+    screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
+  else
+    screen:fill({254, 254, 254, 128})
+  end
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
   thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
