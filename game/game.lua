@@ -472,7 +472,7 @@ function move_character()
   if Tcount==1 or Tcount==4 then
     for k=Tcount,Tcount+2, 1 do
       player.new_y=Y_position()
-      if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+      if (player.cur_y > upper_bound_y or player.cur_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
         print("Death caused by falling off grid")
         get_killed()
         return
@@ -481,7 +481,7 @@ function move_character()
     end
   else
     player.new_y=Y_position()
-    if (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
+    if (player.cur_y > upper_bound_y or player.cur_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
       print("Death caused by falling off grid")
       get_killed()
       return
