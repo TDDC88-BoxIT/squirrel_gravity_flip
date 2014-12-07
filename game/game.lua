@@ -503,12 +503,11 @@ function Y_check(falling)
       if direction_flag == "down" then
         player.cur_y=B_T-32
         Tcount=1
-        touchGround = true
       else
         player.cur_y=B_B
         Tcount=1
-        touchGround = true
       end
+      touchGround = true
     end
   end
 end
