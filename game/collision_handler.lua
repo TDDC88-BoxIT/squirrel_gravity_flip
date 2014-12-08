@@ -130,6 +130,8 @@ function buttonTest1(gameCounter,tileSet, herox, heroy, hero_width, hero_height,
        end
      end
    end
+ end
+
 --[[function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
   local w = get_screen_size().width
   for k = tileset_start, tileset_end, 1 do
