@@ -66,7 +66,7 @@ function test_score:test_table_length_return_length()
   
   expected = 5
   
-  assertEquals(test_table, expected)
+  assertEquals(table_length(test_table), expected)
   
 end
 
@@ -75,9 +75,9 @@ function test_score:test_table_length_return_length_with_empty_table()
   
   test_table = {}
   
-  expected = 0  
+  expected = 0
   
-  assertEquals(test_table, expected)
+  assertEquals(table_length(test_table), expected)
   
 end
 

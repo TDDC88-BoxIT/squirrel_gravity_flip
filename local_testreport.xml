@@ -73,18 +73,9 @@
         </testcase>
         <testcase classname="test_score"
             name="test_score.test_table_length_return_length">
-            <failure type="Failure detected" >
-                <![CDATA[./game/tests/test_score.lua:69: expected: 5, actual: {
-	1,
-	1,
-	1,
-	1,
-	1}]]></failure>
         </testcase>
         <testcase classname="test_score"
             name="test_score.test_table_length_return_length_with_empty_table">
-            <failure type="Failure detected" >
-                <![CDATA[./game/tests/test_score.lua:80: expected: 0, actual: {}]]></failure>
         </testcase>
     </testsuite>
 </testsuites>
