@@ -373,7 +373,6 @@ function update_buffer(redraw_index, first_x)
 end
 
 function draw_tiles()
-
   -- Step 1. check if we need load new buffer.
   local newindex = math.floor(gameCounter / buffer_width) + 1
   if newindex ~= curindex then
@@ -499,6 +498,7 @@ function Y_check(falling)
     if W==nil or (falling==1 and W==nil) then
       Tcount=Tcount+1
       player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+      touchGround = false
     else
       if direction_flag == "down" then
         player.cur_y=B_T-32
