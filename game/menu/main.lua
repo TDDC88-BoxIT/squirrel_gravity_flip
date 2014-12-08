@@ -2,11 +2,11 @@ require("../tool_box/menu_object")
 require("game/level_config")
 require("game/menu/text_input_handler")
 
-local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
-local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
-local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
-local level_menu_y = screen:get_height()/100
-local level_menu_x = screen:get_width()/100
+local menu_width
+local menu_x 
+local menu_y 
+local level_menu_y 
+local level_menu_x 
 local name_menu1_x = 400
 local name_menu1_y = 200
 local name_menu2_x = 550
@@ -32,16 +32,17 @@ nr_buttons_pressed = 0
 local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
 local was_pressed_from_menu = false
 
-
-
 --local squirrel1 = nil
 --local squirrel2 = nil
 
-
-
 function start_menu(state)
   menuState=state
-
+  menu_width= get_screen_size().width*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
+  menu_x = (get_screen_size().width-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
+  menu_y = (get_screen_size().height)/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
+  level_menu_y = (get_screen_size().height)/100
+  level_menu_x = (get_screen_size().width)/100
+  
   unlocked_level = read_unlocked_level()
   if menuState == "new_name_menu" then
     menu = menu_object(128,92)
@@ -154,7 +155,7 @@ end
 function configure_menu_height()
   menuState = get_menu_state()
   if menuState == "level_menu" and menuState == "highscore_menu" then
-    local box_height = (screen:get_height()-2*screen:get_height()/100-20*menu:get_item_amount())/menu:get_item_amount()
+    local box_height = (get_screen_size().height-2*get_screen_size().height/100-20*menu:get_item_amount())/menu:get_item_amount()
     menu:set_button_size(nil, box_height)
   end
   
@@ -185,7 +186,7 @@ function add_menu_bling()
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gameover.png")
   end
 
-  screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
+  screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=get_screen_size().width,height=get_screen_size().height})
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
   thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
@@ -193,9 +194,9 @@ function add_menu_bling()
   thunderAcorn.height=139
   thunderAcorn.width=101
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
-  screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
-  screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
-  screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  screen:copyfrom(thunderAcorn.img, nil,{x=get_screen_size().width-thunderAcorn.width,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  screen:copyfrom(thunderAcorn.img, nil,{x=0,y=get_screen_size().height-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  screen:copyfrom(thunderAcorn.img, nil,{x=get_screen_size().width-thunderAcorn.width,y=get_screen_size().height-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   
   -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
   thunderAcorn.img:destroy()

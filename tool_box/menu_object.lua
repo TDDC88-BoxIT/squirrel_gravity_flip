@@ -42,7 +42,7 @@ THIS IS DONE BY CALLING:
 require("class")
 -- THE MENU CONSTRUCTOR SETS START VALUES FOR THE MENU
 menu_object = class(function (self, menu_width, menu_height)
-    self.width = menu_width or math.floor(screen:get_width()*0.2)
+    self.width = menu_width or math.floor(get_screen_size().width*0.2)
     self.height = menu_height or 300
     self.button_height = 60
     self.button_width = math.floor(self.width*0.9)
@@ -156,7 +156,7 @@ local function make_background(self)
   local img_surface=nil
   img_surface = gfx.loadpng(self.menu_background)
   img_surface:premultiply()
-  self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height-(20+2*screen:get_height()/100)},true)
+  self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height-(20+2*get_screen_size().height/100)},true)
   img_surface:destroy()
 end
 
@@ -202,7 +202,7 @@ local function update(self)
     --self.menu_surface:clear()
   end
   --if self.height~=#self.menu_items*(self.button_height+20) then
-    --self:set_button_size(nil,(self.height-(#self.menu_items)*20-(2*screen:get_height()/100))/#self.menu_items) --ADJUSTS THE BUTTON HEIGHT IN CASE IT IS TOO BIG TO FIT ALL BUTTONS ON THE SCREEN (LEVEL MENU). TAKES INTO ACCOUNT THE FACT THAT THE LEVEL MENU STARTS 1/100 DOWN
+    --self:set_button_size(nil,(self.height-(#self.menu_items)*20-(2*get_screen_size().height/100))/#self.menu_items) --ADJUSTS THE BUTTON HEIGHT IN CASE IT IS TOO BIG TO FIT ALL BUTTONS ON THE SCREEN (LEVEL MENU). TAKES INTO ACCOUNT THE FACT THAT THE LEVEL MENU STARTS 1/100 DOWN
   --end
   make_background(self)
   make_buttons(self)

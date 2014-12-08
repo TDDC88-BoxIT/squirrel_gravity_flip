@@ -36,7 +36,7 @@ DRAWS TUTORIAL SPACE BAR ON SCREEN
 ]]
 function draw_tutorial_helper()
 	if tutorial_goal_fulfilled == false and tutorial_level==1  then
-		screen:copyfrom(tutorial_helper:get_surface(), nil,{x=(screen:get_width()/2)-150,y=400},true)
+		screen:copyfrom(tutorial_helper:get_surface(), nil,{x=(get_screen_size().width/2)-150,y=400},true)
 	end
 end
 

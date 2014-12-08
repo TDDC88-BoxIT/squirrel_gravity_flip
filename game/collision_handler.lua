@@ -3,7 +3,7 @@
 
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
 --Collision detection for flames, only canculate the columns of flames which close to the hero 
-  local s_width = screen:get_width()
+  local s_width = get_screen_size().width
   local x_cloud=math.floor((herox+gameCounter)/32)+1
   for i = ((x_cloud-1)*Level.raw_level.height+1), (x_cloud+1)*Level.raw_level.height, 1 do
     if Level.map_table[i] ~= nil then
@@ -81,7 +81,7 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
 end
 
 --[[function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
-  local w = screen:get_width()
+  local w = get_screen_size().width
   for k = tileset_start, tileset_end, 1 do
     v = tileSet[k]
     if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then

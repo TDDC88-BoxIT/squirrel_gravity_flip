@@ -34,7 +34,6 @@ local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=3;     --gravity
 local Tcount=1
 local touchGround = false
-
 -- tileset_start and tileset_end mantain the current tiles that displayed to screen based on gameCounter.
 tileset_start = 0
 tileset_end = 0
@@ -270,7 +269,7 @@ end
 -- Update tileset_start and tileset_end based on gameCounter.
 function update_tile_index()
   local istart = math.floor(gameCounter / Level.raw_level.tilewidth) * Level.raw_level.height
-  local iend = math.ceil((gameCounter + screen:get_width()) / Level.raw_level.tilewidth) * Level.raw_level.height
+  local iend = math.ceil((gameCounter + get_screen_size().width) / Level.raw_level.tilewidth) * Level.raw_level.height
   for i = istart, iend, 1 do
     istart = i
     if Level.map_table[i] ~=nil then
@@ -438,7 +437,7 @@ function draw_screen()
 end
 
 function draw_background()
-  screen:copyfrom(gameBackground,nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
+  screen:copyfrom(gameBackground,nil,{x=0,y=0,width=get_screen_size().width,height=get_screen_size().height})
 end
 
 --[[ 
@@ -448,7 +447,7 @@ THE TILES ARE DRAWN ON THEIR ORIGINAL X-POSITION - gameCounter
 ]]  
 function draw_tiles()
   local sf = nil
-  local w = screen:get_width()
+  local w = get_screen_size().width
   --for k,v in pairs(Level.tiles) do
   for k = tileset_start, tileset_end, 1 do
     v = Level.tiles[k]
