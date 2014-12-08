@@ -110,34 +110,6 @@ end
   end
   return nil
 end]]
-  --[[for k,v in pairs(CloudSet) do   
-    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
-      print("hero_x= "..herox)
-      print("hero_y= "..heroy)
-      print("old_function_x= "..v.x+gameCounter)
-      print("old_function_y= "..v.y)
-      print("------------------------")
-      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-        print("Death caused by hitting Cloud")
-        get_killed()
-        return
-      end
-    end
-  end]]
-  --[[  for k,v in pairs(FlameSet) do
-    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
-      print("hero_x= "..herox)
-      print("hero_y= "..heroy)
-      print("old_function_x= "..v.x+gameCounter)
-      print("old_function_y= "..v.y)
-      print("------------------------")
-      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-        print("Death caused by hitting Flame")
-        get_killed()
-        return
-      end
-    end
-  end]]
 -- purpose: Check Collision between two objects.
 -- input: (x,y) and (width, height) of Object A.
 -- input: (x,y) and (width, height) of Object B.
@@ -152,19 +124,24 @@ end]]
 function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
   local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
   if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1 then
-    local X={{"ALeft",ax1},{"ARight",ax2},{"BLeft",bx1},{"BRight",bx2}}
-    local Y={{"ATop",ay1},{"ABottom",ay2},{"BTop",by1},{"BBottom",by2}}
-    local B_T=Y[3][2]
-    local B_B=Y[4][2]
+    local B_L=bx1
+    local B_R=bx2
+    local B_T=by1
+    local B_B=by2
+    --local X={{"ALeft",ax1},{"ARight",ax2},{"BLeft",bx1},{"BRight",bx2}}
+    --local Y={{"ATop",ay1},{"ABottom",ay2},{"BTop",by1},{"BBottom",by2}}
+    --local B_T=Y[3][2]
+    --local B_B=Y[4][2]
     --print("Y = "..Y[1][2].." : "..Y[2][2].." : "..Y[3][2].." : "..Y[4][2])
-    local comp = function(a,b)
-      return a[2] < b[2] 
-    end
-    table.sort(X, comp)
-    table.sort(Y,comp)
-    local W=X[3][2]-X[2][2]
-    local H=Y[3][2]-Y[2][2]
-    return W,H,B_T,B_B
+    --local comp = function(a,b)
+      --return a[2] < b[2] 
+    --end
+    --table.sort(X, comp)
+    --table.sort(Y,comp)
+    --local W=X[3][2]-X[2][2]
+    --local H=Y[3][2]-Y[2][2]
+    --return W,H,B_T,B_B
+    return B_L, B_R, B_T, B_B
   end
   return nil
 end
