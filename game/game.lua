@@ -560,20 +560,15 @@ end
 
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
-    --[[print("key = ok ---------------")
-    print(touchGround)
     if direction_flag == "down" then
-      print(hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height))
-    else
-      print(hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height))
-    end]]
-    if direction_flag == "down" then
-      if touchGround == true  then
+      --if touchGround == true  then
+      if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then 
         character:flip()
         direction_flag="up"
       end
     else
-      if touchGround == true then
+      --if touchGround == true then
+      if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then 
         character:flip()
         direction_flag="down"
       end
