@@ -1,8 +1,9 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
 --Rebuild the hitTest, narrow the travel range to 4 tiles
-local s_width = screen:get_width()
+
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
 --Collision detection for flames, only canculate the columns of flames which close to the hero 
+  local s_width = screen:get_width()
   local x_cloud=math.floor((herox+gameCounter)/32)+1
   for i = ((x_cloud-1)*Level.raw_level.height+1), (x_cloud+1)*Level.raw_level.height, 1 do
     if Level.map_table[i] ~= nil then
