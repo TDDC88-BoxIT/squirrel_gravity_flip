@@ -337,14 +337,18 @@ end
 
 function Y_check(falling)
   --Check if the hero has collision with the tiles or not, and if there will be a collision, adjust the y_position to fit the object.
-
   local W,H,B_T,B_B=hitTest(gameCounter, Level.tiles, player.cur_x, player.new_y, character.width, character.height)
   if islevelWon() then
       return
   else
+    --print("Before--------------out")
+    --print(touchGround)
     if W==nil or (falling==1 and W==nil) then
+      --print("Before--------------in")
+      --print(touchGround)
       Tcount=Tcount+1
       player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
+      touchGround = false
     else
       if direction_flag == "down" then
         player.cur_y=B_T-32
@@ -355,6 +359,8 @@ function Y_check(falling)
       end
       touchGround = true
     end
+    --print("After----------")
+    --print(touchGround)
   end
 end
 --[[Gravity equation
@@ -555,19 +561,25 @@ end
 
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
+    --[[print("key = ok ---------------")
+    print(touchGround)
+    if direction_flag == "down" then
+      print(hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height))
+    else
+      print(hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height))
+    end]]
     if direction_flag == "down" then
       if touchGround == true  then
         character:flip()
         direction_flag="up"
       end
-      touchGround = false
     else
       if touchGround == true then
         character:flip()
         direction_flag="down"
       end
-      touchGround = false
     end
+    touchGround = false
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
     pause_game()    
     change_global_game_state(0)
