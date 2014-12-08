@@ -714,7 +714,8 @@ function game_navigation(key, state)
   if key=="ok" and state== 'down' then
     if direction_flag == "down" then
       --if touchGround == true  then
-      if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then 
+      if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
+      --if buttonTest1(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height,direction_flag) ~= nil then 
         character:flip()
         direction_flag="up"
       end
@@ -722,6 +723,7 @@ function game_navigation(key, state)
     else
       --if touchGround == true then
       if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then
+      --if buttonTest1(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height,direction_flag) ~= nil then
         character:flip()
         direction_flag="down"
       end
