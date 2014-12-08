@@ -110,34 +110,7 @@ end
   end
   return nil
 end]]
-  --[[for k,v in pairs(CloudSet) do   
-    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
-      print("hero_x= "..herox)
-      print("hero_y= "..heroy)
-      print("old_function_x= "..v.x+gameCounter)
-      print("old_function_y= "..v.y)
-      print("------------------------")
-      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-        print("Death caused by hitting Cloud")
-        get_killed()
-        return
-      end
-    end
-  end]]
-  --[[  for k,v in pairs(FlameSet) do
-    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<s_width then
-      print("hero_x= "..herox)
-      print("hero_y= "..heroy)
-      print("old_function_x= "..v.x+gameCounter)
-      print("old_function_y= "..v.y)
-      print("------------------------")
-      if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-        print("Death caused by hitting Flame")
-        get_killed()
-        return
-      end
-    end
-  end]]
+
 -- purpose: Check Collision between two objects.
 -- input: (x,y) and (width, height) of Object A.
 -- input: (x,y) and (width, height) of Object B.
