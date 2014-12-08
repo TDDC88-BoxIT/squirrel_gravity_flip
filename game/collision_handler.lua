@@ -96,6 +96,40 @@ function buttonTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
   end
   return nil
 end
+
+function buttonTest1(gameCounter,tileSet, herox, heroy, hero_width, hero_height, direction_flag)
+  --Check the 4 tiles around the character if they have collision
+  local inputSet_up= {}
+  local inputSet_down= {}
+  local x_n=math.floor((herox+gameCounter)/32)+1---the n'th tile in the column
+  local y_n=math.floor(heroy/32)+1  -- the n'th tile in the row
+  inputSet_up={(x_n-1)*(Level.raw_level.height)+y_n, x_n*(Level.raw_level.height)+y_n}
+  inputSet_down={(x_n-1)*(Level.raw_level.height)+y_n+1, x_n*(Level.raw_level.height)+y_n+1}
+  if direction_flag == "down" then
+    for i=1, 2, 1 do
+      if Level.map_table[inputSet_down[i]] ~=nil then
+        local ob= tiles[Level.map_table[inputSet_down[i]]]
+        local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, ob.x-gameCounter, ob.y, ob.width, ob.height)
+        if temp1 ~= nil then
+          if ob.type ==1 then
+            return temp1,temp2,temp3,temp4
+          end
+        end
+      end
+    end
+  else
+    for i=1, 2, 1 do
+      if Level.map_table[inputSet_up[i]] ~=nil then
+        local ob= tiles[Level.map_table[inputSet_up[i]]]
+        local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, ob.x-gameCounter, ob.y, ob.width, ob.height)
+        if temp1 ~= nil then
+          if ob.type ==1 then
+            return temp1,temp2,temp3,temp4
+          end
+        end
+       end
+     end
+   end
 --[[function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
   local w = get_screen_size().width
   for k = tileset_start, tileset_end, 1 do
