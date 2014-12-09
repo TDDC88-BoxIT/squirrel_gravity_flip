@@ -48,6 +48,7 @@ number_image={}
 
 -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
 function start_game(level,game_type,life) 
+  key_disabled = true
   gameCounter=0
   game_score=10000
 
@@ -85,6 +86,7 @@ function start_game(level,game_type,life)
     change_global_game_state(0)
     start_menu("start_menu")
   end
+  key_disabled = false
 end
 
 function load_font_images()
@@ -168,6 +170,7 @@ function resume_game()
 end
 
 function stop_game()
+  key_disabled = true
   if timer~=nil then
     timer:stop()
     timer = nil
@@ -180,6 +183,7 @@ function stop_game()
     change_character_timer:stop()
     change_character_timer=nil 
   end  
+  key_disabled = false
 end
 
 function pause_game()

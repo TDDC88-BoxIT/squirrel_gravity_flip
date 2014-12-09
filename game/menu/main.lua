@@ -27,6 +27,7 @@ local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 local current_character = 1
 local player_name = ""
+local key_disabled = false
 text_button_pressed = {0,0,0,0,0,0,0,0,0}
 nr_buttons_pressed = 0
 local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
@@ -41,6 +42,7 @@ local need_redraw = true
 
 
 function start_menu(state)
+  key_disabled = true
   menuState=state
   need_redraw = true
 
@@ -279,6 +281,7 @@ function draw_menu()
     menu:destroy()
     gfx.update()
   end
+  key_disabled = false
 end
 
 
