@@ -296,7 +296,7 @@ end
 function find_col_from_index(first_x)
   -- istart is first set the last index.
   local istart = first_x * Level.raw_level.height+1
-  local iend = istart + 3*Level.raw_level.height
+  local iend = istart + 3*Level.raw_level.height - 1
   print("find_col_from_index, istart="..istart..", iend="..iend)
   for i = istart, iend, 1 do
     istart = i
