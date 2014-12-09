@@ -454,7 +454,7 @@ function move_character()
     if islevelWon() then
       return
     end
-    player.cur_x = B_L-32-gameSpeed
+    player.cur_x =B_L-32
     --player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
     --This part is checking if the hero hit the tail by right side 
     if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height)==nil) or 
