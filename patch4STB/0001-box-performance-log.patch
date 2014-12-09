@@ -1,27 +1,27 @@
-From a6f8eb8860bf580bbc0d77eabfce3f58c6699944 Mon Sep 17 00:00:00 2001
+From 93f52a2b0b5328f01ed142f78ae90d847100e953 Mon Sep 17 00:00:00 2001
 From: wangrq <dlazycat@gmail.com>
-Date: Sun, 30 Nov 2014 16:45:34 +0100
-Subject: [PATCH] box_performance_log
+Date: Fri, 5 Dec 2014 09:52:12 +0100
+Subject: [PATCH] box performance log
 
 ---
  game/game.lua | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/game/game.lua b/game/game.lua
-index 1600298..7e5a0cf 100644
+index 59799bd..d8e9522 100644
 --- a/game/game.lua
 +++ b/game/game.lua
-@@ -325,30 +325,40 @@ function call_draw_score()
+@@ -410,30 +410,40 @@ function call_draw_score()
  end
  
  
 -
 +local t = sys.time()
  function draw_screen()
-   -- Measure the game speed of each function in millisecond.
-   -- Remove the -- to trace and optimize.
 +  logfile:write("Round start:"..(sys.time()-t)..", memory:"..gfx.get_memory_use().."\n")
 +  t = sys.time()
+   -- Measure the game speed of each function in millisecond.
+   -- Remove the -- to trace and optimize.
    move_character()
 +  logfile:write("After move:"..(sys.time()-t)..", memory:"..gfx.get_memory_use().."\n")
    if timer~=nil then
