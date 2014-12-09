@@ -83,31 +83,27 @@ end
 function load_font_images()
   if (gameBackground == nil) then
     if tonumber(current_level) == 1 then
-      gameBackground = gfx.loadpng("images/city_background3.png")
+      gameBackground = gfx.loadpng("images/city_background1.png")
     elseif tonumber(current_level) == 2 then
-      gameBackground = gfx.loadpng("images/underground_background1.png")
+      gameBackground = gfx.loadpng("images/city_background1.png")
     elseif tonumber(current_level) == 3 then
-      gameBackground = gfx.loadpng("images/city_background3.png")
-    elseif tonumber(current_level) == 4 then
       gameBackground = gfx.loadpng("images/city_background2.png")
+    elseif tonumber(current_level) == 4 then
+      gameBackground = gfx.loadpng("images/city_background3.png")
     elseif tonumber(current_level) == 5 then
       gameBackground = gfx.loadpng("images/underground_background1.png")
     elseif tonumber(current_level) == 6 then
       gameBackground = gfx.loadpng("images/underground_background1.png")
     elseif tonumber(current_level) == 7 then
-      gameBackground = gfx.loadpng("images/underground_background1.png")
+      gameBackground = gfx.loadpng("images/underground_background2.png")
     elseif tonumber(current_level) == 8 then
-      gameBackground = gfx.loadpng("images/city_background.png")
+      gameBackground = gfx.loadpng("images/underground_background3.png")
     elseif tonumber(current_level) == 9 then
-      gameBackground = gfx.loadpng("images/city_background.png")
+      gameBackground = gfx.loadpng("images/underground_background4.png")
     elseif tonumber(current_level) == 10 then
-      gameBackground = gfx.loadpng("images/city_background2.png")
-    elseif tonumber(current_level) == 11 then
-      gameBackground = gfx.loadpng("images/city_background3.png")
-    elseif tonumber(current_level) == 12 then
-      gameBackground = gfx.loadpng("images/underground_background1.png")
+      gameBackground = gfx.loadpng("images/underground_background5.png")
     else
-      gameBackground = gfx.loadpng("images/city_background.png")
+      gameBackground = gfx.loadpng("images/underground_background1.png")
     end
   end
 
