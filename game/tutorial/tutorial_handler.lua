@@ -2,7 +2,7 @@ local tutorial_goal_fulfilled
 local tutorial_helper=nil
 local tutorial_helper_timer=nil
 local tutorial_level=nil
-local ok_pressed_times=0
+local ok_pressed_times
 local imageDir = "images/"
 
 
@@ -10,13 +10,12 @@ local imageDir = "images/"
 function create_tutorial_helper(level_number)
 	tutorial_level= level_number
 	tutorial_goal_fulfilled=false
+	ok_pressed_times=0
   	if tutorial_helper==nil and tutorial_level==1 then
     	tutorial_helper = character_object(236,219,imageDir.."tutorialImg/okButtonDown.png")
     	tutorial_helper:add_image(imageDir.."tutorialImg/okButtonUp.png")
-  	else
-    	tutorial_helper:reset()
+    	tutorial_helper_timer = sys.new_timer(500, "update_tutorial_helper")
   	end
-  	tutorial_helper_timer = sys.new_timer(500, "update_tutorial_helper")
 end
 
 function update_tutorial_helper()
@@ -28,28 +27,35 @@ function stop_tutorial_helper()
 	tutorial_goal_fulfilled=true
     tutorial_helper_timer:stop()
     tutorial_helper_timer=nil
+    tutorial_helper:destroy()
+    tutorial_helper=nil
 end
 
 --[[
 DRAWS TUTORIAL SPACE BAR ON SCREEN
 ]]
 function draw_tutorial_helper()
-	if tutorial_goal_fulfilled == false then
-		screen:copyfrom(tutorial_helper:get_surface(), nil,{x=(screen:get_width()/2)-150,y=400},true)
+	if tutorial_goal_fulfilled == false and tutorial_level==1  then
+		screen:copyfrom(tutorial_helper:get_surface(), nil,{x=(get_screen_size().width/2)-150,y=400},true)
 	end
 end
 
 function update_tutorial_handler(key)
 	if key=='ok' then
 		ok_pressed_times=ok_pressed_times+1
-	end
-	check_tutorial_goal_fulfillment()
-end
-
-function check_tutorial_goal_fulfillment()
-	if tutorial_level==1 then
-		if ok_pressed_times==1 then
+		if tutorial_level==1 then
+			if ok_pressed_times==1 then
+				tutorial_goal_fulfilled=true
+			end
+		else
 			tutorial_goal_fulfilled=true
 		end
 	end
+	if tutorial_goal_fulfilled==true and tutorial_helper_timer~=nil then
+		stop_tutorial_helper()
+	end
+end
+
+function tutorial_goal_is_fulfilled()
+	return tutorial_goal_fulfilled
 end

@@ -8,7 +8,6 @@ sys = require('sys')
 
 function love.load()
   --print('love.load')
-  image = love.graphics.newImage("tv_picture.jpg")
   love.keyboard.setKeyRepeat(true)
   first_run = true
   
@@ -20,12 +19,12 @@ function love.load()
   key_translation["3"] = "3"
   key_translation["4"] = "4"
   key_translation["5"] = "5" 
-  key_translation["6"] = "6"
+  key_translation["6"] = "6"  
   key_translation["7"] = "7"
   key_translation["8"] = "8"
   key_translation["9"] = "9"
   key_translation[" "] = "ok"
-  key_translation["up"] = "up"
+  key_translation["up"] = "up"  
   key_translation["down"] = "down"
   key_translation["left"] = "left"
   key_translation["right"] = "right"
@@ -62,14 +61,9 @@ function love.load()
   key_translation["d"] = "record_list"
   key_translation["f"] = "play_list"
   key_translation["u"] = "mute"
-  
-  
-  require('game/main')
-  --require('squirrel_game/main')
+
   buffer_screen = screen
-  require('game.game')
-  --require('test')
-  --require('squirrel_game.menu')
+  require('game.main')
 end
 
 

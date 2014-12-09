@@ -51,13 +51,24 @@ character_object = class(function (self, character_width, character_height, char
 
 	self.width = character_width or 50
 	self.height = character_height or 50
-	self.character_images={}
-	self.character_flipped_images={}
+	self.character_images={
+		boost={},
+		invulnerable={},
+		slow={},
+		normal={}
+	}
+	self.character_state="normal" 		-- THE CHARACTER CAN BE IN SEVERAL STATES DEPENDING ON WHAT POWERUP IS BEING USED
+	self.character_flipped_images={
+		boost={},
+		invulnerable={},
+		slow={},
+		normal={}
+	}
 	self.current_character_image=1	-- DETERMINES WHICH CHARACTER IMAGE WILL BE DISPLAYED CURRENTLY
 	self.character_surface=nil
 	self.show_flipped_images = false -- DETERMINES WHICH SET OF CHARACTER IMAGES THAT WILL BE SHOWN
 	if character_img ~= nil then
-		self:add_image(character_img) 
+		self:add_image(character_img,"normal") 
 	end
 	self:update()
 end)
@@ -75,28 +86,58 @@ function character_object:get_size()
 end
 
 -- ADDS NEW MENU ITEMS
-function character_object:add_image(img_Path)
-	table.insert(self.character_images, #self.character_images+1, img_Path)
+function character_object:add_image(img_Path,state)
+	if state ~= nil then
+		table.insert(self.character_images[state], #self.character_images[state]+1, img_Path)
+	else
+		table.insert(self.character_images["normal"], #self.character_images["normal"]+1, img_Path)
+	end
 end
 
 -- ADDS NEW FLIPPED MENU ITEMS
-function character_object:add_flipped_image(img_Path)
-	table.insert(self.character_flipped_images, #self.character_flipped_images+1, img_Path)
+function character_object:add_flipped_image(img_Path,state)
+	table.insert(self.character_flipped_images[state], #self.character_flipped_images[state]+1, img_Path)
 end
 
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
 function character_object:get_current_image()
 	if self.show_flipped_images==true then
-  		return self.character_flipped_images[self.current_character_image]
+  		if self.character_state == "boost" then
+  			return self.character_flipped_images.boost[self.current_character_image]
+		elseif self.character_state == "invulnerable" then
+			return self.character_flipped_images.invulnerable[self.current_character_image]
+		elseif self.character_state == "slow" then
+			return self.character_flipped_images.slow[self.current_character_image]
+		else
+			return self.character_flipped_images.normal[self.current_character_image]
+		end
   	else
-  		return self.character_images[self.current_character_image]
+  		if self.character_state == "boost" then
+  			return self.character_images.boost[self.current_character_image]
+		elseif self.character_state == "invulnerable" then
+			return self.character_images.invulnerable[self.current_character_image]
+		elseif self.character_state == "slow" then
+			return self.character_images.slow[self.current_character_image]
+		else
+			return self.character_images.normal[self.current_character_image]
+		end
   	end
 end 
 
 -- CLEARS ALL ADDED MENU ITEMS
 function character_object:clear_images()
-  	self.character_images={}
-  	self.character_flipped_images={}
+  	self.character_images={
+  		boost={},
+		invulnerable={},
+		slow={},
+		normal={}
+  	}
+  	self.character_flipped_images={
+  		boost={},
+		invulnerable={},
+		slow={},
+		normal={}
+  	}
 end
 
 -- CHANGES THE BOOLEAN DETERMINING WHICH SET OM CHARACTER IMAGES THAT ARE TO BE DISPLAYED
@@ -114,17 +155,25 @@ function character_object:reset()
 	self.current_character_image=1
 end
 
+function character_object:get_state()
+	return self.character_state
+end
+
+function character_object:set_state(state)
+	self.character_state = state
+end
+
 
 -- CHANGES THE IMAGE INDEX IN ORDER TO CREATE AN ANIMATION OF THE CHARACTER IMAGES
 local function animate(self)
 	if self.show_flipped_images==true then
-		if self.current_character_image<#self.character_flipped_images then
+		if self.current_character_image<#self.character_flipped_images[self.character_state] then
 			self.current_character_image=self.current_character_image+1
 		else
 			self.current_character_image=1
 		end
 	else
-		if self.current_character_image<#self.character_images then
+		if self.current_character_image<#self.character_images[self.character_state] then
 			self.current_character_image=self.current_character_image+1
 		else
 			self.current_character_image=1
@@ -135,6 +184,7 @@ end
 -- SETS THE IMAGE CURRENTLY INDEXED TO THE CHARACTER SURFACE
 local function set_image(self)
 	local sf = gfx.loadpng(self:get_current_image())
+  sf:premultiply()
 	self.character_surface:copyfrom(sf,nil,{x=0,y=0,width=self.width,height=self.height},true)
 	sf:destroy()
 end	
@@ -143,6 +193,7 @@ end
 function character_object:update()
 	if self.character_surface == nil then
 		self.character_surface=gfx.new_surface(self.width, self.height)
+    --self.character_surface:clear()
 	end
 	animate(self)
   	set_image(self)  	

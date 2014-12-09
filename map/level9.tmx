@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="666" height="22" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="character_start_pos_x" value="0"/>
+  <property name="character_start_pos_y" value="15"/>
+ </properties>
+ <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32">
+  <image source="../images/floor1.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="2" name="powerup1" tilewidth="32" tileheight="32">
+  <image source="../images/powerup1.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="3" name="powerup2" tilewidth="32" tileheight="32">
+  <image source="../images/powerup2.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="4" name="powerup3" tilewidth="32" tileheight="32">
+  <image source="../images/powerup3.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="5" name="powerup4" tilewidth="32" tileheight="32">
+  <image source="../images/powerup4.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="6" name="win" tilewidth="32" tileheight="32">
+  <image source="../images/winTile.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="7" name="obstacle1" tilewidth="32" tileheight="32">
+  <image source="../images/obstacleGroundSpike.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="8" name="obstacle2" tilewidth="32" tileheight="32">
+  <image source="../images/obstacleCeilingSpike.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="9" name="obstacle3" tilewidth="32" tileheight="32">
+  <image source="../images/obstacle3.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="10" name="obstacle4" tilewidth="32" tileheight="32">
+  <image source="../images/flame1.png" width="32" height="32"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="666" height="22">
+  <data encoding="base64" compression="zlib">
+   eJzt3ItuozAQheFstmqjvP8Dr6wVamsB9thz8eX/JCvdLsRgwHOShjwev/2h0RobAADAnReN1tCiMy55GgAAjOCt8HuP343mffMYnXPJ0+RpAAAiUHP73WXMnUTnXPI0eRoAAClqpj/G9Vp0ziVPk6cBALY+ojcAyFhmmrTeU2EbJaJzLnmaTA0As/sbvQELaa1zq9RT634jsuYOonMumXr+ax/AXqzmJGp8G8ZNz8pZMzI/WOQaq3mo5zmjcy5ZmgwNH1+P/7Xi7BE+Rr/GR9kODavmohpW+WXnMY2w0niTccqis/LOOXq3c00i+phwHO1ojetKtUqqdd8jzmHNvtJ6z4ZW6u943p08hY+9/XgvN6qf52UP7Xo1So1r7U+639J+XpXL/Tyu+To1x/ysn3w96b+T6HxEDvvW87rIyqpjfUdjP2evR3dG2rfaY6NVW63WS8uMNK653msiag73zJn59l697oikuS3S9e/67d2mZ8fPuV3qnLee3JKOV36/sFYWKt3XUdvHZ0PfwJlZ83Zp/m6pGdYk4+pRwy1z5rGcxz7s8tpR+5yWPN+IY1nKwdZq3/9v4XFOR4zXzFrH6ciUZ5897P07yNlzat0/TM6ElxHriwXPOXCE94ES65x5LFuzr7U1tPZ81P579Qgic6YVrWtBM49pnK+982XahpQXPgQ/S3i8Lru6p6N0bebr1VzLvfePfBVa6+vZ2RvsXX0PJt+PKTNCPasxy3YeeucHj5x5LL/aPCZ9z2DWuV37u9Ui93/0GlvKOqXm0V9JdC4if61l5ePCOSi3wpiMljNbx7R2vFuPyyzHU2qE616jH41tj6jFvTlrhuaVg6IacMXr+8AjPwMnuRby8bj6nDfuacxN3uPc+vmb0med8vfALeds67rgVU+oa/G5iAxGFsO+uAYwM8tzsuX5JNux+3Wmsc+94xKdiche1B8AclbXOXMQpDgn2kTnIvIX2QsArow+p707/z+3w/0878LjLqJzEfmL/AUAuxtt7u7NlVf/v1stu8ua0bmI/EX+AgDsIdWo6DxAI3+RvwAAWE90DqCRvwAAQLx/1SEq4g==
+  </data>
+ </layer>
+</map>
