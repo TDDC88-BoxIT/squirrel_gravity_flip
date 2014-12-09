@@ -336,7 +336,6 @@ function menu_navigation(key, state)
         if menuState == "pause_menu" then
           stop_game()
         end
-        stop_game()
         start_menu("start_menu")
       elseif menu:get_indexed_item().id=="previouspage" then
         current_page = current_page - 1
