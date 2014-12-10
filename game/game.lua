@@ -479,6 +479,9 @@ function move_character()
         return
       end
       Y_check(falling)
+      if Tcount==1 then
+        break
+      end
     end
   else
     player.new_y=Y_position()
