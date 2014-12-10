@@ -562,19 +562,19 @@ end
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
     if direction_flag == "down" then
-      --if touchGround == true  then
-      if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then 
+      if touchGround == true  then
+      --if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then 
         character:flip()
         direction_flag="up"
       end
     else
-      --if touchGround == true then
-      if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then 
+      if touchGround == true then
+      --if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then 
         character:flip()
         direction_flag="down"
       end
     end
-    touchGround = false
+    --touchGround = false
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
     pause_game()    
     change_global_game_state(0)
