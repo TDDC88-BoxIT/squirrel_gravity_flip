@@ -87,7 +87,11 @@ function stop_menu()
     menu2:destroy()
     menu2 = nil
   end
-  screen:clear() 
+  if menu3 ~= nil then
+    menu3:destroy()
+    menu3 = nil
+  end
+  screen:clear()
  end
 
 -- ADDS THE MENU ITEMS
