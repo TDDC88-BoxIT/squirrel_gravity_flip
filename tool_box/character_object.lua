@@ -204,3 +204,10 @@ end
 function character_object:get_surface()
   	return self.character_surface
 end
+
+function character_object:destroy()
+  for i=1, #self.character_images[self.character_state], 1 do
+    self.character_images[self.character_state][i]:destroy();
+    self.character_images[self.character_state][i]=nil
+  end
+end

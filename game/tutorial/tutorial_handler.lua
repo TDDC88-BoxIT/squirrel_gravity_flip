@@ -19,7 +19,6 @@ function create_tutorial_helper(level_number)
 end
 
 function update_tutorial_helper()
-  	tutorial_helper:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
   	tutorial_helper:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
 end
 

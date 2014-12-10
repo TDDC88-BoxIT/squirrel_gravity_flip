@@ -127,6 +127,7 @@ function load_font_images()
     number_image["7"] = gfx.loadpng("images/font/7.png")
     number_image["8"] = gfx.loadpng("images/font/8.png")
     number_image["9"] = gfx.loadpng("images/font/9.png")
+    number_image["A"] = gfx.loadpng("images/font/A.png")
     number_image["0"]:premultiply()
     number_image["1"]:premultiply()
     number_image["2"]:premultiply()
@@ -137,6 +138,7 @@ function load_font_images()
     number_image["7"]:premultiply()
     number_image["8"]:premultiply()
     number_image["9"]:premultiply()
+    number_image["A"]:premultiply()
   end
 end
 
