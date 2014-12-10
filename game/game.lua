@@ -33,7 +33,7 @@ local upper_bound_y = 700 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local lower_bound_y = 0 -- DEFAULT VALUE IF NOT SPECIFIED IN LEVEL INPUT FILE
 local G=3;     --gravity
 local Tcount=1
---local touchGround = false
+local touchGround = false
 local onscreen_buffer
 local w0 = screen:get_width()
 local h0 = screen:get_height()
@@ -127,6 +127,7 @@ function load_font_images()
     number_image["7"] = gfx.loadpng("images/font/7.png")
     number_image["8"] = gfx.loadpng("images/font/8.png")
     number_image["9"] = gfx.loadpng("images/font/9.png")
+    number_image["A"] = gfx.loadpng("images/font/A.png")
     number_image["0"]:premultiply()
     number_image["1"]:premultiply()
     number_image["2"]:premultiply()
@@ -137,6 +138,7 @@ function load_font_images()
     number_image["7"]:premultiply()
     number_image["8"]:premultiply()
     number_image["9"]:premultiply()
+    number_image["A"]:premultiply()
   end
 end
 
@@ -243,7 +245,6 @@ function add_character_images()
 end
 
 function update_game_character()
-  character:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
   character:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
 end
 
@@ -479,6 +480,9 @@ function move_character()
         return
       end
       Y_check(falling)
+      if Tcount==1 then
+        break
+      end
     end
   else
     player.new_y=Y_position()
@@ -500,7 +504,7 @@ function Y_check(falling)
     if W==nil or (falling==1 and W==nil) then
       Tcount=Tcount+1
       player.cur_y = player.new_y -- MOVE CHARACTER DOWNWARDS IF IT DOESN'T HIT ANYTHING
-      --touchGround = false
+      touchGround = false
     else
       if direction_flag == "down" then
         player.cur_y=B_T-32
@@ -509,7 +513,7 @@ function Y_check(falling)
         player.cur_y=B_B
         Tcount=1
       end
-      --touchGround = true
+      touchGround = true
     end
   end
 end
@@ -715,16 +719,16 @@ end
 function game_navigation(key, state)
   if key=="ok" and state== 'down' then
     if direction_flag == "down" then
-      --if touchGround == true  then
-      if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
+      if touchGround == true  then
+      --if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
       --if buttonTest1(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height,direction_flag) ~= nil then 
         character:flip()
         direction_flag="up"
       end
       --touchGround = false
     else
-      --if touchGround == true then
-      if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then
+      if touchGround == true then
+      --if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then
       --if buttonTest1(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height,direction_flag) ~= nil then
         character:flip()
         direction_flag="down"

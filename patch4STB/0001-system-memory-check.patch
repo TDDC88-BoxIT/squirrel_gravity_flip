@@ -1,0 +1,98 @@
+From a725fadda527bc0e807f0f309919b80f3be76142 Mon Sep 17 00:00:00 2001
+From: wangrq <dlazycat@gmail.com>
+Date: Wed, 10 Dec 2014 16:56:49 +0100
+Subject: [PATCH] system memory check
+
+---
+ game/fail_and_success_handler.lua | 4 ++++
+ game/game.lua                     | 8 ++++++++
+ game/menu/main.lua                | 4 ++++
+ 3 files changed, 16 insertions(+)
+
+diff --git a/game/fail_and_success_handler.lua b/game/fail_and_success_handler.lua
+index c9fc8cf..4b8cf5f 100644
+--- a/game/fail_and_success_handler.lua
++++ b/game/fail_and_success_handler.lua
+@@ -9,6 +9,8 @@ function get_killed() -- TO BE CALLED WHEN THE SQUIRREL IS KILLED. DECREAES LIFE
+ end
+ 
+ function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
++  logfile:write("Level won, entrance "..collectgarbage("count").."\n")
++  logfile:flush()
+  	level_won = true
+ 	stop_game()
+     if get_game_type() ~= "tutorial" then
+@@ -21,6 +23,8 @@ function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN ME
+ 	end
+ 	change_global_game_state(0)
+ 	start_menu("levelwin_menu")
++  logfile:write("Level won, entrance "..collectgarbage("count").."\n")
++  logfile:flush()
+ end
+ 
+ function prepare_fail_success_handler()
+diff --git a/game/game.lua b/game/game.lua
+index e755df9..d96b9a0 100644
+--- a/game/game.lua
++++ b/game/game.lua
+@@ -48,6 +48,8 @@ number_image={}
+ 
+ -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
+ function start_game(level,game_type,life) 
++  logfile:write("start_game, entrance "..collectgarbage("count").."\n")
++  logfile:flush()
+   key_disabled = true
+   gameCounter=0
+   game_score=10000
+@@ -87,6 +89,8 @@ function start_game(level,game_type,life)
+     start_menu("start_menu")
+   end
+   key_disabled = false
++  logfile:write("start_game, end "..collectgarbage("count").."\n")
++  logfile:flush()
+ end
+ 
+ function load_font_images()
+@@ -170,6 +174,8 @@ function resume_game()
+ end
+ 
+ function stop_game()
++  logfile:write("stop_game, entrance "..collectgarbage("count").."\n")
++  logfile:flush()
+   key_disabled = true
+   if timer~=nil then
+     timer:stop()
+@@ -184,6 +190,8 @@ function stop_game()
+     change_character_timer=nil 
+   end  
+   key_disabled = false
++  logfile:write("stop_game, end "..collectgarbage("count").."\n")
++  logfile:flush()
+ end
+ 
+ function pause_game()
+diff --git a/game/menu/main.lua b/game/menu/main.lua
+index 7df5c72..d5e9647 100644
+--- a/game/menu/main.lua
++++ b/game/menu/main.lua
+@@ -42,6 +42,8 @@ local need_redraw = true
+ 
+ 
+ function start_menu(state)
++  logfile:write("start_menu, entrance "..collectgarbage("count").."\n")
++  logfile:flush()
+   key_disabled = true
+   menuState=state
+   need_redraw = true
+@@ -64,6 +66,8 @@ function start_menu(state)
+   configure_menu_height()
+   menu:set_background(imageDir.."menuImg/menuBackground.png")
+   draw_menu()
++  logfile:write("start_menu, end "..collectgarbage("count").."\n")
++  logfile:flush()
+ end 
+ 
+ function stop_menu()
+-- 
+1.9.0.msysgit.0
+

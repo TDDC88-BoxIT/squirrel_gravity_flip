@@ -1,0 +1,45 @@
+From 7f540108025d9a5d3d5ecb73b1df1873e36d2fed Mon Sep 17 00:00:00 2001
+From: wangrq <dlazycat@gmail.com>
+Date: Wed, 10 Dec 2014 16:48:42 +0100
+Subject: [PATCH] another way to timer
+
+---
+ game/game.lua | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/game/game.lua b/game/game.lua
+index e755df9..e03df4f 100644
+--- a/game/game.lua
++++ b/game/game.lua
+@@ -75,7 +75,7 @@ function start_game(level,game_type,life)
+       create_tutorial_helper(current_level)
+     end
+     set_character_start_position()
+-    timer = sys.new_timer(40, "update_game")
++    timer = sys.new_timer(10, "update_game")
+     pos_change = 0
+     lives = life
+     player.invulnerable = false
+@@ -259,6 +259,9 @@ end
+ function update_game() 
+   -- if lives > 0 then
+   -- if game_score > 0 then
++  if timer~=nil then
++    timer:stop()
++  end
+   screen:clear()
+   update_tile_index()
+   draw_screen()
+@@ -272,6 +275,9 @@ function update_game()
+     return
+   end
+   gameCounter=gameCounter+gameSpeed -- CHANGES GAME SPEED FOR NOW
++    if timer~=nil then
++    timer:start()
++  end
+ end
+ 
+ -- Update tileset_start and tileset_end based on gameCounter.
+-- 
+1.9.0.msysgit.0
+
