@@ -87,16 +87,20 @@ end
 
 -- ADDS NEW MENU ITEMS
 function character_object:add_image(img_Path,state)
+  local img_data = gfx.loadpng(img_Path)
+  img_data:premultiply()
 	if state ~= nil then
-		table.insert(self.character_images[state], #self.character_images[state]+1, img_Path)
+		table.insert(self.character_images[state], #self.character_images[state]+1, img_data)
 	else
-		table.insert(self.character_images["normal"], #self.character_images["normal"]+1, img_Path)
+		table.insert(self.character_images["normal"], #self.character_images["normal"]+1, img_data)
 	end
 end
 
 -- ADDS NEW FLIPPED MENU ITEMS
 function character_object:add_flipped_image(img_Path,state)
-	table.insert(self.character_flipped_images[state], #self.character_flipped_images[state]+1, img_Path)
+  local img_data = gfx.loadpng(img_Path)
+  img_data:premultiply()
+	table.insert(self.character_flipped_images[state], #self.character_flipped_images[state]+1, img_data)
 end
 
 -- RETURNS THE MENU ITEM CURRENTLY INDEXED
@@ -183,29 +187,20 @@ end
 
 -- SETS THE IMAGE CURRENTLY INDEXED TO THE CHARACTER SURFACE
 local function set_image(self)
-	local sf = gfx.loadpng(self:get_current_image())
-  sf:premultiply()
-	self.character_surface:copyfrom(sf,nil,{x=0,y=0,width=self.width,height=self.height},true)
-	sf:destroy()
+	self.character_surface:copyfrom(self:get_current_image(),nil,{x=0,y=0,width=self.width,height=self.height},true)
 end	
 
 -- ASSEMBLES ALL MENU PARTS INTO A MENU
 function character_object:update()
 	if self.character_surface == nil then
 		self.character_surface=gfx.new_surface(self.width, self.height)
-    self.character_surface:clear()
 	end
+  self.character_surface:clear()
 	animate(self)
-  	set_image(self)  	
+  set_image(self)
 end
 
 -- RETURNS THE MENU SURFACE
 function character_object:get_surface()
   	return self.character_surface
-end 
-
--- DESTROYS THE CHARACTER OBJECT'S SURFACE
-function character_object:destroy()
-	self.character_surface:destroy()
-	self.character_surface=nil
 end
