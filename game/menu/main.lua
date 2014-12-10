@@ -71,6 +71,10 @@ function stop_menu()
     backgroundImage:destroy()
     backgroundImage = nil
   end
+  if thunderAcorn.img ~= nil then
+    thunderAcorn.img:destroy()
+    thunderAcorn.img = nil
+  end
   screen:clear() 
  end
 
@@ -198,18 +202,16 @@ function add_menu_bling()
   end
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
-  thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
-  thunderAcorn.img:premultiply()
-  thunderAcorn.height=139
-  thunderAcorn.width=101
+  if thunderAcorn.img == nil then
+    thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
+    thunderAcorn.img:premultiply()
+    thunderAcorn.height=139
+    thunderAcorn.width=101
+  end
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
   screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
-  
-  -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
-  thunderAcorn.img:destroy()
-
 end
 
 function get_menu_state()
