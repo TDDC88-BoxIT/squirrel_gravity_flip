@@ -75,6 +75,18 @@ function stop_menu()
     thunderAcorn.img:destroy()
     thunderAcorn.img = nil
   end
+  if menu ~= nil then
+    menu:destroy()
+    menu = nil
+  end
+  if menu1 ~= nil then
+    menu1:destroy()
+    menu1 = nil
+  end
+  if menu2 ~= nil then
+    menu2:destroy()
+    menu2 = nil
+  end
   screen:clear() 
  end
 
@@ -231,11 +243,9 @@ function draw_menu()
 
   if menuState == "level_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu:destroy()
     gfx.update()
   elseif menuState == "highscore_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=level_menu_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu:destroy()
     gfx.update()
   elseif menuState == "new_name_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
@@ -267,10 +277,6 @@ function draw_menu()
     for i=nr_buttons_pressed,2 do
       screen:copyfrom(dash, nil,{x=600+(i+1)*30,y=656,width=30,height=6},true)
     end
-
-    menu:destroy()
-    menu2:destroy()
-    menu3:destroy()
     gfx.update()
   elseif menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
@@ -280,7 +286,6 @@ function draw_menu()
     gfx.update()
   else
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu:destroy()
     gfx.update()
   end
   key_disabled = false
