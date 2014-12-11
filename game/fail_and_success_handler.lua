@@ -1,6 +1,6 @@
 local level_won=false
 
-function get_killed() -- TO BE CALLED WHEN THE SQUIRREL IS KILLED. DECREAES LIFE AND CALLS GAMEOVER MENU
+function get_killed() -- TO BE CALLED WHEN THE SQUIRREL IS KILLED. Calls game over menu.
 	reset_game_speed()
 	end_invulnerability()
 	stop_game()

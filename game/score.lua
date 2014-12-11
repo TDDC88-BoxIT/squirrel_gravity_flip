@@ -31,7 +31,6 @@ function read_from_file()
       end
     end
     io.close(file)
-    --return level_read
     return score_board
   else
     return 0

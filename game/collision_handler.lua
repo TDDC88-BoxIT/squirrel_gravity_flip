@@ -1,44 +1,38 @@
 -- LOOPS THROUGH ALL TILES AND DEPENDING ON TILE-TYPE HANDLES THEM DIFFERENTLY
---Rebuild the hitTest, narrow the travel range to 4 tiles
 local s_width = screen:get_width()
 function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
---Collision detection for flames, only canculate the columns of flames which close to the hero 
+--Collision detection for clouds, only calculate the columns of clouds closest to the hero 
   local x_cloud=math.floor((herox+gameCounter)/32)+1
   for i = ((x_cloud-1)*Level.raw_level.height+1), (x_cloud+1)*Level.raw_level.height, 1 do
     if Level.map_table[i] ~= nil then
       v = tiles[Level.map_table[i]]
       if v.gid == 9 then
         if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-          print("Death caused by hitting Cloud")
           get_killed()
           return
         end
       end
     end
   end
-  --Collision detection for flames, only canculate the rows of flames which close to the hero 
+  --Collision detection for flames, only calculate the rows of flames closest to the hero 
   local y_flame=math.floor((heroy/32)+1)
   local x_flame=x_cloud
-  --for i = y_flame, ((Level.raw_level.width-1)*(Level.raw_level.height)+y_flame), (Level.raw_level.height) do
   for i= ((x_flame-1)*(Level.raw_level.height)+y_flame), ((x_flame-1+s_width/32)*(Level.raw_level.height)+y_flame), (Level.raw_level.height) do
     if Level.map_table[i] ~= nil then
       v = tiles[Level.map_table[i]]
       if v.gid==10 then
         if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-          print("Death caused by hitting Flame")
           get_killed()
           return
         end
       end
     end
   end
-  --for i = y_flame+1, ((Level.raw_level.width-1)*(Level.raw_level.height)+y_flame+1), (Level.raw_level.height) do
   for i= ((x_flame-1)*(Level.raw_level.height)+y_flame+1), ((x_flame-1+s_width/32)*(Level.raw_level.height)+y_flame+1), (Level.raw_level.height) do
     if Level.map_table[i] ~= nil then
       v = tiles[Level.map_table[i]]
       if v.gid==10 then
         if CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height) ~=nil and player.invulnerable==false then
-          print("Death caused by hitting Flame")
           get_killed()
           return
         end
@@ -62,7 +56,6 @@ function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height)
           ob.visibility = false
           table.insert(pending_redraw, ob.x)
         elseif ob.type==3  and player.invulnerable==false then -- ob.type==3  IS AN OBSTACLE TILE        
-          print("Death caused by hitting obstacle")
           get_killed()
           return temp1,temp2,temp3,temp4
         elseif ob.type==4  then -- ob.type==4  IS A WIN TILE
@@ -135,36 +128,6 @@ function buttonTest1(gameCounter,tileSet, herox, heroy, hero_width, hero_height,
   end
   return nil
 end
---[[function hitTest(gameCounter,tileSet, herox, heroy, hero_width, hero_height, tileset_start, tileset_end)
-  local w = screen:get_width()
-  for k = tileset_start, tileset_end, 1 do
-    v = tileSet[k]
-    if v.x-gameCounter+v.width>0 and v.visibility==true and v.x-gameCounter<w then
-      --print("old_x= "..v.x-gameCounter.." : old_y= "..v.y)
-      local temp1,temp2,temp3,temp4 = CheckCollision(herox, heroy, hero_width, hero_height, v.x-gameCounter, v.y, v.width, v.height)
-      if temp1 ~= nil then
-        --print("old collision function")
-        --print("x="..v.x.." :y="..v.y)
-        if v.type==1 then -- v.type==1  IS A FLOOR TILE
-          return temp1,temp2,temp3,temp4
-        elseif v.type==2  and v.visibility == true then -- v.type==2  IS A POWERUP TILE
-          activate_power_up(v.name)
-          v.visibility = false
-        elseif v.type==3  and player.invulnerable==false then -- v.type==3  IS AN OBSTACLE TILE        
-          print("Death caused by hitting obstacle")
-          get_killed()
-        elseif v.type==4  then -- v.type==4  IS A WIN TILE
-          if get_game_type() == "tutorial" and tutorial_goal_is_fulfilled()==false then
-            get_killed()
-          else
-            levelwin()
-          end
-        end
-      end
-    end
-  end
-  return nil
-end]]
 
 -- purpose: Check Collision between two objects.
 -- input: (x,y) and (width, height) of Object A.
@@ -184,18 +147,6 @@ function CheckCollision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
     local B_R=bx2
     local B_T=by1
     local B_B=by2
-    --local X={{"ALeft",ax1},{"ARight",ax2},{"BLeft",bx1},{"BRight",bx2}}
-    --local Y={{"ATop",ay1},{"ABottom",ay2},{"BTop",by1},{"BBottom",by2}}
-    --local B_T=Y[3][2]
-    --local B_B=Y[4][2]
-    --local comp = function(a,b)
-      --return a[2] < b[2]
-    --end
-    --table.sort(X, comp)
-    --table.sort(Y,comp)
-    --local W=X[3][2]-X[2][2]
-    --local H=Y[3][2]-Y[2][2]
-    --return W,H,B_T,B_B
     return B_L, B_R, B_T, B_B
   end
   return nil

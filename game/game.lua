@@ -1,13 +1,3 @@
--- version 1.0
-
--- require("squirrel_game.menu")
--- enter_menu()
-
--- dir = 'squirrel_game/'
-
---package.path = package.path .. arg[1] .. "\\game\\?.lua"
---package.path = package.path .. "C:\\TDDC88\\gameproject\\api_squirrel_game\\?.lua"
-
 require ("game/level_handler")
 require ("game/collision_handler")
 require ("game/fail_and_success_handler")
@@ -151,8 +141,6 @@ function destroy_image()
     life:destroy()
     life = nil
   end
-  -- Should destroy number_image here.
-  -- But level_win -> draw_menu will use the varables.
 end
 
 function resume_game()
@@ -258,8 +246,6 @@ end
 
 -- UPDATES THE TILE MOVEMENT BY MOVING THEM DEPENDING ON THE VALUE OF THE GAMECOUNTER
 function update_game() 
-  -- if lives > 0 then
-  -- if game_score > 0 then
   screen:clear()
   update_tile_index()
   draw_screen()
@@ -268,7 +254,6 @@ function update_game()
       game_score = game_score -10
     end
   else
-    print("Death caused by score == 0")
     get_killed()
     return
   end
@@ -302,7 +287,6 @@ function find_col_from_index(first_x)
   -- istart is first set the last index.
   local istart = first_x * Level.raw_level.height+1
   local iend = istart + 3*Level.raw_level.height - 1
-  print("find_col_from_index, istart="..istart..", iend="..iend)
   for i = istart, iend, 1 do
     istart = i
     if Level.map_table[i] ~=nil then
@@ -357,6 +341,7 @@ function destroy_buffer()
     end
   end
 end
+
 -- update certain buffer.
 -- Input: redraw_index, the index of buffers that need to be redraw.
 -- Input: first_x, the column number in that index buffer, used to find the tiles that need to be drawn.
@@ -456,14 +441,12 @@ function move_character()
       return
     end
     player.cur_x =B_L-32
-    --player.cur_x = player.cur_x-gameSpeed -- MOVING THE CHARACTER BACKWARDS IF IT HITS SOMETHING 
     --This part is checking if the hero hit the tail by right side 
     if (direction_flag == "down" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height)==nil) or 
     (direction_flag == "up" and hitTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height)==nil)then  
       falling=1
     end
     if (player.cur_x<-1) or (player.new_y > upper_bound_y or player.new_y < lower_bound_y) then -- CHARACTER HAS GOTTEN STUCK AND GET SQUEEZED BY THE TILES
-      print("Death caused by getting squeezed") 
       get_killed()
       return
     end
@@ -475,7 +458,6 @@ function move_character()
     for k=Tcount,Tcount+2, 1 do
       player.new_y=Y_position()
       if (player.cur_y > upper_bound_y or player.cur_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
-        print("Death caused by falling off grid")
         get_killed()
         return
       end
@@ -487,7 +469,6 @@ function move_character()
   else
     player.new_y=Y_position()
     if (player.cur_y > upper_bound_y or player.cur_y < lower_bound_y) then -- CHARACTER HAS GOTTEN OUT OF RANGE
-      print("Death caused by falling off grid")
       get_killed()
       return
     end
@@ -568,25 +549,15 @@ end
 
 
 function draw_screen()
-  -- Measure the game speed of each function in millisecond.
-  -- Remove the -- to trace and optimize.
   move_character()
   if timer~=nil then
-    --local t = sys.time()
     draw_background()
-    --print(string.format("gameBackground %d", ((sys.time() - t)) * 1000))
     draw_tiles()
-    --print(string.format("Draw_tiles %d", ((sys.time() - t)) * 1000))
-    --print(string.format("Move_character %d", ((sys.time() - t)) * 1000))
     draw_character()
-    --print(string.format("Draw_character %d", ((sys.time() - t)) * 1000))
     call_draw_score()
-    --print(string.format("Draw_score %d", ((sys.time() - t)) * 1000))
     draw_lives()
-    --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
     if current_game_type=="tutorial" and tutorial_goal_is_fulfilled()==false then
       draw_tutorial_helper()
-      --print(string.format("Draw_tutorial_helper %d", ((sys.time() - t)) * 1000))
     end
   end
   gfx.update()
@@ -615,7 +586,6 @@ function draw_tiles_for_movable()
       move_flame(v)
     end
     if v.image == nil then
-      print("The tile the want to draw == nil")
       v.image = gfx.loadpng("images/font/Z.png")
     end
     if v.gid ==9 or v. gid == 10 then
@@ -720,37 +690,19 @@ function game_navigation(key, state)
   if key=="ok" and state== 'down' then
     if direction_flag == "down" then
       if touchGround == true  then
-      --if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height) ~= nil then
-      --if buttonTest1(gameCounter, Level.tiles, player.cur_x, player.cur_y+1, character.width, character.height,direction_flag) ~= nil then 
         character:flip()
         direction_flag="up"
       end
-      --touchGround = false
     else
       if touchGround == true then
-      --if buttonTest(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height) ~= nil then
-      --if buttonTest1(gameCounter, Level.tiles, player.cur_x, player.cur_y-1, character.width, character.height,direction_flag) ~= nil then
         character:flip()
         direction_flag="down"
       end
-      --touchGround = false
     end
   elseif key=="red" and state=='up' then --PAUSE GAME BY CLICKING "Q" ON THE COMPUTER OR "RED" ON THE REMOTE
     pause_game()    
     change_global_game_state(0)
     start_menu("pause_menu")
-  --[[
-  elseif key=="green" and state=='up' then --TO BE REMOVED - FORCES THE LEVELWIN MENU TO APPEAR BY CLICKING "W" ON THE COMPUTER OR "GREEN" ON THE REMOTE
-    levelwin()
-  elseif key=="star" and state=="up" then -- Testing purposes (S on keyboard). Should probably be commented out at some point.
-    game_score = game_score + 1000
-  elseif key=="multi" and state=="up" then -- Testing purposes (A on keyboard). Should probably be commented out at some point.
-    if game_score - 1000 >= 0 then
-      game_score = game_score - 1000
-    else
-      game_score = 0
-    end
-    ]]
   end
 
   if current_game_type=="tutorial" and state=='up' then

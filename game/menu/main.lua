@@ -18,8 +18,6 @@ local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
---local squirrelImg1 = imageDir.."character/bigSquirrel1.png" 
---local squirrelImg2 = imageDir.."character/bigSquirrel2.png"
 local backgroundImage = nil
 local dash = nil
 local green_dash = nil
@@ -33,13 +31,6 @@ nr_buttons_pressed = 0
 local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
 local was_pressed_from_menu = false
 local need_redraw = true
-
-
-
---local squirrel1 = nil
---local squirrel2 = nil
-
-
 
 function start_menu(state)
   key_disabled = true
@@ -257,7 +248,6 @@ function draw_menu()
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
   
     draw_score("Your name ", 300,600)
-    -- the loading of the pictures should probaably not be done here for RAM effectiveness
     backButton = gfx.loadpng(imageDir.."menuImg/backButton.png")
     okButton = gfx.loadpng(imageDir.."menuImg/okButton.png")
     eraseButton = gfx.loadpng(imageDir.."menuImg/eraseButton.png")
