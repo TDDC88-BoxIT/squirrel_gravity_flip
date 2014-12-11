@@ -18,8 +18,6 @@ local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
---local squirrelImg1 = imageDir.."character/bigSquirrel1.png" 
---local squirrelImg2 = imageDir.."character/bigSquirrel2.png"
 local backgroundImage = nil
 local dash = nil
 local green_dash = nil
@@ -33,12 +31,6 @@ nr_buttons_pressed = 0
 local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
 local was_pressed_from_menu = false
 local need_redraw = true
-
-
-
---local squirrel1 = nil
---local squirrel2 = nil
-
 
 
 function start_menu(state)
@@ -142,9 +134,7 @@ function add_level_menu_buttons()
   local dir = imageDir .. "menuImg/level_menu/"
   local level_lable = nil
   unlocked_level = read_unlocked_level()
-
   end_page_level = math.min((start_page_level + levels_per_page - 1), no_level_menu_items)
-
   if (current_page > 1) then
     menu:add_button("previouspage", dir.."previouspage.png")
   end
@@ -158,7 +148,6 @@ function add_level_menu_buttons()
     if (level_number > unlocked_level) then
       level_lable = level_lable .. "locked"
     end
-
     if menuState == "level_menu" then  
       menu:add_button(level_lable, dir .. level_lable .. ".png")
     else
@@ -257,7 +246,6 @@ function draw_menu()
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
   
     draw_score("Your name ", 300,600)
-    -- the loading of the pictures should probaably not be done here for RAM effectiveness
     backButton = gfx.loadpng(imageDir.."menuImg/backButton.png")
     okButton = gfx.loadpng(imageDir.."menuImg/okButton.png")
     eraseButton = gfx.loadpng(imageDir.."menuImg/eraseButton.png")
@@ -282,7 +270,7 @@ function draw_menu()
       screen:copyfrom(dash, nil,{x=600+(i+1)*30,y=656,width=30,height=6},true)
     end
     gfx.update()
-  elseif menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
+  elseif menuState == "levelwin_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
     if get_game_type() ~= "tutorial" then
       draw_highscore(tonumber(get_current_level()),800)
@@ -377,7 +365,6 @@ function menu_navigation(key, state)
         end  
       elseif menuState == "highscore_menu" then 
         unlocked_level = read_unlocked_level()
-        print(unlocked_level)
         for i=1,unlocked_level do
           if menu:get_indexed_item().id == "highscore" .. i then 
             draw_highscore(i,350)
