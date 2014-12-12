@@ -1,0 +1,104 @@
+From f8017e60ff9207893348b94c590b08a3fd9b043d Mon Sep 17 00:00:00 2001
+From: wangrq <dlazycat@gmail.com>
+Date: Tue, 9 Dec 2014 19:57:28 +0100
+Subject: [PATCH] memory check logs
+
+---
+ game/fail_and_success_handler.lua | 10 ++++++++++
+ game/game.lua                     | 12 ++++++++++++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/game/fail_and_success_handler.lua b/game/fail_and_success_handler.lua
+index c9fc8cf..51a0bd9 100644
+--- a/game/fail_and_success_handler.lua
++++ b/game/fail_and_success_handler.lua
+@@ -1,14 +1,20 @@
+ local level_won=false
+ 
+ function get_killed() -- TO BE CALLED WHEN THE SQUIRREL IS KILLED. DECREAES LIFE AND CALLS GAMEOVER MENU
++  logfile:write("get_killed, entrance "..gfx.get_memory_use().."\n")
++  logfile:flush()
+ 	reset_game_speed()
+ 	end_invulnerability()
+ 	stop_game()
+ 	change_global_game_state(0)
+  	start_menu("gameover_menu")
++  logfile:write("get_killed, exit "..gfx.get_memory_use().."\n")
++  logfile:flush()
+ end
+ 
+ function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN MENU
++  logfile:write("levelwin, entrance "..gfx.get_memory_use().."\n")
++  logfile:flush()
+  	level_won = true
+ 	stop_game()
+     if get_game_type() ~= "tutorial" then
+@@ -20,7 +26,11 @@ function levelwin() -- TO BE CALLED WHEN A LEVEL IS ENDED. CALLS THE LEVELWIN ME
+ 	    call_draw_score() --DRAWS BOTH SCORE AND LEVEL NUMBER
+ 	end
+ 	change_global_game_state(0)
++  logfile:write("levelwin, start menu"..gfx.get_memory_use().."\n")
++  logfile:flush()
+ 	start_menu("levelwin_menu")
++  logfile:write("levelwin, end "..gfx.get_memory_use().."\n")
++  logfile:flush()
+ end
+ 
+ function prepare_fail_success_handler()
+diff --git a/game/game.lua b/game/game.lua
+index b41cb4b..f213c3a 100644
+--- a/game/game.lua
++++ b/game/game.lua
+@@ -48,6 +48,8 @@ number_image={}
+ 
+ -- STARTS GAME LEVEL level IN EITHER tutorial OR story MODE
+ function start_game(level,game_type,life) 
++  logfile:write("start_game, entrance "..gfx.get_memory_use().."\n")
++  logfile:flush()
+   gameCounter=0
+   game_score=10000
+ 
+@@ -85,6 +87,8 @@ function start_game(level,game_type,life)
+     change_global_game_state(0)
+     start_menu("start_menu")
+   end
++  logfile:write("start_game, end "..gfx.get_memory_use().."\n")
++  logfile:flush()
+ end
+ 
+ function load_font_images()
+@@ -168,6 +172,8 @@ function resume_game()
+ end
+ 
+ function stop_game()
++  logfile:write("stop_game, entrance "..gfx.get_memory_use().."\n")
++  logfile:flush()
+   if timer~=nil then
+     timer:stop()
+     timer = nil
+@@ -180,9 +186,13 @@ function stop_game()
+     change_character_timer:stop()
+     change_character_timer=nil 
+   end  
++  logfile:write("stop_game, end "..gfx.get_memory_use().."\n")
++  logfile:flush()
+ end
+ 
+ function pause_game()
++  logfile:write("pause_game, entrance "..gfx.get_memory_use().."\n")
++  logfile:flush()
+   if timer~=nil then
+     timer:stop()
+     timer = nil
+@@ -200,6 +210,8 @@ function pause_game()
+   if it~=nil then
+     it:stop()
+   end
++  logfile:write("pause_game, end "..gfx.get_memory_use().."\n")
++  logfile:flush()
+ end
+ 
+ function create_game_character()
+-- 
+1.9.0.msysgit.0
+

@@ -53,11 +53,9 @@ function Level.load_level (level_number,game_type)
   Level.version = loaded_level.version
   Level.raw_level = loaded_level
   Level.width = loaded_level.width
-  set_game_boudries(get_screen_size().height,0)
+  set_game_boudries(screen:get_height(),0)
   -- Get all the tiles and saves them into the Level.tiles table
   Level.tiles = get_tiles()
-  --Level.CloudSet = Cloud_set()
-  --Level.FlameSet = Flame_set()
   Level.character_start_pos_x = loaded_level.properties["character_start_pos_x"] * 32  -- Sets the characters start position on the x-axis
   Level.character_start_pos_y = loaded_level.properties["character_start_pos_y"] * 32  -- Sets the characters start position on the y-axis
   return "level_loaded"
@@ -65,7 +63,6 @@ end
 
 
 function get_tiles()
-  -- Selects the first layer in the lua level file, as of today only one layer is supported
   tile_layer_data = Level.raw_level.layers[1].data
   tilesets = {}
   tiles = {}
@@ -81,12 +78,8 @@ function get_tiles()
     else
       load_images(v.name, v.image)
     end
-  end   
-  -- Loops all the numbers in the level file, 
-
-  --[[
-    Order the tiles primary on Y position, to make index them more convenient.
-    ]]
+  end
+  --Order the tiles primary on Y position, to make index them more convenient.
   for ix=1, Level.width, 1 do
     for iy=1, Level.raw_level.height, 1 do
       k = (iy - 1) * Level.raw_level.width + ix
@@ -196,25 +189,3 @@ end
 function get_current_level()
   return current_level
 end
---[[function Cloud_set()
-  CloudSet = {}
-  local cloud_index=1
-  for k,v in pairs(tiles) do
-    if v.gid==9 then
-      CloudSet[cloud_index]=v
-      cloud_index=cloud_index+1
-    end
-  end
-  return CloudSet
-end
-function Flame_set()
-  FlameSet = {}
-  local flame_index=1
-  for k,v in pairs(tiles) do
-    if v.gid==10 then
-      FlameSet[flame_index]=v
-      flame_index=flame_index+1
-    end
-  end
-  return FlameSet
-end]]

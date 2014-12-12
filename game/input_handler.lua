@@ -1,4 +1,7 @@
 function onKey(key, state)
+  if key_disabled == true then
+    return
+  end
 	  if global_game_state == 0 then
 	    menu_key(key, state)
 	  elseif global_game_state == 1 then

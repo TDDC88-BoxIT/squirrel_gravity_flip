@@ -42,7 +42,7 @@ THIS IS DONE BY CALLING:
 require("class")
 -- THE MENU CONSTRUCTOR SETS START VALUES FOR THE MENU
 menu_object = class(function (self, menu_width, menu_height)
-    self.width = menu_width or math.floor(get_screen_size().width*0.2)
+    self.width = menu_width or math.floor(screen:get_width()*0.2)
     self.height = menu_height or 300
     self.button_height = 60
     self.button_width = math.floor(self.width*0.9)
@@ -52,6 +52,8 @@ menu_object = class(function (self, menu_width, menu_height)
     self.indexed_item=1
     self.menu_items={}
     self.menu_surface=nil
+    self.background_data=nil
+    self.indicator_data=nil
   end)
 
 -- SETS MENU SIZE
@@ -93,7 +95,9 @@ end
 
 -- ADDS NEW MENU ITEMS
 function menu_object:add_button(button_id, img_Path)
-  table.insert(self.menu_items, #self.menu_items+1, {id=button_id,img=img_Path})
+  local img_data = gfx.loadpng(img_Path)
+  img_data:premultiply()
+  table.insert(self.menu_items, #self.menu_items+1, {id=button_id,img=img_data})
 end
 
 -- CLEARS ALL ADDED MENU ITEMS
@@ -153,11 +157,11 @@ end
 
 -- CREATES THE MENU BACKGROUND AND ADDS IT TO THE MENU
 local function make_background(self)
-  local img_surface=nil
-  img_surface = gfx.loadpng(self.menu_background)
-  img_surface:premultiply()
-  self.menu_surface:copyfrom(img_surface,nil,{x=0,y=0,width=self.width,height=self.height-(20+2*get_screen_size().height/100)},true)
-  img_surface:destroy()
+  if self.background_data == nil then
+    self.background_data = gfx.loadpng(self.menu_background)
+    self.background_data:premultiply()
+  end
+  self.menu_surface:copyfrom(self.background_data,nil,{x=0,y=0,width=self.width,height=self.height-(20+2*screen:get_height()/100)},true)
 end
 
 -- CREATES THE MENU INDICATOR AND ADDS IT TO THE MENU. THE Y-VALUE MARKS WHERE THE INDICATOR IS TO BE PUT
@@ -166,11 +170,11 @@ local function make_item_indicator(self, y_value)
   self.indicator_height = self.button_height -- INDICATOR HEIGHT IS SET TO button HEIGHT
   self.indicator_width = math.floor(self.button_width*0.05) -- INDICATOR WIDTH IS SET TO 5% OF button WIDTH
   -- Create indicator surface
-  local sf = gfx.new_surface(self.indicator_width, self.indicator_height)
-  --Set color for indicator surface
-  sf:fill(self.indicator_color)
-  self.menu_surface:copyfrom(sf,nil,{x=self.button_x, y=y_value, width=self.indicator_width, height=self.indicator_height})
-  sf:destroy()
+  if self.indicator_data == nil then
+    self.indicator_data = gfx.new_surface(self.indicator_width, self.indicator_height)
+    self.indicator_data:fill(self.indicator_color)
+  end
+  self.menu_surface:copyfrom(self.indicator_data,nil,{x=self.button_x, y=y_value, width=self.indicator_width, height=self.indicator_height})
 end
 
 -- CREATES ALL MENU BUTTONS AND ADDS THEM TO THE MENU
@@ -178,20 +182,13 @@ local function make_buttons(self)
   
   -- LOOPS THROUGH ALL ITEMS WHICH HAVE BEEN ADDE TO THE MENU AND CREATES A SET OF BUTTONS FOR THESE
   for i = 1, #self.menu_items, 1 do
-    -- SETS THE BUTTON IMAGE
-    local img_surface=nil
-    img_surface = gfx.loadpng(self.menu_items[i].img)
-    img_surface:premultiply()
-
     -- PUTS THE CREATED BUTTON IMAGE ON THE MENU SURFACE  
-      self.menu_surface:copyfrom(img_surface,nil,{x=self.button_x,y=(self.button_y+(self.button_height*(i-1)+i*10)),width=self.button_width,height=self.button_height},true)
+      self.menu_surface:copyfrom(self.menu_items[i].img,nil,{x=self.button_x,y=(self.button_y+(self.button_height*(i-1)+i*10)),width=self.button_width,height=self.button_height},true)
 
     if i == self.indexed_item then
       -- CREATES AN INDICATOR WHICH IS SET ON THE INDEXED BUTTON
       make_item_indicator(self, (self.button_y+(self.button_height*(i-1)+i*10)))
     end
-    -- DESTROYS THE BUTTON IMAGE SURFACE TO SAVE RAM CONSUMPTION
-    img_surface:destroy()
   end
 end
 
@@ -199,11 +196,8 @@ end
 local function update(self)
   if self.menu_surface == nil then
     self.menu_surface=gfx.new_surface(self.width, self.height)
-    --self.menu_surface:clear()
   end
-  --if self.height~=#self.menu_items*(self.button_height+20) then
-    --self:set_button_size(nil,(self.height-(#self.menu_items)*20-(2*get_screen_size().height/100))/#self.menu_items) --ADJUSTS THE BUTTON HEIGHT IN CASE IT IS TOO BIG TO FIT ALL BUTTONS ON THE SCREEN (LEVEL MENU). TAKES INTO ACCOUNT THE FACT THAT THE LEVEL MENU STARTS 1/100 DOWN
-  --end
+  self.menu_surface:clear()
   make_background(self)
   make_buttons(self)
 end
@@ -216,6 +210,22 @@ end
 
 -- DESTROYS THE MENU OBEJCT'S SURFACE
 function menu_object:destroy()
-  self.menu_surface:destroy()
-  self.menu_surface=nil
+  if self.menu_surface ~= nil then
+    self.menu_surface:destroy()
+    self.menu_surface=nil
+  end
+  if self.background_data ~= nil then
+    self.background_data:destroy()
+    self.background_data=nil
+  end
+  if self.indicator_data ~= nil then
+    self.indicator_data:destroy()
+    self.indicator_data=nil
+  end
+  for i = 1, #self.menu_items, 1 do
+    if self.menu_items[i].img ~= nil then
+      self.menu_items[i].img:destroy()
+      self.menu_items[i].img=nil
+    end
+  end
 end

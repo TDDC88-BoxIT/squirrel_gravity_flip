@@ -1,0 +1,58 @@
+From 93f52a2b0b5328f01ed142f78ae90d847100e953 Mon Sep 17 00:00:00 2001
+From: wangrq <dlazycat@gmail.com>
+Date: Fri, 5 Dec 2014 09:52:12 +0100
+Subject: [PATCH] box performance log
+
+---
+ game/game.lua | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/game/game.lua b/game/game.lua
+index 59799bd..d8e9522 100644
+--- a/game/game.lua
++++ b/game/game.lua
+@@ -410,30 +410,40 @@ function call_draw_score()
+ end
+ 
+ 
+-
++local t = sys.time()
+ function draw_screen()
++  logfile:write("Round start:"..(sys.time()-t)..", memory:"..gfx.get_memory_use().."\n")
++  t = sys.time()
+   -- Measure the game speed of each function in millisecond.
+   -- Remove the -- to trace and optimize.
+   move_character()
++  logfile:write("After move:"..(sys.time()-t)..", memory:"..gfx.get_memory_use().."\n")
+   if timer~=nil then
+     --local t = sys.time()
+     draw_background()
++    logfile:write("After backg:"..(sys.time()-t).."\n")
+     --print(string.format("gameBackground %d", ((sys.time() - t)) * 1000))
+     draw_tiles()
++    logfile:write("After tiles:"..(sys.time()-t).."\n")
+     --print(string.format("Draw_tiles %d", ((sys.time() - t)) * 1000))
+     --print(string.format("Move_character %d", ((sys.time() - t)) * 1000))
+     draw_character()
++    logfile:write("After charac:"..(sys.time()-t).."\n")
+     --print(string.format("Draw_character %d", ((sys.time() - t)) * 1000))
+     call_draw_score()
++    logfile:write("After score:"..(sys.time()-t).."\n")
+     --print(string.format("Draw_score %d", ((sys.time() - t)) * 1000))
+     draw_lives()
++    logfile:write("After lives:"..(sys.time()-t).."\n")
+     --print(string.format("Draw_lives %d", ((sys.time() - t)) * 1000))
+     if current_game_type=="tutorial" and tutorial_goal_is_fulfilled()==false then
+       draw_tutorial_helper()
+       --print(string.format("Draw_tutorial_helper %d", ((sys.time() - t)) * 1000))
+     end
+   end
++  logfile:write("Before update:"..(sys.time()-t).."\n")
+   gfx.update()
++  logfile:write("Draw end:"..(sys.time()-t)..", memory:"..gfx.get_memory_use().."\n")
+ end
+ 
+ function draw_background()
+-- 
+1.9.0.msysgit.0
+

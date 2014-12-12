@@ -19,7 +19,6 @@ function create_tutorial_helper(level_number)
 end
 
 function update_tutorial_helper()
-  	tutorial_helper:destroy() -- DESTROYS THE CHARACTER'S SURFACE SO THAT NEW UPDATES WON'T BE PLACED ONTOP OF IT
   	tutorial_helper:update()  -- UPDATES THE CHARACTERS BY CREATING A NEW SURFACE WITH THE NEW IMAGE TO BE DISPLAYED
 end
 
@@ -31,12 +30,11 @@ function stop_tutorial_helper()
     tutorial_helper=nil
 end
 
---[[
-DRAWS TUTORIAL SPACE BAR ON SCREEN
-]]
+
+--DRAWS TUTORIAL SPACE BAR ON SCREEN
 function draw_tutorial_helper()
 	if tutorial_goal_fulfilled == false and tutorial_level==1  then
-		screen:copyfrom(tutorial_helper:get_surface(), nil,{x=(get_screen_size().width/2)-150,y=400},true)
+		screen:copyfrom(tutorial_helper:get_surface(), nil,{x=(screen:get_width()/2)-150,y=400},true)
 	end
 end
 

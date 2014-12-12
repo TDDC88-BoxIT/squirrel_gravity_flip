@@ -57,9 +57,6 @@
     </testsuite>
     <testsuite name="test_score">
         <testcase classname="test_score"
-            name="test_score.test_read_from_file_file_is_nil">
-        </testcase>
-        <testcase classname="test_score"
             name="test_score.test_read_from_file_return_not_nil">
         </testcase>
         <testcase classname="test_score"
@@ -67,15 +64,6 @@
         </testcase>
         <testcase classname="test_score"
             name="test_score.test_read_from_file_return_zero_or_error">
-        </testcase>
-        <testcase classname="test_score"
-            name="test_score.test_score_page">
-        </testcase>
-        <testcase classname="test_score"
-            name="test_score.test_table_length_return_length">
-        </testcase>
-        <testcase classname="test_score"
-            name="test_score.test_table_length_return_length_with_empty_table">
         </testcase>
     </testsuite>
 </testsuites>

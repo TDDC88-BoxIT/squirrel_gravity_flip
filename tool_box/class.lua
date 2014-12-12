@@ -6,7 +6,6 @@ function class(base, init)
       init = base
       base = nil
    elseif type(base) == 'table' then
-    -- our new class is a shallow copy of the base class!
       for i,v in pairs(base) do
          c[i] = v
       end
@@ -24,7 +23,7 @@ function class(base, init)
    if init then
       init(obj,...)
    else 
-      -- make sure that any stuff from the base class is initialized!
+      -- makes sure that any stuff from the base class is initialized
       if base and base.init then
       base.init(obj, ...)
       end

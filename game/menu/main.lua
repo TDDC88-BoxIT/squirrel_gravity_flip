@@ -2,11 +2,11 @@ require("../tool_box/menu_object")
 require("game/level_config")
 require("game/menu/text_input_handler")
 
-local menu_width
-local menu_x 
-local menu_y 
-local level_menu_y 
-local level_menu_x 
+local menu_width= screen:get_width()*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
+local menu_x = (screen:get_width()-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
+local menu_y = screen:get_height()/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
+local level_menu_y = screen:get_height()/100
+local level_menu_x = screen:get_width()/100
 local name_menu1_x = 400
 local name_menu1_y = 200
 local name_menu2_x = 550
@@ -18,8 +18,6 @@ local menu = nil  -- THE MENU SURFACE VARIABLE
 local imageDir = "images/"
 local thunder_acorn_path = imageDir.."thunderAcorn.png"
 local thunderAcorn = {}
---local squirrelImg1 = imageDir.."character/bigSquirrel1.png" 
---local squirrelImg2 = imageDir.."character/bigSquirrel2.png"
 local backgroundImage = nil
 local dash = nil
 local green_dash = nil
@@ -27,22 +25,18 @@ local backdrop = nil
 local addBling = true -- THIS WILL ADD A BACKGROUND IMAGE AND SOME THUNDER ACORNS IF TRUE
 local current_character = 1
 local player_name = ""
+local key_disabled = false
 text_button_pressed = {0,0,0,0,0,0,0,0,0}
 nr_buttons_pressed = 0
 local current_page = 1 -- CORRESPONDS TO THE CURRENT PAGE OF A MENU IF THERE ARE MUTIPLE PAGES FOR IT. FOR EXAMPLE IN THE CASE OF LEVEL MENU
 local was_pressed_from_menu = false
-
---local squirrel1 = nil
---local squirrel2 = nil
+local need_redraw = true
 
 function start_menu(state)
+  key_disabled = true
   menuState=state
-  menu_width= get_screen_size().width*0.2 -- MAKES THE MENU 20% OF TOTAL SCREEN WIDTH
-  menu_x = (get_screen_size().width-menu_width)/2 -- CENTERS THE MENU ON SCREEN ON THE X-AXIS
-  menu_y = (get_screen_size().height)/4 -- MAKES THE MENU START 1/4 DOWN FROM THE TOP OF THE SCREEN
-  level_menu_y = (get_screen_size().height)/100
-  level_menu_x = (get_screen_size().width)/100
-  
+  need_redraw = true
+
   unlocked_level = read_unlocked_level()
   if menuState == "new_name_menu" then
     menu = menu_object(128,92)
@@ -68,7 +62,27 @@ function stop_menu()
     backgroundImage:destroy()
     backgroundImage = nil
   end
-  screen:clear() 
+  if thunderAcorn.img ~= nil then
+    thunderAcorn.img:destroy()
+    thunderAcorn.img = nil
+  end
+  if menu ~= nil then
+    menu:destroy()
+    menu = nil
+  end
+  if menu1 ~= nil then
+    menu1:destroy()
+    menu1 = nil
+  end
+  if menu2 ~= nil then
+    menu2:destroy()
+    menu2 = nil
+  end
+  if menu3 ~= nil then
+    menu3:destroy()
+    menu3 = nil
+  end
+  screen:clear()
  end
 
 -- ADDS THE MENU ITEMS
@@ -119,9 +133,7 @@ function add_level_menu_buttons()
   local dir = imageDir .. "menuImg/level_menu/"
   local level_lable = nil
   unlocked_level = read_unlocked_level()
-
   end_page_level = math.min((start_page_level + levels_per_page - 1), no_level_menu_items)
-
   if (current_page > 1) then
     menu:add_button("previouspage", dir.."previouspage.png")
   end
@@ -135,7 +147,6 @@ function add_level_menu_buttons()
     if (level_number > unlocked_level) then
       level_lable = level_lable .. "locked"
     end
-
     if menuState == "level_menu" then  
       menu:add_button(level_lable, dir .. level_lable .. ".png")
     else
@@ -155,7 +166,7 @@ end
 function configure_menu_height()
   menuState = get_menu_state()
   if menuState == "level_menu" and menuState == "highscore_menu" then
-    local box_height = (get_screen_size().height-2*get_screen_size().height/100-20*menu:get_item_amount())/menu:get_item_amount()
+    local box_height = (screen:get_height()-2*screen:get_height()/100-20*menu:get_item_amount())/menu:get_item_amount()
     menu:set_button_size(nil, box_height)
   end
   
@@ -174,7 +185,7 @@ end
 -- ADDS "BLING" FEATURES TO SCREEN THAT AREN'T MENU NECESSARY
 function add_menu_bling()
   -- SETS A BACKGROUND IMAGE ON SCREEN
-  if (menuState == "start_menu" or menuState == "pause_menu" or menuState == "level_menu" or menuState == "highscore_menu") and backgroundImage == nil then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
+  if (menuState == "start_menu" or menuState == "level_menu" or menuState == "highscore_menu") and backgroundImage == nil then -- SETS DIFFERENT BACKGROUND IMAGES FOR THE DIFFERENT MENUS
     backgroundImage = gfx.loadjpeg(imageDir.."/menuImg/gravityFlip.jpg")
   elseif menuState == "levelwin_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadjpeg(imageDir.."menuImg/levelwin.jpg")
@@ -184,23 +195,27 @@ function add_menu_bling()
     green_dash = gfx.loadpng(imageDir.."font/green_dash.png")
   elseif menuState == "gameover_menu" and backgroundImage == nil then
     backgroundImage = gfx.loadpng(imageDir.."/menuImg/gameover.png")
+  elseif menuState == "pause_menu" then
+    backgroundImage = nil
   end
 
-  screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=get_screen_size().width,height=get_screen_size().height})
+  if backgroundImage ~= nil then
+    screen:copyfrom(backgroundImage, nil,{x=0,y=0,width=screen:get_width(),height=screen:get_height()})
+  else
+    screen:fill({0, 0, 0, 128})
+  end
 
   -- CREATES, AND SETS FOUR THUNDER ACORNS ON SCREEN
-  thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
-  thunderAcorn.img:premultiply()
-  thunderAcorn.height=139
-  thunderAcorn.width=101
+  if thunderAcorn.img == nil then
+    thunderAcorn.img = gfx.loadpng(thunder_acorn_path)
+    thunderAcorn.img:premultiply()
+    thunderAcorn.height=139
+    thunderAcorn.width=101
+  end
   screen:copyfrom(thunderAcorn.img, nil,{x=0,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
-  screen:copyfrom(thunderAcorn.img, nil,{x=get_screen_size().width-thunderAcorn.width,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
-  screen:copyfrom(thunderAcorn.img, nil,{x=0,y=get_screen_size().height-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
-  screen:copyfrom(thunderAcorn.img, nil,{x=get_screen_size().width-thunderAcorn.width,y=get_screen_size().height-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
-  
-  -- DESTROYS UNNCESSEARY SURFACES TO SAVE RAM
-  thunderAcorn.img:destroy()
-
+  screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=0,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  screen:copyfrom(thunderAcorn.img, nil,{x=0,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
+  screen:copyfrom(thunderAcorn.img, nil,{x=screen:get_width()-thunderAcorn.width,y=screen:get_height()-thunderAcorn.height,width=thunderAcorn.width,height=thunderAcorn.height},true)
 end
 
 function get_menu_state()
@@ -208,18 +223,21 @@ function get_menu_state()
 end
 
 function draw_menu()
-  screen:clear()
-  if addBling==true then
+  if menuState ~= "pause_menu" then
+    screen:clear()
+  elseif need_redraw == true then
+    screen:fill({0, 0, 0, 128})
+    need_redraw = false
+  end
+  if addBling==true and menuState ~= "pause_menu" then
       add_menu_bling() -- ADDS BLING BLING TO SCREEN (BACKGROUND, THUNDER ACORNS AND RUNNING SQUIRRELS)
   end
 
   if menuState == "level_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu:destroy()
     gfx.update()
   elseif menuState == "highscore_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=level_menu_x,y=level_menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu:destroy()
     gfx.update()
   elseif menuState == "new_name_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=name_menu1_x,y=name_menu1_y,width=menu:get_size().width,height=menu:get_size().height},true)
@@ -227,7 +245,6 @@ function draw_menu()
     screen:copyfrom(menu3:get_surface(), nil,{x=name_menu3_x,y=name_menu3_y,width=menu:get_size().width,height=menu:get_size().height},true)
   
     draw_score("Your name ", 300,600)
-    -- the loading of the pictures should probaably not be done here for RAM effectiveness
     backButton = gfx.loadpng(imageDir.."menuImg/backButton.png")
     okButton = gfx.loadpng(imageDir.."menuImg/okButton.png")
     eraseButton = gfx.loadpng(imageDir.."menuImg/eraseButton.png")
@@ -251,12 +268,8 @@ function draw_menu()
     for i=nr_buttons_pressed,2 do
       screen:copyfrom(dash, nil,{x=600+(i+1)*30,y=656,width=30,height=6},true)
     end
-
-    menu:destroy()
-    menu2:destroy()
-    menu3:destroy()
     gfx.update()
-  elseif menuState == "levelwin_menu" --[[or menuState == "gameover_menu"]] then
+  elseif menuState == "levelwin_menu" then
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
     if get_game_type() ~= "tutorial" then
       draw_highscore(tonumber(get_current_level()),800)
@@ -264,9 +277,9 @@ function draw_menu()
     gfx.update()
   else
     screen:copyfrom(menu:get_surface(), nil,{x=menu_x,y=menu_y,width=menu:get_size().width,height=menu:get_size().height},true)
-    menu:destroy()
     gfx.update()
   end
+  key_disabled = false
 end
 
 
@@ -314,10 +327,16 @@ function menu_navigation(key, state)
         start_game("next","current",0)
       elseif menu:get_indexed_item().id=="restart" then
         stop_menu()
+        if menuState == "pause_menu" then
+          stop_game()
+        end
         change_global_game_state(1)
         start_game("restart","current",0)
       elseif menu:get_indexed_item().id=="main_menu" then
         stop_menu()
+        if menuState == "pause_menu" then
+          stop_game()
+        end
         start_menu("start_menu")
       elseif menu:get_indexed_item().id=="previouspage" then
         current_page = current_page - 1
@@ -345,7 +364,6 @@ function menu_navigation(key, state)
         end  
       elseif menuState == "highscore_menu" then 
         unlocked_level = read_unlocked_level()
-        print(unlocked_level)
         for i=1,unlocked_level do
           if menu:get_indexed_item().id == "highscore" .. i then 
             draw_highscore(i,350)
