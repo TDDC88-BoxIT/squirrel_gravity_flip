@@ -7,12 +7,10 @@ sys = require('sys')
 ----------------------
 
 function love.load()
-  --print('love.load')
   love.keyboard.setKeyRepeat(true)
   first_run = true
   
   key_translation = {}
-  --key_translation[keyboard] = stb
   key_translation["0"] = "0"
   key_translation["1"] = "1"
   key_translation["2"] = "2"
@@ -68,8 +66,6 @@ end
 
 
 function love.draw()
-  --print('love.draw')
-  --love.graphics.draw(image)
   if first_run then
     if type(onStart) == "function" then
       print('Calling onStart')
@@ -79,11 +75,7 @@ function love.draw()
   end
   
   if gfx.auto_update then
-    --print('Auto draw')
-    buffer_screen = screen
-    
-  --else
-  --  love.graphics.draw(gfx.buffer_screen)
+    buffer_screen = screen 
   end
   love.graphics.draw(buffer_screen.canvas)
 end
@@ -97,16 +89,13 @@ function love.keypressed(key, isrepeat)
   end
   
   if key_translation[key] ~= nil and type(onKey) == "function" then
-    print("Keybord key: " .. key .. ", STB key: " .. key_translation[key] .. ", state: " .. state )
     onKey(key_translation[key], state)
   elseif key == "escape" then
-    print("Memory usage: " .. string.format("%.0f",gfx.get_memory_use()) .. " of " .. string.format("%.0f",gfx.get_memory_limit()) .. " bytes or " .. string.format("%.2f", gfx.get_memory_use() * 100 / gfx.get_memory_limit()) .. " %")
   end
 end
 
 function love.keyreleased(key)
   if key_translation[key] ~= nil and type(onKey) == "function" then
-    print("Keybord key: " .. key .. ", STB key: " .. key_translation[key] .. ", state: up")
     onKey(key_translation[key], "up")
   end
 end
