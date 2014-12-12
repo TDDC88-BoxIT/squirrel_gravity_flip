@@ -127,7 +127,7 @@ end
 -- ADDS A PAGE WITH LEVEL MENU BUTTONS. NUMBER OF LEVELS DISPLAYED PER PAGE AS WELL AS THE MAXIMUM NUMBER OF LEVEL MENU ITEMS CAN BE CONFIGURED
 function add_level_menu_buttons()
   local levels_per_page = 7 
-  local no_level_menu_items = 10
+  local no_level_menu_items = 12
   local start_page_level = levels_per_page * (current_page - 1) + 1
   local end_page_level = nil
   local dir = imageDir .. "menuImg/level_menu/"
