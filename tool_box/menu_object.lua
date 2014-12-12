@@ -197,9 +197,6 @@ local function update(self)
   if self.menu_surface == nil then
     self.menu_surface=gfx.new_surface(self.width, self.height)
   end
-  --if self.height~=#self.menu_items*(self.button_height+20) then
-    --self:set_button_size(nil,(self.height-(#self.menu_items)*20-(2*screen:get_height()/100))/#self.menu_items) --ADJUSTS THE BUTTON HEIGHT IN CASE IT IS TOO BIG TO FIT ALL BUTTONS ON THE SCREEN (LEVEL MENU). TAKES INTO ACCOUNT THE FACT THAT THE LEVEL MENU STARTS 1/100 DOWN
-  --end
   self.menu_surface:clear()
   make_background(self)
   make_buttons(self)
